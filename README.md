@@ -12,7 +12,12 @@ dwtools is a infrastructure as code project for testing self-hosted applications
 ## Getting Started
 
 Easiest way to getting started is using docker installer [dwtools-installer](http://www.dropwizard.io/1.0.2/docs/).
-it launches an ec2 instances(t2.medium), then runs ansible code to install applications. You will end up with publicly accessible, where you run your changes. 
+it launches an ec2 instances(t2.medium), then runs ansible code to install applications. 
+You will end up with:
+ - a workspace in your docker instance
+ - sample wordpress application up and running
+ - a secured ec2 server accessible with ssh, where you can run your changes. 
+ - your pem file, downloaded into your workspace
 
 ### Prerequisites
 
@@ -64,8 +69,8 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
+* [Traefik](https://traefik.io/) - A modern http reverse proxy
+* [Ansible](https://github.com/ansible/ansible) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
 ## Contributing
