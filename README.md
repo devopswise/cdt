@@ -12,7 +12,7 @@ dwtools is a infrastructure as code project for testing self-hosted applications
 ## Getting Started
 
 Easiest way to getting started is using docker installer [dwtools-installer](http://www.dropwizard.io/1.0.2/docs/).
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+it launches an ec2 instances(t2.medium), then runs ansible code to install applications. You will end up with publicly accessible, where you run your changes. 
 
 ### Prerequisites
 
@@ -20,10 +20,7 @@ These instructions will get you a copy of the project up and running on your loc
 - any docker installed system
 
 ### Installing
-
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+However it is not a requirement if you want to run on already-existing server.
 
 ```
 docker run -d dwtools-installer --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
