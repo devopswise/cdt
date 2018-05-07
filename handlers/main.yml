@@ -1,0 +1,11 @@
+---
+- name: restart docker
+  service: name=docker state=restarted
+  become: yes
+  become_method: sudo
+
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
+  become: yes
+  become_method: sudo
+

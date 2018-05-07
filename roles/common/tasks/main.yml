@@ -1,0 +1,176 @@
+---
+# This is a temporary workaround to avoid aws bills for development
+- name: Schedule to turn off system after 2 hours
+  shell: "shutdown -P +90"
+  become: yes
+  become_method: sudo
+
+- name: Turn swap off
+  shell: "nohup swapoff -a &"
+  become: yes
+  become_method: sudo
+
+- name: remove from fstab
+  action: lineinfile dest=/etc/fstab regexp=" swap " state=absent
+  become: yes
+  become_method: sudo
+
+# Only for centos
+- name: remove postfix
+  package: name=postfix state=absent
+  become: yes
+  become_method: sudo
+
+- name: Disable SELinux
+  selinux: state=disabled
+  become: yes
+  become_method: sudo
+
+- name: Disable SELinux imme.
+  shell: "setenforce 0"
+  become: yes
+  become_method: sudo
+
+- name: Create base directories
+  file: path="{{ item }}" state=directory mode=0777 owner="0" group="0"
+  with_items:
+    - "{{ docker_logs }}"
+    - "{{ docker_volumes }}"
+  become: yes
+  become_method: sudo
+
+# enable extra
+- name: enable extras for epel
+  shell: "yum -y --enablerepo=extras install epel-release"
+  become: yes
+  become_method: sudo
+
+- name: Install system packages
+  package: name={{ item }} state=latest
+  with_items:
+    - "sysstat"
+    - "python-setuptools"
+    - "docker"
+    - "python-pip"
+  become: yes
+  become_method: sudo
+
+- name: Install python packages
+  pip: name={{ item }} state=latest
+  with_items:
+    - "docker==3.2.0"
+    - "requests==2.18.4"
+    - "s3cmd"
+    - "docker-compose==1.15.0"
+  become: yes
+  become_method: sudo
+
+- name: start docker
+  service: name=docker state=started
+  become: yes
+  become_method: sudo
+   
+- name: copy s3cmd config
+  template: src=s3cmd.cfg dest=/etc/s3cmd.cfg mode=644
+  become: yes
+  become_method: sudo
+
+- name: copy s3cmd binary wraper
+  copy: src=s3cmd dest=/usr/local/bin/s3cmd mode=775
+  become: yes
+  become_method: sudo
+
+# TODO: https://stackoverflow.com/a/41493058
+- name: Create an internal network
+  docker_network:
+    name: internal
+    state: present
+  become: yes
+  become_method: sudo
+
+- name: Create an external network
+  docker_network:
+    name: external
+    state: present
+  become: yes
+  become_method: sudo
+
+- name: remove ipv6 options
+  sysctl:
+    name: net.ipv6.conf.all.disable_ipv6
+    state: absent
+  become: yes
+  become_method: sudo
+
+- name: set swappiness value to 10
+  sysctl:
+    name: vm.swappiness
+    value: 10
+    state: present
+  become: yes
+  become_method: sudo
+
+- name: set ip forward 1
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+  become: yes
+  become_method: sudo
+
+- name: Configure default profile
+  lineinfile: dest=/etc/profile line="{{ item }}" state=present 
+  become: yes
+  become_method: sudo
+  with_items:
+    - "unset TMOUT"
+    - export PS1='\t \u@\h:\W$ '
+
+- name: Configure rsyslog to listen on 514/UDP for 127.0.0.1
+  lineinfile: dest=/etc/rsyslog.conf line="{{ item }}" state=present insertafter=".*MODULES.*"
+  become: yes
+  become_method: sudo
+  with_items:
+    - "$IncludeConfig /etc/rsyslog.d/*.conf"
+    - "$UDPServerRun 514"
+    - "$UDPServerAddress 127.0.0.1"
+    - "$ModLoad imudp"
+  notify:
+    - restart rsyslog
+
+- name: cleanup rsyslog old file format
+  lineinfile: dest=/etc/rsyslog.conf
+              regexp="^\$ActionFileDefaultTemplate"
+              state=absent
+  become: yes
+  become_method: sudo
+  notify:
+    - restart rsyslog
+
+- name: Configure rsyslog file format
+  lineinfile: dest=/etc/rsyslog.conf
+              line="$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat"
+              insertbefore="^\$IncludeConfig"
+              state=present
+  become: yes
+  become_method: sudo
+  notify:
+    - restart rsyslog
+
+- name: create rsyslog config for docker
+  template: src=10-docker.conf dest=/etc/rsyslog.d/10-docker.conf mode=644
+  become: yes
+  become_method: sudo
+
+- name: ensure the directory exists 
+  file: dest=/opt/docker-logs/docker state=directory
+  become: yes
+  become_method: sudo
+  notify:
+    - restart rsyslog
+
+- name: schedule logrotate hourly 
+  copy: src=logrotate.cron dest=/etc/cron.hourly/logrotate mode=0700
+  become: yes
+  become_method: sudo
+

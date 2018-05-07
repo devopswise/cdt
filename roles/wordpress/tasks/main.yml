@@ -1,0 +1,57 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ wordpress_user }}" group="{{ wordpress_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ wordpress_service_name }}"
+    - "{{ docker_volumes }}/{{ wordpress_service_name }}"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ wordpress_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate a random mysql password
+  set_fact:
+    wordpress_db_pass: "{{ lookup('password', '../credentials/wordpress_db_pass length=12') }}"
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ wordpress_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: Log into private registry
+  when: "{{ role_name }}_registry_user is defined and {{ role_name }}_registry_pass is defined"
+  docker_login:
+    registry: "{{ vars[role_name + '_registry_url'] }}"
+    username: "{{ vars[role_name + '_registry_user'] }}"
+    password: "{{ vars[role_name + '_registry_pass'] }}"
+  become: yes
+  become_method: sudo
+
+- name: "Run wordpress service {{ wordpress_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ wordpress_service_name }}"
+    project_src: "/tmp/{{ wordpress_service_name }}"
+  register: output
+
+- set_fact: run_inside_container="docker exec -i {{ vars['output']['ansible_facts']['homepage'].keys()[0] }} /bin/sh -c"
+  
+- name: download backup files
+  command: "{{ run_inside_container }} 'wget -N {{ item }} -P /backups'"
+  with_items:
+    - "https://blog.devopswise.co.uk/latest_backup.tar.gz"
+    - "https://blog.devopswise.co.uk/latest_backup.sql.gz"
+  become: yes
+  become_method: sudo
+
+- name: restore backup
+  command: "{{ run_inside_container }} 'WORDPRESS_CHANGE_URL_FROM=blog.devopswise.co.uk WORDPRESS_CHANGE_URL_TO=www.{{ base_domain }} /bin/restore.sh latest'"
+  become: yes
+  become_method: sudo

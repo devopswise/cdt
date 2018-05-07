@@ -1,0 +1,7 @@
+smtp_relay_service_name: "smtp_relay"
+
+smtp_relay_version: "latest"
+smtp_tcp_port: 25
+smtp_relay_user: 0
+smtp_relay_group: 0
+

@@ -1,0 +1,8 @@
+---
+- hosts: web_proxy
+  roles:
+    - { role: squid,
+        tags: [ 'squid' ] }
+  handlers:
+    - include: ../handlers/main.yml
+

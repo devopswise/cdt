@@ -1,0 +1,73 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ traefik_user }}" group="{{ traefik_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ traefik_service_name }}"
+    - "{{ docker_volumes }}/{{ traefik_service_name }}"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ traefik_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate traefik password
+  set_fact:
+    traefik_admin_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits') }}"
+
+- name: save generated password locally
+  local_action: shell echo "{{ traefik_admin_password }}" > ../credentials/traefik_admin_pass
+
+- name: generate a random md5password for traefik
+  local_action: shell htpasswd -nb admin "{{ traefik_admin_password }}" | cut -d':' -f2 > ../credentials/traefik_admin_pass_hash_md5
+
+- name: load generated md5password
+  set_fact:
+    traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 length=12') }}"
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ traefik_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: sync traefik.toml
+  template: 
+    src: ../templates/traefik.toml.j2
+    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: ensure file exists
+  copy:
+    content: "{}"
+    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/acme.json"
+    force: no
+    group: "{{ traefik_group }}"
+    owner: "{{ traefik_user }}"
+    mode: 0600
+  become: yes
+  become_method: sudo
+
+- name: "Run traefik service {{ traefik_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ traefik_service_name }}"
+    project_src: "/tmp/{{ traefik_service_name }}"
+
+- name: Remove docker-compose.yml
+  when: false
+  file:
+    state: absent
+    path: "/tmp/{{ traefik_service_name }}/docker-compose.yml"
+  become: yes
+  become_method: sudo
+
+
+
+

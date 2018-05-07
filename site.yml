@@ -1,0 +1,8 @@
+---
+- include: playbooks/common.yml
+- include: playbooks/reverse_proxy.yml
+- include: playbooks/web_proxy.yml
+- include: playbooks/smtp_relay.yml
+- include: playbooks/homepage.yml
+
+

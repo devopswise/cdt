@@ -1,0 +1,37 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=755 owner="{{ squid_user }}" group="{{ squid_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ squid_service_name }}"
+    - "{{ docker_volumes }}/{{ squid_service_name }}"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ squid_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ squid_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: sync squid3.conf
+  template: 
+    src: ../templates/squid3.conf.j2
+    dest: "{{ docker_volumes }}/{{ squid_service_name }}/squid3.conf"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run squid service {{ squid_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ squid_service_name }}"
+    project_src: "/tmp/{{ squid_service_name }}"
+

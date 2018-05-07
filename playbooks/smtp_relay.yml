@@ -1,0 +1,5 @@
+---
+- hosts: smtp_relay
+  roles:
+    - { role: smtp_relay,
+        tags: [ 'smtp_relay' ] }

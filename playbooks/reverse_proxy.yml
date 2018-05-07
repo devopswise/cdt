@@ -1,0 +1,8 @@
+---
+- hosts: reverse_proxy
+  roles:
+    - { role: traefik,
+        tags: [ 'traefik' ] }
+  handlers:
+    - include: ../handlers/main.yml
+

@@ -1,0 +1,9 @@
+---
+- name: restart smtp_relay
+  docker_service:
+    project_name: "{{ smtp_relay_service_name }}"
+    project_src: "/tmp/{{ smtp_relay_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

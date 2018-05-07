@@ -1,0 +1,32 @@
+version: '2'
+services:
+  traefik:
+    image: "{{ registry_url }}traefik:{{ traefik_version }}"
+    command: '-c /traefik.toml --docker --logLevel=DEBUG'
+    restart: always
+    privileged: true
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/opt/docker-volumes/traefik/traefik.toml:/traefik.toml'
+      - '/opt/docker-volumes/traefik/acme.json:/acme.json'
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.frontend.rule=Host:monitor.{{ base_domain }}"
+      - "traefik.port=8080"
+    networks:
+      - internal
+      - external
+    logging: 
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true

@@ -1,0 +1,9 @@
+---
+- name: restart wordpress
+  docker_service:
+    project_name: "{{ wordpress_service_name }}"
+    project_src: "/tmp/{{ wordpress_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

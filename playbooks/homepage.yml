@@ -1,0 +1,6 @@
+---
+- hosts: homepage
+  #strategy: debug
+  roles:
+    - { role: wordpress,
+        tags: [ 'wordpress' ] }

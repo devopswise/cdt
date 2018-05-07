@@ -1,0 +1,7 @@
+squid_service_name: "squid"
+
+squid_version: "latest"
+squid_user: 0
+squid_group: 0
+
+

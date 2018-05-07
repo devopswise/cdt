@@ -1,0 +1,13 @@
+wordpress_version: "4.9.5-15"
+
+wordpress_service_name: "homepage"
+wordpress_image_name: "devopswise/wordpress"
+
+wordpress_user: 0
+wordpress_group: 0
+
+wordpress_db_user: "wordpress"
+wordpress_db_host: "homepage_db:3306"
+wordpress_db_name: "wordpress_homepage"
+wordpress_db_port: "3306"
+

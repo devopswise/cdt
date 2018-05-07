@@ -1,0 +1,9 @@
+---
+- name: restart traefik
+  docker_service:
+    project_name: "{{ traefik_service_name }}"
+    project_src: "/tmp/{{ traefik_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

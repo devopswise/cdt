@@ -1,0 +1,9 @@
+#registry_url: "docker.nexus3.devopswise.co.uk/docker-internal/"
+
+squid_service_name: "squid"
+
+squid_version: "latest"
+squid_port: 3128
+squid_user: 0
+squid_group: 0
+

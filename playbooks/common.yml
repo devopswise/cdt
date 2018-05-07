@@ -1,0 +1,7 @@
+---
+- hosts: Inventory
+  roles:
+    - { role: common,
+        tags: [ 'provision', 'common' ] }
+  handlers:
+    - include: ../handlers/main.yml

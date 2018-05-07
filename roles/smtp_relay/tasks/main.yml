@@ -1,0 +1,30 @@
+---
+- name: Create a directory to store volume
+  when: false
+  file: path="{{ item }}" state=directory mode=755 owner="{{ smtp_relay_user }}" group="{{ smtp_relay_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ smtp_relay_service_name }}"
+    - "{{ docker_volumes }}/{{ smtp_relay_service_name }}"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ smtp_relay_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ smtp_relay_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run smtp_relay service {{ smtp_relay_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ smtp_relay_service_name }}"
+    project_src: "/tmp/{{ smtp_relay_service_name }}"
+
