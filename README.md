@@ -43,13 +43,17 @@ then type
 
 End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+## Persistence
 
-Explain how to run the automated tests for this system
+dwtools-installer keep changes, target specific data, passwords and changes on /opt/dwtools. 
+It is better to mount it to /opt/dwtools on host machine.
 
-### Break down into end to end tests
+```
+docker run -v /opt/dwtools:/opt/dwtools -d dwtools-installer --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+```
 
-Explain what these tests test and why
+### Passwords for applications
+All passwords are generated at first launch and you can find them, /opt/dwtools/master/credentials/ directory.
 
 ```
 Give an example
