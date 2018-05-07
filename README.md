@@ -71,6 +71,7 @@ Add additional notes about how to deploy this on a live system
 
 * [Traefik](https://traefik.io/) - A modern http reverse proxy
 * [OpenLDAP](https://www.openldap.org/) - A modern http reverse proxy
+* [docker-compose](https://docs.docker.com/compose/) - A tool for defining and running multi-container Docker applications
 * [Ansible](https://github.com/ansible/ansible) - IT Automation/Configuration Management
 * [DebianExim4](https://github.com/namshi/docker-smtp) - SMTP Relay
 * [Squid Web Proxy](http://www.squid-cache.org/) - Web Proxy
