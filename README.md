@@ -107,10 +107,6 @@ root@03b6f7de6519:/#
 ## SSH to target instance
 ```
 root@03b6f7de6519:/# dwtools --ssh
-The authenticity of host '34.245.139.72.xip.io (34.245.139.72)' can't be established.
-ECDSA key fingerprint is 16:55:49:c9:11:f0:dd:88:32:28:1e:0e:fe:00:05:ee.
-Are you sure you want to continue connecting (yes/no)? yes
-Warning: Permanently added '34.245.139.72.xip.io,34.245.139.72' (ECDSA) to the list of known hosts.
 Last login: Tue May  8 23:16:36 2018 from ec2-34-240-174-240.eu-west-1.compute.amazonaws.com
 23:17:07 centos@ip-10-0-0-5:~$ 
 ```
