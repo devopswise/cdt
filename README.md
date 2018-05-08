@@ -28,10 +28,10 @@ You will end up with:
 However it is not a requirement if you want to run on already-existing server.
 
 ```
-docker run -d dwtools-installer --name devopswise/dwtools-installer:latest -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -d --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="you aws secret" devopswise/dwtools-installer:latest
 ```
 
-After container starts running, you should
+After container starts running in background, you should
 ```
 docker exec -it dwtools-installer bash
 ```
@@ -39,6 +39,27 @@ docker exec -it dwtools-installer bash
 then type
 ```
 # dwtools --launch
+root@03b6f7de6519:/# dwtools --launch
+      _          _              _
+     | |        | |            | |
+   __| |_      _| |_ ___   ___ | |___
+  / _` \ \ /\ / / __/ _ \ / _ \| / __|
+ | (_| |\ V  V /| || (_) | (_) | \__ \
+  \__,_| \_/\_/  \__\___/ \___/|_|___/
+
+Launching dwtools...
+Cloning into '/opt/dwtools/master'...
+remote: Counting objects: 131, done.
+remote: Compressing objects: 100% (100/100), done.
+remote: Total 131 (delta 33), reused 83 (delta 5), pack-reused 0
+Receiving objects: 100% (131/131), 114.09 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (33/33), done.
+Checking connectivity... done.
+generating new key-pair : dwtools-20180508230154
+creating new ec2 instance
+A new EC2 instance is created instance_id:i-0ef3e3859dfdc29a7
+waiting i-0ef3e3859dfdc29a7 to become alive:
+...
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
@@ -56,7 +77,8 @@ docker run -v /opt/dwtools:/opt/dwtools -d devopswise/dwtools-installer:latest -
 All passwords are generated at first launch and you can find them, /opt/dwtools/master/credentials/ directory.
 
 ```
-Give an example
+# ls /opt/dwtools/credentials
+
 ```
 
 ### And coding style tests
