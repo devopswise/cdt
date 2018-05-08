@@ -39,7 +39,6 @@ docker exec -it dwtools-installer bash
 then type
 ```
 # dwtools --launch
-root@03b6f7de6519:/# dwtools --launch
       _          _              _
      | |        | |            | |
    __| |_      _| |_ ___   ___ | |___
@@ -70,6 +69,7 @@ then, you can either sssh to your instance by typing
 ssh -i /opt/dwtools/master/dwtools-20180508231143.pem centos@34.245.139.72.xip.io
 or you can modify ansible code in /opt/dwtools/master, then apply changes by typing,
 ansible-playbook -i /opt/dwtools/master/inventories/pro /opt/dwtools/master/site.yml -vv --vault-password-file=/opt/dwtools/master/ansible-vault-pass
+/# 
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
@@ -87,8 +87,8 @@ docker run -v /opt/dwtools:/opt/dwtools -d devopswise/dwtools-installer:latest -
 All passwords are generated at first launch and you can find them, /opt/dwtools/master/credentials/ directory.
 
 ```
-# ls /opt/dwtools/credentials
-
+# ls /opt/dwtools/master/credentials/
+traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass
 ```
 
 ### Terminating AWS resources properly
