@@ -60,6 +60,7 @@ creating new ec2 instance
 A new EC2 instance is created instance_id:i-0ef3e3859dfdc29a7
 waiting i-0ef3e3859dfdc29a7 to become alive:
 ...
+
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
@@ -81,15 +82,29 @@ All passwords are generated at first launch and you can find them, /opt/dwtools/
 
 ```
 
-### And coding style tests
+### Terminating AWS resources properly
 
-Explain what these tests test and why
+You can always type dwtools --terminate if you want to remove VPC, subnet, internet gateway etc.
 
 ```
-Give an example
+root@03b6f7de6519:/# dwtools --terminate
+This will remove target server, you can always re-launch,
+a new server but you will lose data inside it if you didn't backup
+Do you wish to terminate server?y
+..............
+root@03b6f7de6519:/#
 ```
 
-## Deployment
+## SSH to target instance
+```
+root@03b6f7de6519:/# dwtools --ssh
+The authenticity of host '34.245.139.72.xip.io (34.245.139.72)' can't be established.
+ECDSA key fingerprint is 16:55:49:c9:11:f0:dd:88:32:28:1e:0e:fe:00:05:ee.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '34.245.139.72.xip.io,34.245.139.72' (ECDSA) to the list of known hosts.
+Last login: Tue May  8 23:16:36 2018 from ec2-34-240-174-240.eu-west-1.compute.amazonaws.com
+23:17:07 centos@ip-10-0-0-5:~$ 
+```
 
 Add additional notes about how to deploy this on a live system
 
