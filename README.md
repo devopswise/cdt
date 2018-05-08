@@ -28,7 +28,7 @@ You will end up with:
 However it is not a requirement if you want to run on already-existing server.
 
 ```
-docker run -d dwtools-installer --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -d dwtools-installer --name devopswise/dwtools-installer:latest -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
 ```
 
 After container starts running, you should
@@ -49,7 +49,7 @@ dwtools-installer keep changes, target specific data, passwords and changes on /
 It is better to mount it to /opt/dwtools on host machine.
 
 ```
-docker run -v /opt/dwtools:/opt/dwtools -d dwtools-installer --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -v /opt/dwtools:/opt/dwtools -d devopswise/dwtools-installer:latest --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
 ```
 
 ### Passwords for applications
