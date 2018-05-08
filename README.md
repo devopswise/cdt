@@ -60,7 +60,16 @@ creating new ec2 instance
 A new EC2 instance is created instance_id:i-0ef3e3859dfdc29a7
 waiting i-0ef3e3859dfdc29a7 to become alive:
 ...
-
+...
+...
+dwtools installed on 34.245.139.72.xip.io, you can access tools www.34.245.139.72.xip.io
+server will be terminated automatically in 2 hours, incase you forgot to terminate it
+get into dwtools-installer container first
+docker exec -it dwtools-installer bash
+then, you can either sssh to your instance by typing
+ssh -i /opt/dwtools/master/dwtools-20180508231143.pem centos@34.245.139.72.xip.io
+or you can modify ansible code in /opt/dwtools/master, then apply changes by typing,
+ansible-playbook -i /opt/dwtools/master/inventories/pro /opt/dwtools/master/site.yml -vv --vault-password-file=/opt/dwtools/master/ansible-vault-pass
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
