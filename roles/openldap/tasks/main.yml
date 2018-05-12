@@ -1,0 +1,46 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ openldap_user }}" group="{{ openldap_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ openldap_service_name }}"
+    - "{{ docker_volumes }}/{{ openldap_service_name }}"
+    - "{{ docker_volumes }}/{{ openldap_service_name }}/data"
+    - "{{ docker_volumes }}/{{ openldap_service_name }}/etc"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ openldap_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate a random mysql password
+  set_fact:
+    openldap_slapd_pass: "{{ lookup('password', '../credentials/openldap_slapd_pass length=12') }}"
+    openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass length=12') }}"
+    openldap_persona_alice_pass: "{{ lookup('password', '../credentials/openldap_persona_alice_pass length=12') }}"
+    openldap_persona_bob_pass: "{{ lookup('password', '../credentials/openldap_persona_bob_pass length=12') }}"
+
+- name: sync structure.ldif
+  template:
+    src: ../templates/structure.ldif.j2
+    dest: "{{ docker_volumes }}/{{ openldap_service_name }}/structure.ldif"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ openldap_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run openldap service {{ openldap_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ openldap_service_name }}"
+    project_src: "/tmp/{{ openldap_service_name }}"
+  register: output

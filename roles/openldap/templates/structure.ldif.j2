@@ -1,0 +1,69 @@
+version: 1
+dn: ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: cn=alice.developer,ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: alice.developer
+displayName: Alice Developer
+givenName: Alice
+mail: alice.developer@${SLAPD_DOMAIN}
+sn: Developer
+uid: alice.developer
+userPassword: {{ openldap_persona_alice_pass }}
+
+dn: cn=bob.developer,ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: bob.developer
+displayName: Bob Developer
+givenName: Bob
+mail: bob.developer@${SLAPD_DOMAIN}
+sn: Developer
+uid: bob.developer
+userPassword: {{ openldap_persona_bob_pass }}
+
+dn: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: ${INITIAL_ADMIN_USER}
+displayName: Admin User
+givenName: Admin
+mail: ${INITIAL_ADMIN_USER}@${SLAPD_DOMAIN}
+sn: User
+uid: ${INITIAL_ADMIN_USER}
+userPassword: ${INITIAL_ADMIN_PASSWORD}
+
+dn: ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: cn=administrators,ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: administrators
+uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+
+dn: cn=developer-all,ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: developer-all
+uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+
+dn: cn=developer-lead,ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: developer-lead
+uniqueMember: cn=alice.developer,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+
