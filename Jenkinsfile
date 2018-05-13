@@ -11,7 +11,7 @@ node('jenkins-python-slave') {
                              sh '''docker run -i \
                                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
                                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-                                   -e DWTOOLS_BRANCH="openldap-integration" \
+                                   -e DWTOOLS_BRANCH="master" \
                                    -e ELASTIC_IP=${DWTOOLS_ELASTIC_IP} \
                                    -e SERVER_FQDN=${DWTOOLS_SERVER_FQDN} \
                                    -e KEY_PAIR=dwtools \
