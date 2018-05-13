@@ -1,0 +1,52 @@
+version: '2'
+services:
+  ldap:
+    image: "{{ openldap_registry_url }}{{ openldap_image_name }}:{{ openldap_version }}"
+    restart: always
+    expose:
+      - "389"
+    ports:
+      - "389:389/tcp"
+    environment:
+      INITIAL_ADMIN_USER: {{ openldap_admin_user }}
+      INITIAL_ADMIN_PASSWORD: {{ openldap_admin_pass }}
+      SLAPD_PASSWORD: {{ openldap_slapd_pass }}
+      SLAPD_DOMAIN: {{ openldap_slapd_domain }}
+      SLAPD_FULL_DOMAIN: {{ openldap_full_domain }}
+    volumes:
+      - "{{ docker_volumes }}/{{ openldap_service_name }}/data:/var/lib/ldap"
+      - "{{ docker_volumes }}/{{ openldap_service_name }}/etc:/etc/ldap"
+      - "{{ docker_volumes }}/{{ openldap_service_name }}/structure.ldif:/tmp/structure.ldif"
+    networks:
+      - internal
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+  ldap-ltb:
+    restart: always
+    image: "{{ openldap_registry_url }}accenture/adop-ldap-ltb:0.1.0"
+    depends_on:
+      - ldap
+    networks:
+      - internal
+    expose:
+      - "80"
+    environment:
+      LDAP_LTB_URL: "ldap://ldap:389"
+      LDAP_LTB_DN: "cn=admin,{{ openldap_full_domain }}"
+      LDAP_LTB_PWD: {{ openldap_slapd_pass }}
+      LDAP_LTB_BS: {{ openldap_full_domain }}
+    labels:
+      - traefik.backend=password
+      - traefik.frontend.rule=Host:passwd.{{ base_domain }}
+      - traefik.docker.network=internal
+      - traefik.port=80
+networks:
+  internal:
+    external: true
+  external:
+    external: true
+
+

@@ -1,0 +1,5 @@
+---
+- hosts: openldap
+  roles:
+    - { role: openldap,
+        tags: [ 'openldap' ] }

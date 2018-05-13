@@ -3,6 +3,5 @@
 - include: playbooks/reverse_proxy.yml
 - include: playbooks/web_proxy.yml
 - include: playbooks/smtp_relay.yml
+- include: playbooks/openldap.yml
 - include: playbooks/homepage.yml
-
-
