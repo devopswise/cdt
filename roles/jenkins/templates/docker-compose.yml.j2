@@ -1,0 +1,27 @@
+version: '2'
+services:
+  jenkins:
+    restart: always
+    image: "{{ jenkins_registry_url }}{{ jenkins_image_name }}:{{ jenkins_version }}"
+    volumes:
+      - "{{ docker_volumes }}/{{ jenkins_service_name }}/data:/var/jenkins_home"
+      #- '/var/run/docker.sock:/var/run/docker.sock'
+    privileged: true
+    networks:
+      - internal
+      - external
+    labels:
+      - traefik.backend=jenkins
+      - traefik.frontend.rule=Host:jenkins.{{ base_domain }}
+      - traefik.docker.network=proxy
+      - traefik.port=8080
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{{.Name}}"
+networks:
+  internal:
+    external: true
+  external:
+    external: true
