@@ -1,7 +1,7 @@
-# dwtools
-dwtools is a infrastructure as code project for testing self-hosted applications.
+# CDT (Continous Delivery Toolchain)
+cdt is continuous delivery toolchain based on Jenkins and Nexus.
 
-#### With dwtools you can
+#### With cdt you can
 - kickstart your iaas project
 - test your self-hosted application which requires ldap, smtp
 - test your self-hosted application if it works behind proxy
