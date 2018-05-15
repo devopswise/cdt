@@ -14,8 +14,8 @@ node('jenkins-python-slave') {
                                    -e CDT_BRANCH="master" \
                                    -e ELASTIC_IP=${CDT_ELASTIC_IP} \
                                    -e SERVER_FQDN=${CDT_SERVER_FQDN} \
-                                   -e KEY_PAIR=cdt \
-                                   -e PEM_FILE=/opt/cdt/cdt.pem \
+                                   -e KEY_PAIR=dwtools \
+                                   -e PEM_FILE=/opt/cdt/dwtools.pem \
                                    -e DEBUG="-vv" \
                                    -v /opt/cdt:/opt/cdt \
                                    devopswise/cdt-installer:latest "cdt --launch" '''
