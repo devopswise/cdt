@@ -19,7 +19,7 @@ services:
       driver: "syslog"
       options:
         syslog-facility: "local2"
-        tag: "docker/{{.Name}}"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 networks:
   internal:
     external: true

@@ -27,6 +27,7 @@
   become_method: sudo
 
 - name: Disable SELinux imme.
+  when: false
   shell: "setenforce 0"
   become: yes
   become_method: sudo
