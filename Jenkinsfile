@@ -17,7 +17,7 @@ node('jenkins-python-slave') {
                                    -e KEY_PAIR=dwtools \
                                    -e PEM_FILE=/opt/cdt/dwtools.pem \
                                    -e DEBUG="-vv" \
-                                   -v /opt/cdt:/opt/cdt \
+                                   -v /opt/source/cdt:/opt/cdt \
                                    devopswise/cdt-installer:latest "cdt --launch" '''
                 }
            }
