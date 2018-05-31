@@ -1,8 +1,8 @@
 jenkins_service_name: "jenkins"
 jenkins_registry_url: ""   #from dockerhub
-jenkins_image_name: "jenkinsci/jenkins"
+jenkins_image_name: "devopswise/jenkins"
 
-jenkins_version: "lts"
-jenkins_user: 33
-jenkins_group: 33
+jenkins_version: "latest"
+jenkins_user: 1000
+jenkins_group: 1000
 
