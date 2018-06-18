@@ -14,10 +14,10 @@
 
 - name: generate a random mysql password
   set_fact:
-    jenkins_slapd_pass: "{{ lookup('password', '../credentials/jenkins_slapd_pass length=12') }}"
-    jenkins_admin_pass: "{{ lookup('password', '../credentials/jenkins_admin_pass length=12') }}"
-    jenkins_persona_alice_pass: "{{ lookup('password', '../credentials/jenkins_persona_alice_pass length=12') }}"
-    jenkins_persona_bob_pass: "{{ lookup('password', '../credentials/jenkins_persona_bob_pass length=12') }}"
+    openldap_slapd_pass: "{{ lookup('password', '../credentials/openldap_slapd_pass length=12') }}"
+    openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass length=12') }}"
+    openldap_persona_alice_pass: "{{ lookup('password', '../credentials/jenkins_persona_alice_pass length=12') }}"
+    openldap_persona_bob_pass: "{{ lookup('password', '../credentials/jenkins_persona_bob_pass length=12') }}"
 
 - name: sync docker-compose.yml
   template: 
