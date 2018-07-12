@@ -1,12 +1,18 @@
 ---
 - name: Create a directory to store volume
-  file: path="{{ item }}" state=directory mode=0777 owner="{{ jenkins_user }}" group="{{ jenkins_group }}"
+  file: path="{{ item }}" state=directory mode=0755 owner="{{ grafana_user }}" group="{{ grafana_group }}"
   with_items:
     - "{{ docker_logs }}/{{ grafana_service_name }}"
-    - "{{ docker_logs }}/{{ prometheus_service_name }}"
     - "{{ docker_volumes }}/{{ grafana_service_name }}"
     - "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
     - "{{ docker_volumes }}/{{ grafana_service_name }}/data"
+  become: yes
+  become_method: sudo
+
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0755 owner="{{ prometheus_user }}" group="{{ prometheus_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ prometheus_service_name }}"
     - "{{ docker_volumes }}/{{ prometheus_service_name }}"
     - "{{ docker_volumes }}/{{ prometheus_service_name }}/data"
     - "{{ docker_volumes }}/{{ prometheus_service_name }}/config"

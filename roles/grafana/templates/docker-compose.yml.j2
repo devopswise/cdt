@@ -11,7 +11,7 @@ services:
       - 9090
     volumes:
       - "{{ docker_volumes }}/{{ prometheus_service_name }}/data:/prometheus"
-      - "{{ docker_volumes }}/{{ grafana_service_name }}/config:/etc/prometheus"
+      - "{{ docker_volumes }}/{{ prometheus_service_name }}/config:/etc/prometheus"
       - /etc/localtime:/etc/localtime:ro
     networks:
       - internal
@@ -20,7 +20,7 @@ services:
       - traefik.frontend.rule=Host:prometheus.{{ base_domain }}
       - traefik.docker.network=internal
       - traefik.port=9090
-      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      #- traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
   pushgateway:
     restart: always
@@ -39,14 +39,14 @@ services:
       - traefik.frontend.rule=Host:pushgateway.{{ base_domain }}
       - traefik.docker.network=internal
       - traefik.port=9091
-      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      #- traefik.frontend.auth.basic=admin:$$apr1$$yk1vP8L3$$XHz138PzmxfidBroXGTPV1
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
   grafana:
     restart: always
     image: "{{ grafana_registry_url }}{{ grafana_image_name }}:{{ grafana_version }}"
     volumes:
-      - "{{ docker_volumes }}/{{ grafana_service_name }}/grafana/provisioning:/etc/grafana/provisioning"
-      - "{{ docker_volumes }}/{{ grafana_service_name }}/grafana/data:/var/lib/grafana"
+      - "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning:/etc/grafana/provisioning"
+      - "{{ docker_volumes }}/{{ grafana_service_name }}/data:/var/lib/grafana"
       - "/etc/localtime:/etc/localtime:ro"    
     environment:
       http_proxy: "{{ http_proxy }}"
@@ -68,7 +68,7 @@ services:
       - traefik.frontend.rule=Host:grafana.{{ base_domain }}
       - traefik.docker.network=internal
       - traefik.port=3000
-      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      #- traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
 networks:
   internal:

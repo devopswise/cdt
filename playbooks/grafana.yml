@@ -1,0 +1,5 @@
+---
+- hosts: grafana
+  roles:
+    - { role: grafana,
+        tags: [ 'grafana' ] }

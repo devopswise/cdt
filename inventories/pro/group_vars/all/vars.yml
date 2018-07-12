@@ -21,8 +21,8 @@ no_proxy: "127.0.0.1,localhost"
 
 #smtp configuration
 smtp_relay_gmail_user: "devopswise@gmail.com"
-smtp_server: "smtp.{{ smtp_domain }}"
-smtp_domain: "mail.{{ smtp_domain }}"
+smtp_server: "smtp.{{ base_domain }}"
+smtp_domain: "mail.{{ base_domain }}"
 smtp_server_port: 25
 
 ## end of new inventory
