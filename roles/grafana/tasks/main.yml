@@ -1,0 +1,86 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ jenkins_user }}" group="{{ jenkins_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ grafana_service_name }}"
+    - "{{ docker_logs }}/{{ prometheus_service_name }}"
+    - "{{ docker_volumes }}/{{ grafana_service_name }}"
+    - "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
+    - "{{ docker_volumes }}/{{ grafana_service_name }}/data"
+    - "{{ docker_volumes }}/{{ prometheus_service_name }}"
+    - "{{ docker_volumes }}/{{ prometheus_service_name }}/data"
+    - "{{ docker_volumes }}/{{ prometheus_service_name }}/config"
+  become: yes
+  become_method: sudo
+
+- name: Check if the prometheus.yml exists
+  stat:
+    path: "{{ docker_volumes }}/{{ prometheus_service_name }}/config/prometheus.yml"
+  register: prometheus_config_file
+
+- name: "Create default template if not exists"
+  template:
+    src: "prometheus.yml.j2"
+    dest: '{{ docker_volumes }}/{{ prometheus_service_name }}/config/prometheus.yml'
+    owner: '{{ prometheus_user }}'
+    group: '{{ prometheus_group }}'
+  when: prometheus_config_file.stat.exists == False
+  become: yes
+  become_method: sudo
+
+- name: Check if the dashboards.yml exists, if so dont clone anything
+  stat:
+    path: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning/dashboards/all.yml"
+  register: grafana_dashboard_config_file
+
+- name: clone dashboards from git
+  git:
+    repo: "{{ grafana_provisioning_repo_url }}"
+    dest: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
+    version: "{{ grafana_provisioning_repo_branch }}"
+  when: grafana_dashboard_config_file.stat.exists == False
+  become: yes
+  become_method: sudo
+
+- name: "overwrite datasources"
+  template:
+    src: "grafana-datasources.yml.j2"
+    dest: '{{ docker_volumes }}/{{ grafana_service_name }}/provisioning/datasources/datasources.yml'
+    owner: '{{ grafana_user }}'
+    group: '{{ grafana_group }}'
+  become: yes
+  become_method: sudo
+
+- name: set ownership for cloned dashboards so grafana user can access
+  file:
+    dest: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
+    owner: "{{ grafana_user }}"
+    group: "{{ grafana_group }}"
+    recurse: yes
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ grafana_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate a random mysql password
+  set_fact:
+    grafana_admin_pass: "{{ lookup('password', '../credentials/grafana_admin_pass length=12') }}"
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ grafana_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run grafana service {{ grafana_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ grafana_service_name }}"
+    project_src: "/tmp/{{ grafana_service_name }}"
+  register: output

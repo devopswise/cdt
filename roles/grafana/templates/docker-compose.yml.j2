@@ -1,0 +1,77 @@
+version: '2'
+services:
+  prometheus:
+    restart: always
+    image: "{{ prometheus_registry_url }}{{ prometheus_image_name }}:{{ prometheus_version }}"
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }},0.0.0.0:9090"
+    ports:
+      - 9090
+    volumes:
+      - "{{ docker_volumes }}/{{ prometheus_service_name }}/data:/prometheus"
+      - "{{ docker_volumes }}/{{ grafana_service_name }}/config:/etc/prometheus"
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - internal
+    labels:
+      - traefik.backend=prometheus
+      - traefik.frontend.rule=Host:prometheus.{{ base_domain }}
+      - traefik.docker.network=internal
+      - traefik.port=9090
+      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
+  pushgateway:
+    restart: always
+    image: "{{ pushgateway_registry_url }}{{ pushgateway_image_name }}:{{ pushgateway_version }}"
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }},0.0.0.0:9090"
+    ports:
+      - 9091
+    networks:
+      - internal
+      - external
+    labels:
+      - traefik.backend=pushgateway
+      - traefik.frontend.rule=Host:pushgateway.{{ base_domain }}
+      - traefik.docker.network=internal
+      - traefik.port=9091
+      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
+  grafana:
+    restart: always
+    image: "{{ grafana_registry_url }}{{ grafana_image_name }}:{{ grafana_version }}"
+    volumes:
+      - "{{ docker_volumes }}/{{ grafana_service_name }}/grafana/provisioning:/etc/grafana/provisioning"
+      - "{{ docker_volumes }}/{{ grafana_service_name }}/grafana/data:/var/lib/grafana"
+      - "/etc/localtime:/etc/localtime:ro"    
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }},prometheus,pushgateway"
+      GF_SECURITY_ADMIN_PASSWORD: "{{ grafana_admin_pass }}"
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "{{ smtp_server }}:{{ smtp_server_port }}"
+      GF_SMTP_FROM_ADDRESS: "cdtbot@{{ base_domain }}"
+      GF_SMTP_USER: ""
+      GF_SMTP_PASSWORD: ""
+      GF_SMTP_SKIP_VERIFY: "true"      
+    ports:
+      - 3000
+    networks:
+      - internal
+    labels:
+      - traefik.backend=grafana
+      - traefik.frontend.rule=Host:grafana.{{ base_domain }}
+      - traefik.docker.network=internal
+      - traefik.port=3000
+      - traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
+      # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
+networks:
+  internal:
+    external: true
+  external:
+    external: true
