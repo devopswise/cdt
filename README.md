@@ -1,13 +1,16 @@
 # CDT (Continous Delivery Toolchain)
-cdt is continuous delivery toolchain based on Jenkins and Nexus.
+cdt is continuous delivery toolchain based on Jenkins and Github.
+
+cdt install continuous delivery tools on your server and configure those applications to run together.
+For example, when you push your code into github, jenkins start building it. This comes preconfigured.
+
+Meanwhile, project aims to have best tools of ci/cd industry and most favorite integrations between them.
 
 #### With cdt you can
-- kickstart your iaas project
-- test your self-hosted application which requires ldap, smtp
-- test your self-hosted application if it works behind proxy
-- use it for educational purposes, then terminate your server after use, unless you keep your changes on code.
-- use it to avoid cloud bills to run your dev environment
-- it creates an enterprise like server environment, with LDAP, reverse proxy, web proxy, smtp relay etc.
+- kickstart your web application project from zero to deployment, just by cloning a reference project.
+- each branch is isolated and has it is own endpoint. if you use feature1 branch, it will deploy deploy to feature1.yourdomain.com
+- cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
+- cdt is also suitable for training.
 
 ## Getting Started
 
