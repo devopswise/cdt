@@ -14,7 +14,7 @@ Meanwhile, project aims to have best tools of ci/cd industry and most favorite i
 
 ## Getting Started
 
-Easiest way to getting started is using docker installer [dwtools-installer](https://hub.docker.com/r/devopswise/dwtools-installer/).
+Easiest way to getting started is using docker installer [cdt-installer](https://hub.docker.com/r/devopswise/cdt-installer/).
 it launches an ec2 instances(t2.medium), then runs ansible code to install applications. 
 You will end up with:
  - a workspace in your docker instance
