@@ -24,9 +24,8 @@ node('jenkins-python-slave') {
                                    -v /opt/source/cdt:/opt/cdt \
                                    devopswise/cdt-installer:latest "cdt --launch" '''
                 }
-           */
-           }
-       }
+           } */
+       }   
     }
     catch (err) {
         currentBuild.result = "FAILURE"
