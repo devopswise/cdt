@@ -90,3 +90,26 @@
     project_name: "{{ grafana_service_name }}"
     project_src: "/tmp/{{ grafana_service_name }}"
   register: output
+
+- set_fact: container_name="{{ vars['output']['ansible_facts']['prometheus'].keys()[0] }}"
+
+- set_fact: run_inside_container="docker exec -i {{ container_name }} /bin/sh -c"
+
+- name: copy insert-docker-host.sh to host
+  template: 
+    src: ../templates/insert-docker-host.sh.j2
+    dest: /tmp/{{ grafana_service_name }}/insert-docker-host.sh
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: copy insert-docker-host.sh to prometheus container
+  command: "docker cp /tmp/{{ grafana_service_name }}/insert-docker-host.sh {{ container_name }}:/tmp/insert-docker-host.sh"
+  become: yes
+  become_method: sudo
+
+- name: add host.docker.internal into /etc/host inside docker container
+  command: "{{ run_inside_container }} 'bash /tmp/insert-docker-host.sh'"
+  become: yes
+  become_method: sudo
+

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+host_docker_internal=$(/sbin/ip route|awk '/default/ { print $3 }') && echo "${host_docker_internal}     host.docker.internal" >> /etc/hosts

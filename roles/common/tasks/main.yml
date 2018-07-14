@@ -75,9 +75,13 @@
   become: yes
   become_method: sudo
 
-
 - name: enable docker remote api
   template: src=docker-external.conf.j2 dest=/etc/systemd/system/docker.service.d/docker-external.conf mode=644
+  become: yes
+  become_method: sudo
+
+- name: enable docker metrics
+  template: src=docker-daemon-js.j2 dest=/etc/docker/daemon.json mode=644
   become: yes
   become_method: sudo
 
