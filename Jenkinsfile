@@ -4,6 +4,7 @@ node('jenkins-python-slave') {
        stage('run cdt-installer'){
            sh 'printenv'
            sh 'env'
+           /*
            withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                          string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                          string(credentialsId: 'CDT_ELASTIC_IP', variable: 'CDT_ELASTIC_IP'),
@@ -23,6 +24,7 @@ node('jenkins-python-slave') {
                                    -v /opt/source/cdt:/opt/cdt \
                                    devopswise/cdt-installer:latest "cdt --launch" '''
                 }
+           */
            }
        }
     }
