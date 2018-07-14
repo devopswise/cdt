@@ -2,6 +2,8 @@ node('jenkins-python-slave') {
     currentBuild.result = "SUCCESS"
     try {
        stage('run cdt-installer'){
+           sh 'printenv'
+           sh 'env'
            withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                          string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                          string(credentialsId: 'CDT_ELASTIC_IP', variable: 'CDT_ELASTIC_IP'),
