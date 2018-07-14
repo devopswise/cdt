@@ -2,9 +2,6 @@ node('jenkins-python-slave') {
     currentBuild.result = "SUCCESS"
     try {
        stage('run cdt-installer'){
-           sh 'printenv'
-           sh 'env'
-           /*
            withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                          string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                          string(credentialsId: 'CDT_ELASTIC_IP', variable: 'CDT_ELASTIC_IP'),
@@ -14,7 +11,7 @@ node('jenkins-python-slave') {
                              sh '''docker run -i \
                                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
                                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-                                   -e CDT_BRANCH="master" \
+                                   -e CDT_BRANCH="${BRANCH_NAME}" \
                                    -e CDT_PLAYBOOK="minimal.yml" \
                                    -e ELASTIC_IP=${CDT_ELASTIC_IP} \
                                    -e SERVER_FQDN=${CDT_SERVER_FQDN} \
@@ -24,7 +21,7 @@ node('jenkins-python-slave') {
                                    -v /opt/source/cdt:/opt/cdt \
                                    devopswise/cdt-installer:latest "cdt --launch" '''
                 }
-           } */
+           }
        }   
     }
     catch (err) {
