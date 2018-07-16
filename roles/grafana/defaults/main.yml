@@ -2,7 +2,7 @@ grafana_service_name: "grafana"
 grafana_registry_url: ""   #from dockerhub
 grafana_image_name: "grafana/grafana"
 
-grafana_version: "5.1.3"
+grafana_version: "5.2.1"
 grafana_user: 472
 grafana_group: 472
 
