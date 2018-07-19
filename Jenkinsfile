@@ -12,7 +12,7 @@ node('jenkins-python-slave') {
                                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
                                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
                                    -e CDT_BRANCH="grafana" \
-                                   -e CDT_PLAYBOOK="minimal.yml" \
+                                   -e CDT_PLAYBOOK="site.yml" \
                                    -e ELASTIC_IP=${CDT_ELASTIC_IP} \
                                    -e SERVER_FQDN=${CDT_SERVER_FQDN} \
                                    -e KEY_PAIR=dwtools \
