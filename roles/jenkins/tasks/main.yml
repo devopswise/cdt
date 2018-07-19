@@ -16,8 +16,8 @@
   set_fact:
     openldap_slapd_pass: "{{ lookup('password', '../credentials/openldap_slapd_pass length=12') }}"
     openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass length=12') }}"
-    openldap_persona_alice_pass: "{{ lookup('password', '../credentials/jenkins_persona_alice_pass length=12') }}"
-    openldap_persona_bob_pass: "{{ lookup('password', '../credentials/jenkins_persona_bob_pass length=12') }}"
+    openldap_persona_alice_pass: "{{ lookup('password', '../credentials/openldap_persona_alice_pass length=12') }}"
+    openldap_persona_bob_pass: "{{ lookup('password', '../credentials/openldap_persona_bob_pass length=12') }}"
 
 - name: sync docker-compose.yml
   template: 
@@ -34,3 +34,22 @@
     project_name: "{{ jenkins_service_name }}"
     project_src: "/tmp/{{ jenkins_service_name }}"
   register: output
+
+- name: create reference job
+  template:
+    src: ../templates/multibranch-pipeline-job.xml.j2
+    dest: /tmp/{{ jenkins_service_name }}/hrweb-java.xml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: Wait untils Jenkins web API is available
+  shell: "curl -k --head --silent https://{{ jenkins_service_name }}.{{ base_domain }}/login?from=%2F"
+  register: result
+  until: result.stdout.find("200 OK") != -1
+  retries: 20
+  delay: 5
+
+- name: Create reference job using REST API
+  shell: "curl -k -s -XPOST https://{{ jenkins_service_name }}.{{ base_domain }}/createItem?name=hrweb-java -u alice.developer:{{ openldap_persona_alice_pass }} --data-binary @/tmp/{{ jenkins_service_name }}/hrweb-java.xml -H 'Content-Type:text/xml'"
+
