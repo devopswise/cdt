@@ -1,7 +1,7 @@
 ## new inventory
 
 env: pro
-base_domain: cdt.devopswise.co.uk
+base_domain: __base_domain__
 
 #registry_url: "docker.nexus3.devopswise.com/docker-internal/"
 registry_url: ""
