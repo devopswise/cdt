@@ -53,3 +53,50 @@
 - name: Create reference job using REST API
   shell: "curl -k -s -XPOST https://{{ jenkins_service_name }}.{{ base_domain }}/createItem?name=hrweb-java -u alice.developer:{{ openldap_persona_alice_pass }} --data-binary @/tmp/{{ jenkins_service_name }}/hrweb-java.xml -H 'Content-Type:text/xml'"
 
+- name: copy key file
+  copy:
+    src:  '/opt/cdt/grafana/jenkins.pem'
+    dest: '/opt/docker-volumes/jenkins/jenkins.pem'
+
+- name: generate jenkins API
+  when: false
+  uri:
+    url: 'https://{{ jenkins_service_name }}.{{ base_domain }}/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
+    user: admin
+    password: "{{ openldap_admin_pass }}"
+    force_basic_auth: yes
+    return_content: yes
+    validate_certs: no
+  register: crumb
+
+- name: set key
+  set_fact:
+    jenkins_ssh_key: "{{lookup('file', '/opt/cdt/grafana/jenkins.pem') }}"
+
+- name: insert ssh key
+  uri:
+    method: POST
+    url: 'https://{{ jenkins_service_name }}.{{ base_domain }}/credentials/store/system/domain/_/createCredentials'
+    user: admin
+    password: "{{ openldap_admin_pass }}"
+    force_basic_auth: yes
+    validate_certs: no
+    #headers:
+    #  Jenkins-Crumb: "{{ crumb.content.split(':')[1] }}"
+    body: |
+      json={
+        "": "0",
+        "credentials": {
+          "scope": "GLOBAL",
+          "id": "jenkins-ssh-slave-user",
+          "username": "user",
+          "password": "",
+          "privateKeySource": {
+          "stapler-class": "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey$FileOnMasterPrivateKeySource",
+             "privateKeyFile": "/var/jenkins_home/jenkins.pem"
+          },
+          "description": "jenkins-ssh-slave-user",
+          "stapler-class": "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey"
+        }
+      }
+
