@@ -72,31 +72,31 @@
 - name: set key
   set_fact:
     jenkins_ssh_key: "{{lookup('file', '/opt/cdt/grafana/jenkins.pem') }}"
-
-- name: insert ssh key
-  uri:
-    method: POST
-    url: 'https://{{ jenkins_service_name }}.{{ base_domain }}/credentials/store/system/domain/_/createCredentials'
-    user: admin
-    password: "{{ openldap_admin_pass }}"
-    force_basic_auth: yes
-    validate_certs: no
     #headers:
     #  Jenkins-Crumb: "{{ crumb.content.split(':')[1] }}"
-    body: |
-      json={
-        "": "0",
-        "credentials": {
-          "scope": "GLOBAL",
-          "id": "jenkins-ssh-slave-user",
-          "username": "user",
-          "password": "",
-          "privateKeySource": {
-          "stapler-class": "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey$FileOnMasterPrivateKeySource",
-             "privateKeyFile": "/var/jenkins_home/jenkins.pem"
-          },
-          "description": "jenkins-ssh-slave-user",
-          "stapler-class": "com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey"
-        }
-      }
 
+#TODO: This should be moved to openldap playbook
+- name: generate key-pair for admin
+  when: false
+  local_action:
+    module: shell
+    _raw_params: ssh-keygen -t rsa -b 4096 -q -P '' -C 'your_email@example.com' -f ../credentials/openldap_admin_pass
+
+- name: copy add-new-credential.groovy to target
+  template:
+    src: ../templates/add-new-credential.groovy.j2
+    dest: /tmp/{{ jenkins_service_name }}/add-new-credential.groovy
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: Transfer script to run
+  copy:
+    src: /opt/cdt/grafana/jenkins.pem
+    dest: "{{ docker_volumes }}/{{ jenkins_service_name }}/ssh-private-key.pem"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: make curl request to jenkins
+  shell: "curl -f --user admin:{{ openldap_admin_pass }} --data-urlencode \"script@/tmp/{{ jenkins_service_name }}/add-new-credential.groovy\" https://{{ jenkins_service_name }}.{{ base_domain }}/scriptText"
