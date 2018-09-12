@@ -11,6 +11,7 @@ node('jenkins-python-slave') {
                              sh '''docker run -i \
                                    -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
                                    -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+                                   -e DO_NOT_PROVISION_EC2=${DO_NOT_PROVISION_EC2} \
                                    -e AWS_INSTANCE_TYPE="t2.large" \
                                    -e CDT_BRANCH="grafana" \
                                    -e CDT_PLAYBOOK="site.yml" \
