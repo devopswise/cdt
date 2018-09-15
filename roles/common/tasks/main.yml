@@ -39,6 +39,13 @@
   become: yes
   become_method: sudo
 
+- name: Install yum-config-manager
+  package: name={{ item }} state=latest
+  with_items:
+    - "yum-utils"
+  become: yes
+  become_method: sudo
+
 # enable extra
 - name: enable extras for epel
   shell: "{{ item }}"
