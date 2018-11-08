@@ -1,0 +1,50 @@
+version: '2'
+services:
+  jira:
+    restart: always
+    image: "{{ jira_registry_url }}{{ jira_image_name }}:{{ jira_version }}"
+    volumes:
+      - "{{ docker_volumes }}/{{ jira_service_name }}/data:/var/atlassian/jira"
+    depends_on:
+      - mysql
+    environment:
+      X_PROXY_NAME: jira.{{ base_domain }}
+      X_PROXY_PORT: 443
+      X_PROXY_SCHEME: https
+    labels:
+      - traefik.backend=jira
+      - traefik.frontend.rule=Host:jira.{{ base_domain }}
+      - traefik.port=8080
+    #logging:
+    #  driver: "syslog"
+    #  options:
+    #    syslog-facility: "local2"
+    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+  mysql:
+    image: mariadb:{{ mariadb_version }}
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: {{ jira_mysql_pass }}
+      MYSQL_DATABASE: jira
+      MYSQL_USER: jira
+      MYSQL_PASSWORD: {{ jira_mysql_pass }}
+    volumes:
+      - '{{ docker_volumes }}/{{ jira_service_name }}/mysql:/var/lib/mysql'
+    ports:
+      - 3306
+    labels:
+      - traefik.enable=false
+    #logging:
+    #  driver: "syslog"
+    #  options:
+    #    syslog-facility: "local2"
+    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true
+
+

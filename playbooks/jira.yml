@@ -1,0 +1,5 @@
+---
+- hosts: jira
+  roles:
+    - { role: jira,
+        tags: [ 'jira' ] }
