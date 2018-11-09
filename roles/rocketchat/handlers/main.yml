@@ -1,0 +1,9 @@
+---
+- name: restart rocketchat
+  docker_service:
+    project_name: "{{ rocketchat_service_name }}"
+    project_src: "/tmp/{{ rocketchat_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo
