@@ -1,0 +1,5 @@
+---
+- hosts: gitea
+  roles:
+    - { role: gitea,
+        tags: [ 'gitea' ] }

@@ -6,11 +6,14 @@ services:
     volumes:
       - "{{ docker_volumes }}/{{ jira_service_name }}/data:/var/atlassian/jira"
     depends_on:
-      - mysql
+      - jira_db
     environment:
       X_PROXY_NAME: jira.{{ base_domain }}
       X_PROXY_PORT: 443
       X_PROXY_SCHEME: https
+    networks:
+      - internal
+      - external
     labels:
       - traefik.backend=jira
       - traefik.frontend.rule=Host:jira.{{ base_domain }}
@@ -21,7 +24,7 @@ services:
     #    syslog-facility: "local2"
     #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
-  mysql:
+  jira_db:
     image: mariadb:{{ mariadb_version }}
     restart: always
     environment:
@@ -29,6 +32,9 @@ services:
       MYSQL_DATABASE: jira
       MYSQL_USER: jira
       MYSQL_PASSWORD: {{ jira_mysql_pass }}
+    networks:
+      - internal
+      - external
     volumes:
       - '{{ docker_volumes }}/{{ jira_service_name }}/mysql:/var/lib/mysql'
     ports:

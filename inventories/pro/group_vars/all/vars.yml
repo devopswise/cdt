@@ -25,4 +25,5 @@ smtp_server: "smtp.{{ base_domain }}"
 smtp_domain: "mail.{{ base_domain }}"
 smtp_server_port: 25
 
+mariadb_version: "10.3"
 ## end of new inventory

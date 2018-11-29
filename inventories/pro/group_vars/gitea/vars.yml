@@ -1,0 +1,10 @@
+gitea_service_name: "gitea"
+gitea_registry_url: ""   #from dockerhub
+gitea_image_name: "gitea/gitea"
+
+mariadb_version: "10.3"
+
+gitea_version: "1.6"
+gitea_user: 1000
+gitea_group: 1000
+

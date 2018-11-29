@@ -1,9 +1,10 @@
 ---
 # This is a temporary workaround to avoid aws bills for development
 - name: Schedule to turn off system after 2 hours
-  shell: "shutdown -P +90"
+  shell: "shutdown -P +120"
   become: yes
   become_method: sudo
+  when: cdt_shutdown_after_2h is defined
 
 - name: Turn swap off
   shell: "nohup swapoff -a &"

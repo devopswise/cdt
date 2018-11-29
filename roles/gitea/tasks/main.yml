@@ -1,0 +1,35 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ gitea_user }}" group="{{ gitea_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ gitea_service_name }}"
+    - "{{ docker_volumes }}/{{ gitea_service_name }}"
+    - "{{ docker_volumes }}/{{ gitea_service_name }}/mysql"
+    - "{{ docker_volumes }}/{{ gitea_service_name }}/data"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ gitea_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate a random mysql password
+  set_fact:
+    gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass length=12 chars=ascii_letters') }}"
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ gitea_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run gitea service {{ gitea_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ gitea_service_name }}"
+    project_src: "/tmp/{{ gitea_service_name }}"
+  register: output

@@ -1,0 +1,9 @@
+---
+- name: restart gitea
+  docker_service:
+    project_name: "{{ gitea_service_name }}"
+    project_src: "/tmp/{{ gitea_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

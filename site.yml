@@ -6,4 +6,7 @@
 - include: playbooks/openldap.yml
 - include: playbooks/jenkins.yml
 - include: playbooks/grafana.yml
-- include: playbooks/homepage.yml
+- include: playbooks/gitea.yml
+- include: playbooks/jira.yml
+- include: playbooks/rocketchat.yml
+#- include: playbooks/homepage.yml

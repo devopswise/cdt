@@ -22,5 +22,14 @@ only_server
 [grafana:children]
 only_server
 
+[jira:children]
+only_server
+
+[rocketchat:children]
+only_server
+
+[gitea:children]
+only_server
+
 [only_server]
 cdt01 ansible_ssh_host=__dw_server_fqdn__ ansible_ssh_user=centos ansible_ssh_private_key_file=__dw_private_key__

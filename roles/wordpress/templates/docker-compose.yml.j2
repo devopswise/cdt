@@ -29,7 +29,7 @@ services:
         syslog-facility: "local2"
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
   homepage_db:
-    image: mariadb
+    image: mariadb:{{ mariadb_version }}
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "{{ wordpress_db_pass }}"
