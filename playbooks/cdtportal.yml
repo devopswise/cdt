@@ -1,0 +1,5 @@
+---
+- hosts: cdtportal
+  roles:
+    - { role: cdtportal,
+        tags: [ 'cdtportal' ] }

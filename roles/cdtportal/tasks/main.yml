@@ -1,0 +1,39 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ cdtportal_user }}" group="{{ cdtportal_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ cdtportal_service_name }}"
+    - "{{ docker_volumes }}/{{ cdtportal_service_name }}"
+    - "{{ docker_volumes }}/{{ cdtportal_service_name }}/config"
+    - "{{ docker_volumes }}/{{ cdtportal_service_name }}/data"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ cdtportal_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: sync application.properties file for cdtportal
+  template: 
+    src: ../templates/application.properties.j2
+    dest: /{{ docker_volumes }}/{{ cdtportal_service_name }}/config/application.properties
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/docker-compose.yml.j2
+    dest: /tmp/{{ cdtportal_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: "Run cdtportal service {{ cdtportal_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ cdtportal_service_name }}"
+    project_src: "/tmp/{{ cdtportal_service_name }}"
+  register: output

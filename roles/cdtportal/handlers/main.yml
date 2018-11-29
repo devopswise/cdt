@@ -1,0 +1,9 @@
+---
+- name: restart cdtportal
+  docker_service:
+    project_name: "{{ cdtportal_service_name }}"
+    project_src: "/tmp/{{ cdtportal_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo
