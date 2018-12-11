@@ -1,0 +1,7 @@
+#!/bin/bash
+OPENJDK_VERSION="8-jdk"
+WORKING_DIR={{ docker_certs }}
+CERT_TO_IMPORT={{ base_domain }}.crt
+docker pull openjdk:${OPENJDK_VERSION}
+docker run --rm --entrypoint cat openjdk:${OPENJDK_VERSION} /etc/ssl/certs/java/cacerts > ${WORKING_DIR}/cacerts
+docker run --rm -v `pwd`:/tmp/certs openjdk:${OPENJDK_VERSION} bash -c 'cd /tmp/certs && keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias {{ base_domain }} -file {{ base_domain }}.crt'

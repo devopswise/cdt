@@ -9,6 +9,7 @@ registry_url: ""
 docker_volumes: /opt/docker-volumes
 docker_logs: /opt/docker-logs
 docker_backups: /opt/docker-backups
+docker_certs: /opt/docker-certs
 
 aws_access_key: "AKIAJYUEDKFQKOPEJMHQ"
 aws_region: "eu-west-1"
@@ -18,6 +19,7 @@ http_proxy_port: 3128
 http_proxy: "http://{{ http_proxy_hostname }}:{{ http_proxy_port }}"
 https_proxy: "{{ http_proxy }}"
 no_proxy: "127.0.0.1,localhost"
+use_self_signed_https_cert: false
 
 #smtp configuration
 smtp_relay_gmail_user: "devopswise@gmail.com"
@@ -26,4 +28,7 @@ smtp_domain: "mail.{{ base_domain }}"
 smtp_server_port: 25
 
 mariadb_version: "10.3"
+
+#misc
+cdt_shutdown_after_2h: false
 ## end of new inventory

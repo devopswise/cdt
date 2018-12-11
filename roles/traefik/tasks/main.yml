@@ -34,9 +34,14 @@
   become: yes
   become_method: sudo
 
+- name: Use self-signed certficite for traefik
+  set_fact:
+    traefik_toml_template: "../templates/traefik.toml.self-signed.j2"
+  when: "{{ use_self_signed_https_cert | bool }}"
+
 - name: sync traefik.toml
   template: 
-    src: ../templates/traefik.toml.j2
+    src: "{{ traefik_toml_template }}"
     dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
@@ -67,7 +72,6 @@
     path: "/tmp/{{ traefik_service_name }}/docker-compose.yml"
   become: yes
   become_method: sudo
-
 
 
 
