@@ -4,7 +4,7 @@
   shell: "shutdown -P +120"
   become: yes
   become_method: sudo
-  when: cdt_shutdown_after_2h is defined
+  when: cdt_shutdown_after_2h == "true"
 
 - name: Turn swap off
   shell: "nohup swapoff -a &"

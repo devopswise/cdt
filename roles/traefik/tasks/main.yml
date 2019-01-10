@@ -4,6 +4,7 @@
   with_items:
     - "{{ docker_logs }}/{{ traefik_service_name }}"
     - "{{ docker_volumes }}/{{ traefik_service_name }}"
+    - "{{ docker_volumes }}/{{ traefik_service_name }}/certs"
   become: yes
   become_method: sudo
 
@@ -26,6 +27,30 @@
   set_fact:
     traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 length=12') }}"
 
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/traefik_http_ssl.crt
+  register: traefik_http_ssl_crt
+
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/traefik_http_ssl.key
+  register: traefik_http_ssl_key
+
+- name: create openssl configuration file
+  template: src=../templates/openssl_req.cfg.j2 dest=../credentials/openssl_req.cfg
+  delegate_to: localhost
+
+- name: generate self-signed ssl certificate if not exists
+  local_action:
+    module: shell
+    _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/traefik_http_ssl.key -out ../credentials/traefik_http_ssl.crt -config ../credentials/openssl_req.cfg
+  when: not (traefik_http_ssl_key.stat.exists and traefik_http_ssl_crt.stat.exists) 
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/traefik_http_ssl.crt dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{base_domain}}.crt
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/traefik_http_ssl.key dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{base_domain}}.key
+
 - name: sync docker-compose.yml
   template: 
     src: ../templates/docker-compose.yml.j2
@@ -34,13 +59,32 @@
   become: yes
   become_method: sudo
 
-- name: sync traefik.toml
+- name: sync traefik.toml (letsencrypt)
   template: 
-    src: ../templates/traefik.toml.j2
+    src: ../templates/traefik.toml.https.j2
     dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
   become_method: sudo
+  when: http_ssl_certificate_generation == "letsencrypt"
+
+- name: sync traefik.toml (no ssl certificate, http)
+  template:
+    src: ../templates/traefik.toml.http.j2
+    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    mode: 0755
+  become: yes
+  become_method: sudo
+  when: http_ssl_certificate_generation == "none"
+
+- name: sync traefik.toml (use self-signed https certificate)
+  template:
+    src: ../templates/traefik.toml.selfsigned.j2
+    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    mode: 0755
+  become: yes
+  become_method: sudo
+  when: http_ssl_certificate_generation == "selfsigned"
 
 - name: ensure file exists
   copy:

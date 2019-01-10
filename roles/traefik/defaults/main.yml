@@ -13,3 +13,4 @@ traefik_ports:
 traefik_user: 0
 traefik_group: 0
 
+http_ssl_certificate_generation: "letsencrypt"

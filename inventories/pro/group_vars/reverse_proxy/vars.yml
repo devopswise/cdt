@@ -3,7 +3,7 @@ traefik_admin_email: devopswise@gmail.com
 
 traefik_service_name: "traefik"
 
-traefik_version: "1.5.4"
+traefik_version: "1.7.4"
 traefik_user: 0
 traefik_group: 0
 

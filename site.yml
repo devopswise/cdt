@@ -9,4 +9,5 @@
 - include: playbooks/gitea.yml
 - include: playbooks/jira.yml
 - include: playbooks/rocketchat.yml
+- include: playbooks/cdtportal.yml
 #- include: playbooks/homepage.yml
