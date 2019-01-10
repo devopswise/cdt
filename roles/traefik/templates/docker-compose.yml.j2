@@ -9,7 +9,7 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - '/opt/docker-volumes/traefik/traefik.toml:/traefik.toml'
       - '/opt/docker-volumes/traefik/acme.json:/acme.json'
-      - '/opt/docker-volumes/traefik/certs:/certs'
+      - '/opt/docker-certs:/certs'
     ports:
       - "80:80"
       - "443:443"

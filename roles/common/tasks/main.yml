@@ -37,6 +37,7 @@
   with_items:
     - "{{ docker_logs }}"
     - "{{ docker_volumes }}"
+    - "{{ docker_certs }}"
   become: yes
   become_method: sudo
 
@@ -46,7 +47,6 @@
     - "yum-utils"
   become: yes
   become_method: sudo
-
 # enable extra
 - name: enable extras for epel
   shell: "{{ item }}"
@@ -76,7 +76,7 @@
     - "docker-compose==1.15.0"
   become: yes
   become_method: sudo
-
+  
 - name: Ensures /etc/systemd/system/docker.service.d dir exists
   file: path=/etc/systemd/system/docker.service.d state=directory
   become: yes
@@ -109,6 +109,43 @@
 
 - name: copy s3cmd binary wraper
   copy: src=s3cmd dest=/usr/local/bin/s3cmd mode=775
+  become: yes
+  become_method: sudo
+
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/{{ base_domain }}.crt
+  register: http_ssl_crt
+
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/{{ base_domain }}.key
+  register: http_ssl_key
+
+- name: create openssl configuration file
+  template: src=../templates/openssl_req.cfg.j2 dest=../credentials/openssl_req.cfg
+  delegate_to: localhost
+
+- name: generate self-signed ssl certificate if not exists
+  local_action:
+    module: shell
+    _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/{{ base_domain }}.key -out ../credentials/{{ base_domain }}.crt -config ../credentials/openssl_req.cfg
+  when: not (http_ssl_key.stat.exists and http_ssl_crt.stat.exists)
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/{{ base_domain }}.crt dest={{ docker_certs }}/{{base_domain}}.crt
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/{{ base_domain }}.key dest={{ docker_certs }}/{{base_domain}}.key
+
+- name: generate-cacert.sh file
+  template:
+    src: ../templates/generate-cacert.sh.j2
+    dest: "{{ docker_certs }}/generate-cacert.sh"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: Run cacert generation script 
+  shell: "cd {{ docker_certs }} && {{ docker_certs }}/generate-cacert.sh"
   become: yes
   become_method: sudo
 

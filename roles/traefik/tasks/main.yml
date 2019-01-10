@@ -59,6 +59,7 @@
   become: yes
   become_method: sudo
 
+<<<<<<< HEAD
 - name: sync traefik.toml (letsencrypt)
   template: 
     src: ../templates/traefik.toml.https.j2
@@ -111,7 +112,6 @@
     path: "/tmp/{{ traefik_service_name }}/docker-compose.yml"
   become: yes
   become_method: sudo
-
 
 
 
