@@ -8,11 +8,6 @@ address = ":8080"
 [entryPoints]
   [entryPoints.http]
   address = ":80"
-    [entryPoints.http.redirect]
-      entryPoint = "https"
-  [entryPoints.https]
-  address = ":443"
-    [entryPoints.https.tls]
 
 [acme]
 email = "{{ traefik_admin_email }}"
@@ -24,3 +19,8 @@ onDemand = false
   entryPoint = "http"
 [[acme.domains]]
   main = "{{ base_domain }}"
+
+[metrics]
+  [metrics.prometheus]
+    entryPoint = "traefik"
+    buckets = [0.1,0.3,1.2,5.0]

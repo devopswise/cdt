@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "db=db.getSiblingDB(\"${MONGO_INITDB_APP_DB}\")" > /tmp/mongo-init.js
+echo "db.createUser({ user: \"${MONGO_INITDB_APP_USER}\", pwd: \"${MONGO_INITDB_APP_PASS}\", roles: [{ role: \"dbOwner\", db: \"${MONGO_INITDB_APP_DB}\" }] })" >> /tmp/mongo-init.js
+mongo 127.0.0.1/${MONGO_INITDB_DATABASE} -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} /tmp/mongo-init.js
+
+echo DB:${MONGO_INITDB_APP_DB}
+echo USER:${MONGO_INITDB_APP_USER}
+echo PASS:${MONGO_INITDB_APP_PASS}

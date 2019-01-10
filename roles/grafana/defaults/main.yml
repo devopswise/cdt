@@ -1,0 +1,23 @@
+grafana_service_name: "grafana"
+grafana_registry_url: ""   #from dockerhub
+grafana_image_name: "grafana/grafana"
+
+grafana_version: "5.2.1"
+grafana_user: 472
+grafana_group: 472
+
+prometheus_service_name: "prometheus"
+prometheus_registry_url: ""   #from dockerhub
+prometheus_image_name: "devopswise/prometheus"
+
+prometheus_version: "latest"
+prometheus_user: 0
+prometheus_group: 0
+
+pushgateway_service_name: "pushgateway"
+pushgateway_registry_url: ""   #from dockerhub
+pushgateway_image_name: "quay.io/prometheus/pushgateway"
+pushgateway_version: "latest"
+
+grafana_provisioning_repo_url: "https://github.com/devopswise/cdt-grafana-provisioning.git"
+grafana_provisioning_repo_branch: master

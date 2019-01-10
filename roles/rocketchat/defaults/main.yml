@@ -1,0 +1,10 @@
+rocketchat_service_name: "rocketchat"
+rocketchat_registry_url: ""
+rocketchat_image_name: "rocketchat/rocket.chat"
+
+mongodb_version: 3.6
+
+rocketchat_version: "0.65.1"
+rocketchat_user: 0
+rocketchat_group: 0
+

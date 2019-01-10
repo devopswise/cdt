@@ -1,9 +1,10 @@
 ---
 # This is a temporary workaround to avoid aws bills for development
 - name: Schedule to turn off system after 2 hours
-  shell: "shutdown -P +90"
+  shell: "shutdown -P +120"
   become: yes
   become_method: sudo
+  when: cdt_shutdown_after_2h == "true"
 
 - name: Turn swap off
   shell: "nohup swapoff -a &"
@@ -27,7 +28,6 @@
   become_method: sudo
 
 - name: Disable SELinux imme.
-  when: false
   shell: "setenforce 0"
   become: yes
   become_method: sudo
@@ -37,9 +37,16 @@
   with_items:
     - "{{ docker_logs }}"
     - "{{ docker_volumes }}"
+    - "{{ docker_certs }}"
   become: yes
   become_method: sudo
 
+- name: Install yum-config-manager
+  package: name={{ item }} state=latest
+  with_items:
+    - "yum-utils"
+  become: yes
+  become_method: sudo
 # enable extra
 - name: enable extras for epel
   shell: "{{ item }}"
@@ -56,6 +63,7 @@
     - "python-setuptools"
     - "docker-ce"
     - "python-pip"
+    - "git"
   become: yes
   become_method: sudo
 
@@ -68,15 +76,24 @@
     - "docker-compose==1.15.0"
   become: yes
   become_method: sudo
-
+  
 - name: Ensures /etc/systemd/system/docker.service.d dir exists
   file: path=/etc/systemd/system/docker.service.d state=directory
   become: yes
   become_method: sudo
 
-
 - name: enable docker remote api
   template: src=docker-external.conf.j2 dest=/etc/systemd/system/docker.service.d/docker-external.conf mode=644
+  become: yes
+  become_method: sudo
+
+- name: Create /etc/docker directories
+  file: path="/etc/docker" state=directory mode=0755 owner="0" group="0"
+  become: yes
+  become_method: sudo
+
+- name: enable docker metrics
+  template: src=docker-daemon-js.j2 dest=/etc/docker/daemon.json mode=644
   become: yes
   become_method: sudo
 
@@ -92,6 +109,43 @@
 
 - name: copy s3cmd binary wraper
   copy: src=s3cmd dest=/usr/local/bin/s3cmd mode=775
+  become: yes
+  become_method: sudo
+
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/{{ base_domain }}.crt
+  register: http_ssl_crt
+
+- name: generate self-signed ssl certificate if not exists
+  local_action: stat path=../credentials/{{ base_domain }}.key
+  register: http_ssl_key
+
+- name: create openssl configuration file
+  template: src=../templates/openssl_req.cfg.j2 dest=../credentials/openssl_req.cfg
+  delegate_to: localhost
+
+- name: generate self-signed ssl certificate if not exists
+  local_action:
+    module: shell
+    _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/{{ base_domain }}.key -out ../credentials/{{ base_domain }}.crt -config ../credentials/openssl_req.cfg
+  when: not (http_ssl_key.stat.exists and http_ssl_crt.stat.exists)
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/{{ base_domain }}.crt dest={{ docker_certs }}/{{base_domain}}.crt
+
+- name: copy generated certificates to cert folder
+  copy: src=../credentials/{{ base_domain }}.key dest={{ docker_certs }}/{{base_domain}}.key
+
+- name: generate-cacert.sh file
+  template:
+    src: ../templates/generate-cacert.sh.j2
+    dest: "{{ docker_certs }}/generate-cacert.sh"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: Run cacert generation script 
+  shell: "cd {{ docker_certs }} && {{ docker_certs }}/generate-cacert.sh"
   become: yes
   become_method: sudo
 

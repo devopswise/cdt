@@ -1,0 +1,22 @@
+global:
+  scrape_interval:     60s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 60s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scheme: http
+    metrics_path: '/metrics'
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'dockerd'
+    static_configs:
+    - targets: ['host.docker.internal:9323']
+
+  - job_name: 'traefik'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['traefik:8080']
+

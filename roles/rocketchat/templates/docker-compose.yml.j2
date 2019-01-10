@@ -1,0 +1,56 @@
+version: '2'
+services:
+  rocketchat:
+    restart: always
+    image: "{{ rocketchat_registry_url }}{{ rocketchat_image_name }}:{{ rocketchat_version }}"
+    command: "node --use-openssl-ca main.js"
+    networks:
+      - internal
+      - external
+    ports:
+      - 3000
+    depends_on:
+      - mongodb
+    environment:
+        MONGO_URL: "mongodb://rocketchat:{{ rocketchat_mongodb_pass }}@mongodb:27017/rocketchat"
+        NODE_TLS_REJECT_UNAUTHORIZED: "0"
+        SSL_CERT_DIR: "/etc/ssl/certs"
+    labels:
+      - traefik.backend=rocketchat
+      - traefik.frontend.rule=Host:rocketchat.{{ base_domain }}
+      - traefik.docker.network=external
+      - traefik.port=3000
+    #logging:
+    #  driver: "syslog"
+    #  options:
+    #    syslog-facility: "local2"
+    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+  mongodb:
+    build: .
+    volumes:
+      - {{ docker_volumes }}/{{ rocketchat_service_name }}/mongodb:/db/data
+    networks:
+      - internal
+      - external
+    ports:
+      - 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: {{ rocketchat_mongodb_pass }}
+      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_APP_DB: rocketchat
+      MONGO_INITDB_APP_USER: rocketchat
+      MONGO_INITDB_APP_PASS: {{ rocketchat_mongodb_pass }}
+    #logging:
+    #  driver: "syslog"
+    #  options:
+    #    syslog-facility: "local2"
+    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true
+

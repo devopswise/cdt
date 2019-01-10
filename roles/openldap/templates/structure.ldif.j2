@@ -30,6 +30,32 @@ sn: Developer
 uid: bob.developer
 userPassword: {{ openldap_persona_bob_pass }}
 
+dn: cn=charlie.leaddeveloper,ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: charlie.leaddeveloper
+displayName: Charlie Lead Developer
+givenName: Charlie
+mail: charlie.leaddeveloper@${SLAPD_DOMAIN}
+sn: Lead Developer
+uid: charlie.leaddeveloper
+userPassword: {{ openldap_persona_bob_pass }}
+
+dn: cn=onur.ozkol,ou=people,${SLAPD_FULL_DOMAIN}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: onur.ozkol
+displayName: Onur Ozkol
+givenName: Onur
+mail: onur@${SLAPD_DOMAIN}
+sn: Ozkol
+uid: onur.ozkol
+userPassword: {{ openldap_persona_bob_pass }}
+
 dn: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
@@ -65,5 +91,23 @@ objectClass: groupOfUniqueNames
 objectClass: top
 cn: developer-lead
 uniqueMember: cn=alice.developer,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+
+dn: cn=jira-administrators,ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: jira-administrators
+uniqueMember: cn=charlie.leaddeveloper,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=onur.ozkol,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
+
+dn: cn=jira-software-users,ou=groups,${SLAPD_FULL_DOMAIN}
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: jira-software-users
+uniqueMember: cn=alice.developer,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=bob.developer,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=charlie.leaddeveloper,ou=people,${SLAPD_FULL_DOMAIN}
+uniqueMember: cn=onur.ozkol,ou=people,${SLAPD_FULL_DOMAIN}
 uniqueMember: cn=${INITIAL_ADMIN_USER},ou=people,${SLAPD_FULL_DOMAIN}
 

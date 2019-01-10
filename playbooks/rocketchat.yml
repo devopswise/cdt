@@ -1,0 +1,5 @@
+---
+- hosts: rocketchat
+  roles:
+    - { role: rocketchat,
+        tags: [ 'rocketchat' ] }

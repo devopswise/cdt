@@ -1,0 +1,38 @@
+---
+- name: Create a directory to store volume
+  file: path="{{ item }}" state=directory mode=0777 owner="{{ rocketchat_user }}" group="{{ rocketchat_group }}"
+  with_items:
+    - "{{ docker_logs }}/{{ rocketchat_service_name }}"
+    - "{{ docker_volumes }}/{{ rocketchat_service_name }}"
+    - "{{ docker_volumes }}/{{ rocketchat_service_name }}/mongodb"
+  become: yes
+  become_method: sudo
+
+- name: create directory for project_src
+  file: path="/tmp/{{ rocketchat_service_name }}" state=directory
+  become: yes
+  become_method: sudo
+
+- name: generate a random mysql password
+  set_fact:
+    rocketchat_mongodb_pass: "{{ lookup('password', '../credentials/rocketchat_mongodb_pass length=12') }}"
+
+- name: sync docker-compose.yml
+  template: 
+    src: ../templates/{{ item }}.j2
+    dest: /tmp/{{ rocketchat_service_name }}/{{ item }}
+    mode: 0755
+  become: yes
+  become_method: sudo
+  with_items:
+    - "Dockerfile"
+    - "dbinit.sh"
+    - "docker-compose.yml"
+
+- name: "Run rocketchat service {{ rocketchat_version }}"
+  become: yes
+  become_method: sudo
+  docker_service:
+    project_name: "{{ rocketchat_service_name }}"
+    project_src: "/tmp/{{ rocketchat_service_name }}"
+  register: output

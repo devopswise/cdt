@@ -1,0 +1,30 @@
+version: '2'
+services:
+  cdtportal:
+    image: "{{ cdtportal_registry_url }}{{ cdtportal_image_name }}:{{ cdtportal_version }}"
+    volumes:
+      - "{{ docker_volumes }}/{{ cdtportal_service_name }}/config/application.properties:/config/application.properties"
+      - "{{ docker_volumes }}/{{ cdtportal_service_name }}/data:/data"
+    ports:
+      - 8080
+    networks:
+      - internal
+      - external
+    restart: always
+    labels:
+      - traefik.backend=cdtportal
+      - traefik.frontend.rule=Host:cdtportal.{{ base_domain }}
+      - traefik.port=8080
+    #logging:
+    #  driver: "syslog"
+    #  options:
+    #    syslog-facility: "local2"
+    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true
+
+

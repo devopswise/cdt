@@ -3,6 +3,9 @@ services:
   jenkins:
     restart: always
     image: "{{ jenkins_registry_url }}{{ jenkins_image_name }}:{{ jenkins_version }}"
+    ports:
+      - 8080
+      - 50000
     volumes:
       - "{{ docker_volumes }}/{{ jenkins_service_name }}:/var/jenkins_home"
       - '/var/run/docker.sock:/var/run/docker.sock'
@@ -23,11 +26,11 @@ services:
       LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: "false"
       LDAP_DISPLAY_NAME_ATTRIBUTE_NAME: "displayName"
       LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME: "mail"
-      DOCKER_SLAVE_LABEL: "jenkins-ssh-slave"
+      DOCKER_SLAVE_LABEL: "jenkins-ssh-slave-docker-cli"
       DOCKER_SLAVE_NETWORK: "internal"
       DOCKER_SLAVE_VOLUMES: "/var/run/docker.sock:/var/run/docker.sock"
       DOCKER_SLAVE_ENVIRONMENT: "JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCq2fTf6psRS53paW1hSWGANcmSG9miwci08L9AChjIDZG5OV8RBWjXKimfFzbP18fnmuzJ6cmghvx1e4IkpBdAdgz9qyqPC10J/c3gYtdqdZkTHI712DyME7FoIYqEP3dy7H407mJOnj4nJB3E6KhMsPXHGWu1IYp2fIOqJPY3p/4n3KGqYZnWamGuFoefqE3zd/blB7MMNRrT7vcnrHnCl1XNC6P9T29orTrHJL7Vg1wNklyM24w0vXxVm7whBfiZc/C4rotjTHwbuQeL5jqP4OEp1N8mHbrAcnuEzVRQzK9chvwDR81c4PQkGAWx6jC54XOV6UnQYyrlPnToofKx root@ip-172-31-36-108"
-      DOCKER_SLAVE_IMAGE: "jenkinsci/ssh-slave"
+      DOCKER_SLAVE_IMAGE: "devopswise/jenkins-ssh-slave-docker-cli:1.0.0"
       DOCKER_SLAVE_DOCKER_HOST_URI: "tcp://172.17.0.1:2375"
     privileged: true
     networks:
@@ -36,7 +39,7 @@ services:
     labels:
       - traefik.backend=jenkins
       - traefik.frontend.rule=Host:jenkins.{{ base_domain }}
-      - traefik.docker.network=proxy
+      - traefik.docker.network=internal
       - traefik.port=8080
     logging:
       driver: "syslog"

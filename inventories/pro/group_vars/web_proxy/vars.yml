@@ -1,6 +1,6 @@
 squid_service_name: "squid"
 
-squid_version: "latest"
+squid_version: "3.3.8-23"
 squid_user: 0
 squid_group: 0
 

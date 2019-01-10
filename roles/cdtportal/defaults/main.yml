@@ -1,0 +1,8 @@
+cdtportal_service_name: "cdtportal"
+cdtportal_registry_url: ""   #from dockerhub
+cdtportal_image_name: "devopswise/cdtportal"
+
+cdtportal_version: "latest"
+cdtportal_user: 1000
+cdtportal_group: 1000
+
