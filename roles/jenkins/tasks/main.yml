@@ -53,11 +53,6 @@
 - name: Create reference job using REST API
   shell: "curl -k -s -XPOST {{ cdt_protocol }}://{{ jenkins_service_name }}.{{ base_domain }}/createItem?name=hrweb-java -u alice.developer:{{ openldap_persona_alice_pass }} --data-binary @/tmp/{{ jenkins_service_name }}/hrweb-java.xml -H 'Content-Type:text/xml'"
 
-- name: copy key file
-  copy:
-    src:  '/opt/cdt/grafana/jenkins.pem'
-    dest: '/opt/docker-volumes/jenkins/jenkins.pem'
-
 - name: generate jenkins API
   when: false
   uri:
@@ -74,6 +69,7 @@
     jenkins_ssh_key: "{{lookup('file', '../credentials/openldap_admin_sshkey.pem') }}"
     #headers:
     #  Jenkins-Crumb: "{{ crumb.content.split(':')[1] }}"
+  when: false
 
 #TODO: This should be moved to openldap playbook
 - name: generate key-pair for admin
@@ -81,6 +77,7 @@
   local_action:
     module: shell
     _raw_params: ssh-keygen -t rsa -b 4096 -q -P '' -C 'your_email@example.com' -f ../credentials/openldap_admin_sshkey.pem
+  when: false
 
 - name: copy add-new-credential.groovy to target
   template:
@@ -89,14 +86,17 @@
     mode: 0755
   become: yes
   become_method: sudo
+  when: false
 
 - name: Transfer script to run
   copy:
-    src: /opt/cdt/grafana/jenkins.pem
+    src: ../credentials/openldap_admin_sshkey.pem
     dest: "{{ docker_volumes }}/{{ jenkins_service_name }}/ssh-private-key.pem"
     mode: 0755
   become: yes
   become_method: sudo
+  when: false
 
 - name: make curl request to jenkins
   shell: "curl -k -f --user admin:{{ openldap_admin_pass }} --data-urlencode \"script@/tmp/{{ jenkins_service_name }}/add-new-credential.groovy\" {{ cdt_protocol }}://{{ jenkins_service_name }}.{{ base_domain }}/scriptText"
+  when: false

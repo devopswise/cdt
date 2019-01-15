@@ -59,7 +59,6 @@
   become: yes
   become_method: sudo
 
-<<<<<<< HEAD
 - name: sync traefik.toml (letsencrypt)
   template: 
     src: ../templates/traefik.toml.https.j2
