@@ -14,6 +14,7 @@ pipeline {
                                     -e DEBUG="-vv" \
                                     -v /opt/source/cdt-test/aws:/opt/cdt \
                                     devopswise/cdt-installer:latest "cdt --launch" '''
+                            }
             }
     }
   }
