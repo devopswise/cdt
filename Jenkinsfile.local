@@ -3,12 +3,11 @@ pipeline {
   stages {
     stage('run cdt-installer'){
       steps {
-            withCredentials([sshUserPrivateKey(credentialsId: 'devopswise', keyFileVariable: 'identity', passphraseVariable: '', usernameVariable: 'userName')]) {
-                remote.user = "root"
-                remote.identityFile = identity
-                sshCommand remote: remote, command: 'hostname'
-                sshCommand remote: remote, command: 'xe vm-list'
+
+            withCredentials([sshUserPrivateKey(credentialsId: "devopswise", keyFileVariable: 'keyfile')]) {
+                sh "ssh -i ${keyfile} root@192.168.0.46 hostname"
             }
+
 
             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                             string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
