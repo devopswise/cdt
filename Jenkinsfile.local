@@ -5,7 +5,7 @@ pipeline {
       steps {
 
             withCredentials([sshUserPrivateKey(credentialsId: "devopswise", keyFileVariable: 'keyfile')]) {
-                sh "ssh -i ${keyfile} root@192.168.0.46 hostname"
+                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 hostname"
             }
 
 
