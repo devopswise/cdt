@@ -14,7 +14,7 @@ pipeline {
                                     -e PEM_FILE=/opt/cdt/dwtools.pem \
                                     -e DEBUG="-vv" \
                                     -v /opt/source/cdt-test/aws:/opt/cdt \
-                                    devopswise/cdt-installer:latest "sleep infinity" '''
+                                    devopswise/cdt-installer:latest "cdt --launch" '''
                             }
             }
        }
