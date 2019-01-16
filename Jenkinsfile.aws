@@ -2,8 +2,6 @@ pipeline {
   agent any
   stages {
     stage('run cdt-installer'){
-        currentBuild.result = "SUCCESS"
-        try {
             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                             string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                             ]) {
@@ -16,13 +14,7 @@ pipeline {
                                     -e DEBUG="-vv" \
                                     -v /opt/source/cdt-test/aws:/opt/cdt \
                                     devopswise/cdt-installer:latest "cdt --launch" '''
-                    }
             }
-        }
-        catch (err) {
-            currentBuild.result = "FAILURE"
-            throw err
-        }
     }
   }
 }
