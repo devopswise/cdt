@@ -1,5 +1,5 @@
 pipeline {
-  agent 'jenkins-jnlp-slave-docker-cli'
+  agent { label 'jenkins-jnlp-slave-docker-cli' }
   stages {
     stage('run cdt-installer'){
       steps {
