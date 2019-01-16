@@ -3,12 +3,11 @@ pipeline {
   stages {
     stage('run cdt-installer'){
       steps {
-
             withCredentials([sshUserPrivateKey(credentialsId: "devopswise", keyFileVariable: 'keyfile')]) {
-                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 hostname"
+                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 'xe snapshot-revert uuid=97cde43e-13ad-29b0-7b43-fc642a037371'"
+                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 'xe vm-start vm=srvpre01'"
             }
-
-
+            sh "sleep 15"
             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                             string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                             ]) {
