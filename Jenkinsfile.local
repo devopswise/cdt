@@ -5,8 +5,8 @@ pipeline {
                string(defaultValue: "", description: 'Which server?', name: 'serverFqdn') }
 
   environment { 
-      CDT_BRANCH=${params.branchName}
-      CDT_SERVER_FQDN=${params.serverFqdn} 
+      CDT_BRANCH="${params.branchName}"
+      CDT_SERVER_FQDN="${params.serverFqdn}" 
   }
   stages {
     stage('run cdt-installer'){
