@@ -35,7 +35,7 @@ pipeline {
                                     -e KEY_PAIR=dwtools \
                                     -e PEM_FILE=/opt/cdt/dwtools.pem \
                                     -e DEBUG="-vv" \
-                                    -v /opt/source/cdt-test/aws:/opt/cdt \
+                                    -v /opt/source/cdt-test/local:/opt/cdt \
                                     devopswise/cdt-installer:latest "cdt --launch" '''
                             }
             }
