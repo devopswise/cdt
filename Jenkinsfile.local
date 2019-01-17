@@ -3,7 +3,7 @@ pipeline {
   
   parameters { string(defaultValue: "master", description: 'What branch?', name: 'branchName')
                string(defaultValue: "srvpre01", description: 'Which server?', name: 'vmName') 
-               string(defaultValue: "precdt", description: 'Server's fqdn?', name: 'serverFqdn')
+               string(defaultValue: "precdt", description: 'Server fqdn?', name: 'serverFqdn')
                string(defaultValue: "site.yml", description: 'Which playbook?', name: 'playbook')
   }
 
