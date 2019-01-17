@@ -2,18 +2,23 @@ pipeline {
   agent { label 'jenkins-jnlp-slave-docker-cli' }
   
   parameters { string(defaultValue: "master", description: 'What branch?', name: 'branchName')
-               string(defaultValue: "", description: 'Which server?', name: 'serverFqdn') }
+               string(defaultValue: "srvpre01", description: 'Which server?', name: 'vmName') 
+               string(defaultValue: "precdt", description: 'Server's fqdn?', name: 'serverFqdn')
+               string(defaultValue: "site.yml", description: 'Which playbook?', name: 'playbook')
+  }
 
   environment { 
       CDT_BRANCH="${params.branchName}"
-      CDT_SERVER_FQDN="${params.serverFqdn}" 
+      CDT_SERVER_FQDN="${params.serverFqdn}"
+      CDT_TARGET_VM="${params.vmName}"
+      CDT_PLAYBOOK="${params.playbook}" 
   }
+
   stages {
     stage('run cdt-installer'){
       steps {
             withCredentials([sshUserPrivateKey(credentialsId: "devopswise", keyFileVariable: 'keyfile')]) {
-                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 'xe snapshot-revert uuid=97cde43e-13ad-29b0-7b43-fc642a037371'"
-                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 'xe vm-start vm=srvpre01'"
+                sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 revert-xen-vm-to-latest-snapshot.sh ${CDT_TARGET_VM}"
             }
             sh "sleep 15"
             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
@@ -25,6 +30,7 @@ pipeline {
                                     -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
                                     -e DO_NOT_PROVISION_EC2="true" \
                                     -e CDT_BRANCH=${CDT_BRANCH} \
+                                    -e CDT_PLAYBOOK=${CDT_PLAYBOOK} \
                                     -e SERVER_FQDN=${CDT_SERVER_FQDN} \
                                     -e KEY_PAIR=dwtools \
                                     -e PEM_FILE=/opt/cdt/dwtools.pem \
