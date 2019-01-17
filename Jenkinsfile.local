@@ -1,13 +1,9 @@
 pipeline {
   agent { label 'jenkins-jnlp-slave-docker-cli' }
   
-  parameters { string(defaultValue: "master", description: 'What branch?', name: 'branchName')
-               string(defaultValue: "", description: 'Which server?', name: 'serverFqdn') }
+  parameters { string(defaultValue: "master", description: 'What branch?', name: 'CDT_BRANCH')
+               string(defaultValue: "", description: 'Which server?', name: 'CDT_SERVER_FQDN') }
 
-  environment { 
-      CDT_BRANCH="${params.branchName}"
-      CDT_SERVER_FQDN="${params.serverFqdn}" 
-  }
   stages {
     stage('run cdt-installer'){
       steps {
@@ -20,7 +16,7 @@ pipeline {
                             string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY')
                             ]) {
                             wrap([$class: 'AnsiColorBuildWrapper', colorMapName: "xterm"]) {
-                                sh '''env && docker run -i \
+                                sh '''docker run -i \
                                     -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
                                     -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
                                     -e DO_NOT_PROVISION_EC2="true" \
