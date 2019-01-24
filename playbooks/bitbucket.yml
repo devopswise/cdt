@@ -1,0 +1,5 @@
+---
+- hosts: bitbucket
+  roles:
+    - { role: bitbucket,
+        tags: [ 'bitbucket' ] }

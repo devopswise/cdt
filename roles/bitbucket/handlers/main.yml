@@ -1,0 +1,9 @@
+---
+- name: restart bitbucket
+  docker_service:
+    project_name: "{{ bitbucket_service_name }}"
+    project_src: "/tmp/{{ bitbucket_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo
