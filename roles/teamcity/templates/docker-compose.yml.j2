@@ -1,0 +1,40 @@
+version: '2'
+services:
+  teamcity:
+    image: "{{ teamcity_registry_url }}{{ teamcity_image_name }}:{{ teamcity_version }}"
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }}"
+    volumes:
+      - "{{ docker_volumes }}/{{ teamcity_service_name }}/data:/data/teamcity_server/datadir"
+      - "{{ docker_logs }}/{{ teamcity_service_name }}:/opt/teamcity/logs"
+    ports:
+      - "8111"
+    networks:
+      - internal
+      - external
+    restart: always
+    labels:
+      - traefik.backend=teamcity
+      - traefik.frontend.rule=Host:teamcity.{{ base_domain }}
+      - traefik.port=8111
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+  teamcity_agent:
+    image: jetbrains/teamcity-minimal-agent
+    environment:
+      - SERVER_URL=http://teamcity:8111
+      - AGENT_NAME=minimal_agent
+    networks:
+      - internal
+      - external
+
+networks:
+  internal:
+    external: true
+  external:
+    external: true

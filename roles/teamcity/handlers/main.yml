@@ -1,0 +1,9 @@
+---
+- name: restart teamcity
+  docker_service:
+    project_name: "{{ teamcity_service_name }}"
+    project_src: "/tmp/{{ teamcity_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo
