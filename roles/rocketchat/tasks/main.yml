@@ -15,7 +15,7 @@
 
 - name: generate a random mysql password
   set_fact:
-    rocketchat_mongodb_pass: "{{ lookup('password', '../credentials/rocketchat_mongodb_pass length=12') }}"
+    rocketchat_mongodb_pass: "{{ lookup('password', '../credentials/rocketchat_mongodb_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template: 

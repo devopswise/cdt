@@ -14,7 +14,7 @@
 
 - name: generate a random mysql password
   set_fact:
-    wordpress_db_pass: "{{ lookup('password', '../credentials/wordpress_db_pass length=12') }}"
+    wordpress_db_pass: "{{ lookup('password', '../credentials/wordpress_db_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template: 

@@ -73,7 +73,7 @@
 
 - name: generate a random mysql password
   set_fact:
-    grafana_admin_pass: "{{ lookup('password', '../credentials/grafana_admin_pass length=12') }}"
+    grafana_admin_pass: "{{ lookup('password', '../credentials/grafana_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template: 
