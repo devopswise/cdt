@@ -38,6 +38,7 @@
     - "{{ docker_logs }}"
     - "{{ docker_volumes }}"
     - "{{ docker_certs }}"
+    - "{{ docker_data }}"
   become: yes
   become_method: sudo
 

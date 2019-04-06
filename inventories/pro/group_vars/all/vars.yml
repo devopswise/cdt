@@ -11,6 +11,7 @@ docker_volumes: /opt/docker-volumes
 docker_logs: /opt/docker-logs
 docker_backups: /opt/docker-backups
 docker_certs: /opt/docker-certs
+docker_data: /opt/docker-data
 
 aws_access_key: "AKIAJYUEDKFQKOPEJMHQ"
 aws_region: "eu-west-1"
