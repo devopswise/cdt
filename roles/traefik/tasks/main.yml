@@ -25,7 +25,7 @@
 
 - name: load generated md5password
   set_fact:
-    traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 length=12') }}"
+    traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: generate self-signed ssl certificate if not exists
   local_action: stat path=../credentials/traefik_http_ssl.crt

@@ -16,7 +16,7 @@
 
 - name: generate a random mysql password
   set_fact:
-    gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass length=12 chars=ascii_letters') }}"
+    gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template: 

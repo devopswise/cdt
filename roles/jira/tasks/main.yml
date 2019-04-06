@@ -16,7 +16,7 @@
 
 - name: generate a random mysql password
   set_fact:
-    jira_mysql_pass: "{{ lookup('password', '../credentials/jira_mysql_pass length=12') }}"
+    jira_mysql_pass: "{{ lookup('password', '../credentials/jira_mysql_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template: 
