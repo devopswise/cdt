@@ -3,7 +3,7 @@ services:
   rocketchat:
     restart: always
     image: "{{ rocketchat_registry_url }}{{ rocketchat_image_name }}:{{ rocketchat_version }}"
-    command: "node --use-openssl-ca main.js"
+    command: "bash -c 'sleep 10 && node --use-openssl-ca main.js'"
     networks:
       - internal
       - external
