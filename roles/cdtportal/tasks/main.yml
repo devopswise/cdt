@@ -14,10 +14,10 @@
   become: yes
   become_method: sudo
 
-- name: sync application.properties file for cdtportal
+- name: sync application.yaml file for cdtportal
   template: 
-    src: ../templates/application.properties.j2
-    dest: /{{ docker_volumes }}/{{ cdtportal_service_name }}/config/application.properties
+    src: ../templates/application.yml.j2
+    dest: /{{ docker_volumes }}/{{ cdtportal_service_name }}/config/application.yml
     mode: 0755
   become: yes
   become_method: sudo

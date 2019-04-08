@@ -1,0 +1,68 @@
+---
+application:
+  springfox:
+    documentation:
+      swagger:
+        v2:
+          path: /api-docs
+server:
+  contextPath: /v2
+  port: "8080"
+logging:
+  file: ${CDTPORTAL_LOG}/cdtportal.log
+  level:
+    com:
+      devopswise: DEBUG
+      offbytwo:
+        jenkins: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+endpoints:
+  metrics:
+    sensitive: false
+  logfile:
+    sensitive: false
+  dump:
+    sensitive: false
+info:
+  app:
+    name: cdtportal
+    description: RestAPI to create and configure projects in jenkins,gitea,rocketchat
+    version: {{ cdtportal_version }}
+spring:
+  datasource:
+    url: jdbc:h2:file:${CDTPORTAL_DATA}/h2db;DB_CLOSE_ON_EXIT=FALSE
+  jackson:
+    date-format: io.swagger.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: "false"
+  h2:
+    console:
+      enabled: "true"
+      path: /h2-console
+  jpa:
+    open-in-view: "true"
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: default
+  ldap:
+    urls: ldap://cdt.{{ base_domain }}:389
+    base: {{ openldap_full_domain }}
+    username: cn=admin,{{ openldap_full_domain }}
+    password: Jah8qOetood
+jenkins:
+  baseUrl: https://jenkins.{{ base_domain }}
+  username: admin
+  password: Jah8qOetood
+rocketChat:
+  baseUrl: https://rocketchat.{{ base_domain }}
+  username: local.admin
+  password: Jah8q123!
+  debug: "true"
+gitea:
+  baseUrl: https://gitea.{{ base_domain }}/api/v1
+  username: local.admin
+  password: Jah8q123!
+  debug: "true"
