@@ -95,8 +95,7 @@ End with an example of getting some data out of the system or using it for a dem
 
 ## Screenshots
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png">
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="200">
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" height="600">
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" height="600">
 
 ## Persistence
 Regarding data files or configuration files created by this installation, everything stored on /opt folder on aws instance (or your vm). 
