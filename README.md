@@ -1,19 +1,35 @@
 # CDT (Continous Delivery Toolchain)
-cdt is continuous delivery toolchain based on Jenkins and Github.
+CDT is continuous deliver toolchain project based on 5 tool.
+They are Jenkins, Gitea, RocketChat and Grafana
 
 cdt install continuous delivery tools on your server and configure those applications to run together.
-For example, when you push your code into github, jenkins start building it. This comes preconfigured.
+For example, when you push your code into Gitea, Jenkins start building it. This comes preconfigured.
 
-Meanwhile, project aims to have best tools of ci/cd industry and most favorite integrations between them.
+This project aims to have best tools of ci/cd industry and most favorite integrations between them.
 
-#### With cdt you can
-- kickstart your web application project from zero to deployment, just by cloning a reference project.
-- each branch is isolated and has it is own endpoint. if you use feature1 branch, it will deploy deploy to feature1.yourdomain.com
+## Features
 - cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
 - cdt is also suitable for training.
+- cdt installs a proxy server (traefik) so you can access like jenkins.yourdomain.com etc.
+- cdt generates a https certificate (either ss, or using lets encrypt)
+- all communication between tools and outside world are over https.
+- cdt installs a common ldap directory and create testing users on this directory.
+- passwords if this users are generated here under credentials dir.
+- all sdlc apps are configured to use ldap.
+- gitea, rocket chat comes bootstrapped for you.
+- ec2 instance is isolated, created and secured.
+- only required ports leaved open, other firewalled.
+- to access ec2 server a ssh provate key had generated and keept locally only on this server.
+- an smtp relay gets installed and configured to use gmail.
+- cdt configures outgoing mail for all tools. so apps can send notifications to team.
+- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
+- cdt install prometheus and grafana and creates grafana dashboards for tools.
+- grafana can also be used to monitor applications created by team.
+- cdt uses official docker images for tools and tools can be updated easily.
+- when a self signed cert is generated, all apps made trust the grnerated certificate.
+
 
 ## Getting Started
-
 Easiest way to getting started is using docker installer [cdt-installer](https://hub.docker.com/r/devopswise/cdt-installer/).
 it launches an ec2 instances(t2.medium), then runs ansible code to install applications. 
 You will end up with:
