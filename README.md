@@ -1,10 +1,3 @@
-
-
-### documentation is in progress, you should checkout [dwtools project](https://github.com/devopswise/dwtools.git) if you want to try out.
-
-
-
-
 # CDT (Continous Delivery Toolchain)
 cdt is continuous delivery toolchain based on Jenkins and Github.
 
@@ -38,67 +31,89 @@ You will end up with:
 However it is not a requirement if you want to run on already-existing server.
 
 ```
-docker run -d --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="you aws secret" devopswise/dwtools-installer:latest
+docker run -d --name cdt-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="you aws secret" devopswise/cdt-installer:latest
 ```
 
 After container starts running in background, you should
 ```
-docker exec -it dwtools-installer bash
+docker exec -it cdt-installer bash
+```
+```
+Type 'cdt --launch' to install cdt for the first time
+have fun!
+root@3b749e89f113:/#
 ```
 
 then type
 ```
-# dwtools --launch
-      _          _              _
-     | |        | |            | |
-   __| |_      _| |_ ___   ___ | |___
-  / _` \ \ /\ / / __/ _ \ / _ \| / __|
- | (_| |\ V  V /| || (_) | (_) | \__ \
-  \__,_| \_/\_/  \__\___/ \___/|_|___/
+root@3b749e89f113:/# cdt --launch
+               _     _
+              | |   | |
+   ___      __| |   | |_
+  / __|    / _` |   | __|
+ | (__    | (_| |   | |_
+  \___|    \__,_|    \__|
 
-Launching dwtools...
-Cloning into '/opt/dwtools/master'...
-remote: Counting objects: 131, done.
-remote: Compressing objects: 100% (100/100), done.
-remote: Total 131 (delta 33), reused 83 (delta 5), pack-reused 0
-Receiving objects: 100% (131/131), 114.09 KiB | 0 bytes/s, done.
-Resolving deltas: 100% (33/33), done.
+Launching cdt...
+Cloning into '/opt/cdt/master'...
+remote: Enumerating objects: 242, done.
+remote: Counting objects: 100% (242/242), done.
+remote: Compressing objects: 100% (146/146), done.
+remote: Total 819 (delta 100), reused 185 (delta 59), pack-reused 577
+Receiving objects: 100% (819/819), 288.77 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (363/363), done.
 Checking connectivity... done.
-generating new key-pair : dwtools-20180508230154
+generating new key-pair : cdt-20190408174854
 creating new ec2 instance
-A new EC2 instance is created instance_id:i-0ef3e3859dfdc29a7
-waiting i-0ef3e3859dfdc29a7 to become alive:
+A new EC2 instance is created instance_id:i-00f025e986e062bc1
+waiting i-00f025e986e062bc1 to become alive:
+.... running
+public_ip=34.244.161.83
+using xip.io for fqdn
+ansible-playbook -i /opt/cdt/master/inventories/pro /opt/cdt/master/site.yml --vault-password-file=/opt/cdt/master/ansible-vault-pass
+/
 ...
 ...
-...
-dwtools installed on 34.245.139.72.xip.io, you can access tools www.34.245.139.72.xip.io
+SERVER_FQDN=34.244.161.83.xip.io
+PUBLIC_IP=34.244.161.83
+PEM_FILE=/opt/cdt/master/cdt-20190408174854.pem
+KEY_PAIR=cdt-20190408174854
+provisioning completed.
+
+cdt installed on 34.244.161.83.xip.io, you can now access tools at www.34.244.161.83.xip.io
 server will be terminated automatically in 2 hours, incase you forgot to terminate it
-get into dwtools-installer container first
-docker exec -it dwtools-installer bash
-then, you can either sssh to your instance by typing
-ssh -i /opt/dwtools/master/dwtools-20180508231143.pem centos@34.245.139.72.xip.io
-or you can modify ansible code in /opt/dwtools/master, then apply changes by typing,
-ansible-playbook -i /opt/dwtools/master/inventories/pro /opt/dwtools/master/site.yml -vv --vault-password-file=/opt/dwtools/master/ansible-vault-pass
+if you want to develop or dig around, get into cdt-installer container first
+docker exec -it cdt-installer bash
+
+ you can always share your thoughts on info@devopswise.co.uk[
 /# 
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+End with an example of getting some data out of the system or using it for a demo
+
+## Screenshots
+
 
 ## Persistence
+Regarding data files or configuration files created by this installation, everything stored on /opt folder on aws instance (or your vm). 
 
-dwtools-installer keep changes, target specific data, passwords and changes on /opt/dwtools. 
+__It will be removed if you use cdt --terminate command.__
+
+
+Regarding persistence source code changes of cdt;
+cdt-installer keep changes, target specific data, passwords and changes on /opt/dwtools. 
 It is better to mount it to /opt/dwtools on host machine.
 
 ```
-docker run -v /opt/dwtools:/opt/dwtools -d devopswise/dwtools-installer:latest --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -v /opt/cdt:/opt/cdt -d devopswise/dwtools-installer:latest --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
 ```
 
 ### Passwords for applications
-All passwords are generated at first launch and you can find them, /opt/dwtools/master/credentials/ directory.
+All passwords are generated at first launch and you can find them, /opt/cdt/master/credentials/ directory.
 
 ```
-# ls /opt/dwtools/master/credentials/
-traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass
+# ls /opt/cdt/master/credentials/
+traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass openldap_persona_alice_pass openldap_persona_bob_pass
 ```
 
 ### Terminating AWS resources properly
@@ -106,31 +121,56 @@ traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass
 You can always type dwtools --terminate if you want to remove VPC, subnet, internet gateway etc.
 
 ```
-root@03b6f7de6519:/# dwtools --terminate
+root@3b749e89f113:/# cdt --terminate
 This will remove target server, you can always re-launch,
 a new server but you will lose data inside it if you didn't backup
-Do you wish to terminate server?y
+Do you wish to terminate server? (y/n)y
 ..............
-root@03b6f7de6519:/#
+root@3b749e89f113:/#
 ```
 
 ## SSH to target instance
 ```
-root@03b6f7de6519:/# dwtools --ssh
-Last login: Tue May  8 23:16:36 2018 from ec2-34-240-174-240.eu-west-1.compute.amazonaws.com
-23:17:07 centos@ip-10-0-0-5:~$ 
+root@3b749e89f113:/# cdt --ssh
+Last login: Mon Apr  8 17:59:34 2019 from ec2-34-240-174-XX.eu-west-1.compute.amazonaws.com
+18:03:44 centos@ip-10-0-0-9:~$ 
 ```
 
-Add additional notes about how to deploy this on a live system
+## List of running containers
+```
+root@3b749e89f113:/# cdt --ssh
+18:20:47 root@ip-10-0-0-9:centos$ docker ps
+CONTAINER ID        IMAGE                                   NAMES
+3302fb981460        devopswise/cdtportal:latest             cdtportal_cdtportal_1
+50543f595c14        rocketchat/rocket.chat:1.0.0-rc.0       rocketchat_rocketchat_1
+308b21869920        rocketchat_mongodb                      rocketchat_mongodb_1
+f4f42bfafb2d        gitea/gitea:1.8                         gitea_gitea_1
+2234e2025eac        mariadb:10.3                            gitea_mysql_1
+568de08be5eb        grafana/grafana:5.2.1                   grafana_grafana_1
+f9b421a147d1        devopswise/prometheus:latest            grafana_prometheus_1
+3290d10fcfc0        quay.io/prometheus/pushgateway:latest   grafana_pushgateway_1
+be903bfe31c9        devopswise/jenkins:latest               jenkins_jenkins_1
+1c8084f71cda        accenture/adop-ldap-ltb:0.1.0           openldap_ldap-ltb_1
+3032743193c1        accenture/adop-ldap:0.1.3               openldap_ldap_1
+586b7ddd3432        namshi/smtp:latest                      smtprelay_smtp_1
+efe4876dd123        sameersbn/squid:3.3.8-23                squid_web_proxy_1
+d55b507dd4e4        traefik:1.7.4                           traefik_traefik_1
+```
 
 ## Built With
 
+* [Gitea](https://gitea.io) - A painless self-hosted Git service
+* [Jenkins](https://jenkins.io) - The leading open source automation server
+* [RocketChat](https://rocket.chat/) - Rocket.Chat is free, unlimited and open source ultimate team chat software
+* [Grafana](https://grafana.com/) - The open platform for beautiful 
+analytics and monitoring
+* [Prometheus](https://prometheus.io/) - Monitoring system & time series database
 * [Traefik](https://traefik.io/) - A modern http reverse proxy
 * [OpenLDAP](https://www.openldap.org/) - A modern http reverse proxy
 * [docker-compose](https://docs.docker.com/compose/) - A tool for defining and running multi-container Docker applications
 * [Ansible](https://github.com/ansible/ansible) - IT Automation/Configuration Management
 * [DebianExim4](https://github.com/namshi/docker-smtp) - SMTP Relay
-* [Wordpress](https://github.com/WordPress/WordPress) - As sample application and documentation of project
+* [Gitea](https://gitea.io) - A painless self-hosted Git service
 * [Squid Web Proxy](http://www.squid-cache.org/) - Web Proxy
 
 
