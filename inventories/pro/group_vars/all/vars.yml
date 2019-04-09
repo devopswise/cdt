@@ -1,7 +1,10 @@
 ## new inventory
 
 env: pro
-base_domain: __base_domain__
+
+##will load from cdt-config.json
+##base_domain: __base_domain__  
+
 cdt_protocol: https
 
 #registry_url: "docker.nexus3.devopswise.com/docker-internal/"
@@ -21,7 +24,6 @@ http_proxy_port: 3128
 http_proxy: "http://{{ http_proxy_hostname }}:{{ http_proxy_port }}"
 https_proxy: "{{ http_proxy }}"
 no_proxy: "127.0.0.1,localhost"
-use_self_signed_https_cert: false
 
 #smtp configuration
 smtp_relay_gmail_user: "devopswise@gmail.com"

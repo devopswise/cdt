@@ -4,6 +4,6 @@
  "base_domain":"__base_domain__",
  "smtp_relay_gmail_pass" : "__gmail_account_password__",
  "admin_email" : "admin@admin.com",
- "cdt_shutdown_after_2h" : "true",
- "use_self_signed_https_cert" : "true"
+ "cdt_shutdown_after_2h" : "false",
+ "http_ssl_certificate_generation" : "selfsigned"
 }
