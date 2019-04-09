@@ -1,0 +1,9 @@
+{
+ "openldap_slapd_domain":"devopswise.co.uk",
+ "openldap_full_domain":"dc=devopswise,dc=co,dc=uk",
+ "base_domain":"__base_domain__",
+ "smtp_relay_gmail_pass" : "__gmail_account_password__",
+ "admin_email" : "admin@admin.com",
+ "cdt_shutdown_after_2h" : "true",
+ "use_self_signed_https_cert" : "true"
+}

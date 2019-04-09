@@ -21,6 +21,11 @@ pipeline {
                 sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 revert-xen-vm-to-latest-snapshot.sh ${CDT_TARGET_VM}"
             }
             sh "sleep 15"
+            configFileProvider(
+                [configFile(fileId: 'cdt-config', variable: 'CDT_CONFIG_JSON')]) {
+                sh 'echo cp -f $CDT_CONFIG_JSON cdt-config.json'
+                sh 'cp -f $CDT_CONFIG_JSON cdt-config.json'
+            }
             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY_ID'),
                             string(credentialsId: 'AWS_SECRET_KEY', variable: 'AWS_SECRET_ACCESS_KEY')
                             ]) {
