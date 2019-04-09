@@ -32,6 +32,11 @@
   become: yes
   become_method: sudo
 
+- name: Stop and disable firewalld
+  shell: "systemctl disable firewalld && systemctl stop firewalld"
+  become: yes
+  become_method: sudo
+
 - name: Create base directories
   file: path="{{ item }}" state=directory mode=0777 owner="0" group="0"
   with_items:
