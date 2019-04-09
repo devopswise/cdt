@@ -51,18 +51,18 @@ spring:
     urls: ldap://cdt.{{ base_domain }}:389
     base: {{ openldap_full_domain }}
     username: cn=admin,{{ openldap_full_domain }}
-    password: Jah8qOetood
+    password: {{ openldap_admin_pass }}
 jenkins:
   baseUrl: https://jenkins.{{ base_domain }}
   username: admin
-  password: Jah8qOetood
+  password: {{ openldap_admin_pass }}
 rocketChat:
   baseUrl: https://rocketchat.{{ base_domain }}
   username: local.admin
-  password: Jah8q123!
+  password: {{ openldap_admin_pass }}
   debug: "true"
 gitea:
   baseUrl: https://gitea.{{ base_domain }}/api/v1
   username: local.admin
-  password: Jah8q123!
+  password: {{ openldap_admin_pass }}
   debug: "true"

@@ -14,6 +14,10 @@
   become: yes
   become_method: sudo
 
+- name: get or generate local.admin pass
+  set_fact:
+    openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
+
 - name: sync application.yaml file for cdtportal
   template: 
     src: ../templates/application.yml.j2
