@@ -51,7 +51,7 @@ spring:
     urls: ldap://cdt.{{ base_domain }}:389
     base: {{ openldap_full_domain }}
     username: cn=admin,{{ openldap_full_domain }}
-    password: {{ openldap_admin_pass }}
+    password: {{ openldap_slapd_pass }}
 jenkins:
   baseUrl: https://jenkins.{{ base_domain }}
   username: admin
