@@ -15,6 +15,7 @@ services:
         MONGO_URL: "mongodb://rocketchat:{{ rocketchat_mongodb_pass }}@mongodb:27017/rocketchat"
         NODE_TLS_REJECT_UNAUTHORIZED: "0"
         SSL_CERT_DIR: "/etc/ssl/certs"
+        OVERWRITE_SETTING_Show_Setup_Wizard: "completed"
     labels:
       - traefik.backend=rocketchat
       - traefik.frontend.rule=Host:rocketchat.{{ base_domain }}

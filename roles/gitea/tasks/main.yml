@@ -19,9 +19,17 @@
     gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
-  template: 
+  template:
     src: ../templates/docker-compose.yml.j2
     dest: /tmp/{{ gitea_service_name }}/docker-compose.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: sync app.ini
+  template: 
+    src: ../templates/app.ini.j2
+    dest: "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
     mode: 0755
   become: yes
   become_method: sudo
