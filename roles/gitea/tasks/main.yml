@@ -6,6 +6,8 @@
     - "{{ docker_volumes }}/{{ gitea_service_name }}"
     - "{{ docker_volumes }}/{{ gitea_service_name }}/mysql"
     - "{{ docker_volumes }}/{{ gitea_service_name }}/data"
+    - "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea"
+    - "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf"
   become: yes
   become_method: sudo
 
@@ -30,7 +32,7 @@
   template: 
     src: ../templates/app.ini.j2
     dest: "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
-    mode: 0755
+    mode: 0644
   become: yes
   become_method: sudo
 
