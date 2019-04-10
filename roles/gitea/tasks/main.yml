@@ -29,10 +29,12 @@
   become_method: sudo
 
 - name: sync app.ini
-  template: 
+  template:
     src: ../templates/app.ini.j2
     dest: "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
     mode: 0644
+    owner: "{{ gitea_user }}"
+    group: "{{ gitea_group }}"
   become: yes
   become_method: sudo
 
