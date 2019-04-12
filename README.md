@@ -120,11 +120,11 @@ __It will be removed if you use cdt --terminate command.__
 
 
 Regarding persistence source code changes of cdt;
-cdt-installer keep changes, target specific data, passwords and changes on /opt/dwtools. 
-It is better to mount it to /opt/dwtools on host machine.
+cdt-installer keep changes, target specific data, passwords and changes on /opt/cdt. 
+It is better to mount it to /opt/cdt on host machine.
 
 ```
-docker run -v /opt/cdt:/opt/cdt -d devopswise/dwtools-installer:latest --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -v /opt/cdt:/opt/cdt -d devopswise/cdt-installer:latest --name cdt-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
 ```
 
 ### Passwords for applications
@@ -137,7 +137,7 @@ traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass openldap_pers
 
 ### Terminating AWS resources properly
 
-You can always type dwtools --terminate if you want to remove VPC, subnet, internet gateway etc.
+You can always type cdt --terminate if you want to remove VPC, subnet, internet gateway etc.
 
 ```
 root@3b749e89f113:/# cdt --terminate
