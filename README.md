@@ -4,7 +4,7 @@ CDT is a __self-hosted software distribution__ based those tools:
 CI/CD  |  Source Control | Team Chat | Monitoring
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png" width="80">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png" width="80"> 
-Jenkins  |  Gitea | RocketChat | Grafana
+Jenkins  |  Gitea | RocketChat | Grafana & Prometheus
 
 CDT install those tools on your server(or cloud) and configure those applications to run together.
 
