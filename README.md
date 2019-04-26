@@ -96,7 +96,7 @@ End with an example of getting some data out of the system or using it for a dem
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png" width="900">
 <p float="left">
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"/>
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-login.png" width="300"/>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-login.png" width="250"/>
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/ldap-password-change.png" width="300"/>
 </p>
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" width="900"/>
