@@ -95,8 +95,10 @@ End with an example of getting some data out of the system or using it for a dem
 ## Screenshots
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png">
 <p float="left">
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"/><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" width="600"/>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"/>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-login.png" width="300"/>
 </p>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" width="600"/>
 
 ## Features
 - cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
