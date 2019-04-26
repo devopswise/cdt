@@ -1,33 +1,16 @@
 # CDT (Continous Delivery Toolchain)
-CDT is continuous deliver toolchain project based on 5 tool.
-They are Jenkins, Gitea, RocketChat and Grafana
+CDT is a self-hosted software distribution based those tools:
 
-cdt install continuous delivery tools on your server and configure those applications to run together.
+CI/CD  |  Source Control | Team Chat | Monitoring
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="200"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="200"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png"> 
+Jenkins  |  Gitea | RocketChat | Grafana
+
+CDT install those tools on your server(or cloud) and configure those applications to run together.
+
 For example, when you push your code into Gitea, Jenkins start building it. This comes preconfigured.
 
-This project aims to have best tools of ci/cd industry and most favorite integrations between them.
-
-## Features
-- cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
-- cdt is also suitable for training.
-- cdt installs a proxy server (traefik) so you can access like jenkins.yourdomain.com etc.
-- cdt generates a https certificate (either ss, or using lets encrypt)
-- all communication between tools and outside world are over https.
-- cdt installs a common ldap directory and create testing users on this directory.
-- passwords if this users are generated here under credentials dir.
-- all sdlc apps are configured to use ldap.
-- gitea, rocket chat comes bootstrapped for you.
-- ec2 instance is isolated, created and secured.
-- only required ports leaved open, other firewalled.
-- to access ec2 server a ssh provate key had generated and keept locally only on this server.
-- an smtp relay gets installed and configured to use gmail.
-- cdt configures outgoing mail for all tools. so apps can send notifications to team.
-- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
-- cdt install prometheus and grafana and creates grafana dashboards for tools.
-- grafana can also be used to monitor applications created by team.
-- cdt uses official docker images for tools and tools can be updated easily.
-- when a self signed cert is generated, all apps made trust the grnerated certificate.
-
+This project aims to have best tools of ci/cd industry and most favorite integrations between them without any hassle.
 
 ## Getting Started
 Easiest way to getting started is using docker installer [cdt-installer](https://hub.docker.com/r/devopswise/cdt-installer/).
@@ -112,6 +95,27 @@ End with an example of getting some data out of the system or using it for a dem
 ## Screenshots
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png">
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" height="600">
+
+## Features
+- cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
+- cdt is also suitable for training.
+- cdt installs a proxy server (traefik) so you can access like jenkins.yourdomain.com etc.
+- cdt generates a https certificate (either ss, or using lets encrypt)
+- all communication between tools and outside world are over https.
+- cdt installs a common ldap directory and create testing users on this directory.
+- passwords if this users are generated here under credentials dir.
+- all sdlc apps are configured to use ldap.
+- gitea, rocket chat comes bootstrapped for you.
+- ec2 instance is isolated, created and secured.
+- only required ports leaved open, other firewalled.
+- to access ec2 server a ssh provate key had generated and keept locally only on this server.
+- an smtp relay gets installed and configured to use gmail.
+- cdt configures outgoing mail for all tools. so apps can send notifications to team.
+- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
+- cdt install prometheus and grafana and creates grafana dashboards for tools.
+- grafana can also be used to monitor applications created by team.
+- cdt uses official docker images for tools and tools can be updated easily.
+- when a self signed cert is generated, all apps made trust the grnerated certificate.
 
 ## Persistence
 Regarding data files or configuration files created by this installation, everything stored on /opt folder on aws instance (or your vm). 
