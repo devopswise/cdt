@@ -1,9 +1,9 @@
 # CDT (Continous Delivery Toolchain)
-CDT is a self-hosted software distribution based those tools:
+CDT is a __self-hosted software distribution__ based those tools:
 
 CI/CD  |  Source Control | Team Chat | Monitoring
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="200"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="200"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png"> 
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png" width="80">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png" width="80"> 
 Jenkins  |  Gitea | RocketChat | Grafana
 
 CDT install those tools on your server(or cloud) and configure those applications to run together.
@@ -94,8 +94,9 @@ End with an example of getting some data out of the system or using it for a dem
 
 ## Screenshots
 <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png">
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" height="600">
-
+<p float="left">
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"/><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" width="600"/>
+</p>
 ## Features
 - cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
 - cdt is also suitable for training.
