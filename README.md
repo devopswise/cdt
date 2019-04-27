@@ -1,14 +1,17 @@
 # CDT (Continous Delivery Toolchain)
 CDT is a __self-hosted software distribution__ based those tools:
 
-CI/CD  |  Source Control | Team Chat | Monitoring
-:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png" width="80">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png" width="80"> 
-Jenkins  |  Gitea | RocketChat | Grafana & Prometheus
+CI/CD  |  Source Control | Team Chat | Monitoring | Alerting
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png" width="80">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/prometheus-logo.png" width="80"> 
+Jenkins  |  Gitea | RocketChat | Grafana | Prometheus
 
 CDT install those tools on your server(or cloud) and configure those applications to run together.
 
-For example, when you push your code into Gitea, Jenkins start building it. This comes preconfigured.
+For example; those come preconfigured.
+- when you push your code into your feature branch in Gitea, Jenkins start building it. 
+- you can access all tools like jenkins.yourdomain.com, gitea.yourdomain.com
+- SMTP configuration is ready for all tools.
 
 This project aims to have best tools of ci/cd industry and most favorite integrations between them without any hassle.
 
