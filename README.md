@@ -1,33 +1,19 @@
 # CDT (Continous Delivery Toolchain)
-CDT is continuous deliver toolchain project based on 5 tool.
-They are Jenkins, Gitea, RocketChat and Grafana
+CDT is a __self-hosted software distribution__ based those tools:
 
-cdt install continuous delivery tools on your server and configure those applications to run together.
-For example, when you push your code into Gitea, Jenkins start building it. This comes preconfigured.
+CI/CD  |  Source Control | Team Chat | Monitoring | Alerting
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-logo.png" width="80">  |  <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/gitea-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/rocketchat-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-logo.png" width="80"> | <img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/prometheus-logo.png" width="80"> 
+Jenkins  |  Gitea | RocketChat | Grafana | Prometheus
 
-This project aims to have best tools of ci/cd industry and most favorite integrations between them.
+CDT install those tools on your server(or cloud) and configure those applications to run together.
 
-## Features
-- cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
-- cdt is also suitable for training.
-- cdt installs a proxy server (traefik) so you can access like jenkins.yourdomain.com etc.
-- cdt generates a https certificate (either ss, or using lets encrypt)
-- all communication between tools and outside world are over https.
-- cdt installs a common ldap directory and create testing users on this directory.
-- passwords if this users are generated here under credentials dir.
-- all sdlc apps are configured to use ldap.
-- gitea, rocket chat comes bootstrapped for you.
-- ec2 instance is isolated, created and secured.
-- only required ports leaved open, other firewalled.
-- to access ec2 server a ssh provate key had generated and keept locally only on this server.
-- an smtp relay gets installed and configured to use gmail.
-- cdt configures outgoing mail for all tools. so apps can send notifications to team.
-- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
-- cdt install prometheus and grafana and creates grafana dashboards for tools.
-- grafana can also be used to monitor applications created by team.
-- cdt uses official docker images for tools and tools can be updated easily.
-- when a self signed cert is generated, all apps made trust the grnerated certificate.
+For example; those come preconfigured.
+- when you push your code into your feature branch in Gitea, Jenkins start building it. 
+- you can access all tools like jenkins.yourdomain.com, gitea.yourdomain.com
+- SMTP configuration is ready for all tools.
 
+This project aims to have best tools of ci/cd industry and most favorite integrations between them without any hassle.
 
 ## Getting Started
 Easiest way to getting started is using docker installer [cdt-installer](https://hub.docker.com/r/devopswise/cdt-installer/).
@@ -110,8 +96,34 @@ docker exec -it cdt-installer bash
 End with an example of getting some data out of the system or using it for a demo
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png">
-<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"><img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" height="600">
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-with-other-tabs.png" width="900">
+<p float="left">
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/puppet-users.png" width="300"/>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/jenkins-login.png" width="250"/>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/ldap-password-change.png" width="300"/>
+</p>
+<img src="https://raw.githubusercontent.com/devopswise/cdt/master/resources/images/grafana-dashboard-traefik.png" width="900"/>
+
+## Features
+- cdt comes with sample persona's puppets. like Alice Developer, Charlie Lead Developer. Their access rights and user accounts also come preconfigured.
+- cdt is also suitable for training.
+- cdt installs a proxy server (traefik) so you can access like jenkins.yourdomain.com etc.
+- cdt generates a https certificate (either ss, or using lets encrypt)
+- all communication between tools and outside world are over https.
+- cdt installs a common ldap directory and create testing users on this directory.
+- passwords if this users are generated here under credentials dir.
+- all sdlc apps are configured to use ldap.
+- gitea, rocket chat comes bootstrapped for you.
+- ec2 instance is isolated, created and secured.
+- only required ports leaved open, other firewalled.
+- to access ec2 server a ssh provate key had generated and keept locally only on this server.
+- an smtp relay gets installed and configured to use gmail.
+- cdt configures outgoing mail for all tools. so apps can send notifications to team.
+- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
+- cdt install prometheus and grafana and creates grafana dashboards for tools.
+- grafana can also be used to monitor applications created by team.
+- cdt uses official docker images for tools and tools can be updated easily.
+- when a self signed cert is generated, all apps made trust the grnerated certificate.
 
 ## Persistence
 Regarding data files or configuration files created by this installation, everything stored on /opt folder on aws instance (or your vm). 
@@ -120,11 +132,11 @@ __It will be removed if you use cdt --terminate command.__
 
 
 Regarding persistence source code changes of cdt;
-cdt-installer keep changes, target specific data, passwords and changes on /opt/dwtools. 
-It is better to mount it to /opt/dwtools on host machine.
+cdt-installer keep changes, target specific data, passwords and changes on /opt/cdt. 
+It is better to mount it to /opt/cdt on host machine.
 
 ```
-docker run -v /opt/cdt:/opt/cdt -d devopswise/dwtools-installer:latest --name dwtools-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
+docker run -v /opt/cdt:/opt/cdt -d devopswise/cdt-installer:latest --name cdt-installer -e AWS_ACCESS_KEY_ID="your aws access key" -e AWS_SECRET_ACCESS_KEY="your aws secret access key"
 ```
 
 ### Passwords for applications
@@ -137,7 +149,7 @@ traefik_admin_pass  traefik_admin_pass_hash_md5  wordpress_db_pass openldap_pers
 
 ### Terminating AWS resources properly
 
-You can always type dwtools --terminate if you want to remove VPC, subnet, internet gateway etc.
+You can always type cdt --terminate if you want to remove VPC, subnet, internet gateway etc.
 
 ```
 root@3b749e89f113:/# cdt --terminate
