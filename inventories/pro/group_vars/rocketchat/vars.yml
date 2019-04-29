@@ -4,7 +4,7 @@ rocketchat_image_name: "rocketchat/rocket.chat"
 
 mongodb_version: 3.6
 
-rocketchat_version: "1.0.0-rc.2"
+rocketchat_version: "1.0.1"
 rocketchat_user: 0
 rocketchat_group: 0
 
