@@ -18,21 +18,27 @@
     traefik_admin_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits') }}"
 
 - name: save generated password locally
-  local_action: shell echo "{{ traefik_admin_password }}" > ../credentials/traefik_admin_pass
+  shell: echo "{{ traefik_admin_password }}" > ../credentials/traefik_admin_pass
+  delegate_to: localhost
 
 - name: generate a random md5password for traefik
-  local_action: shell htpasswd -nb admin "{{ traefik_admin_password }}" | cut -d':' -f2 > ../credentials/traefik_admin_pass_hash_md5
+  shell: htpasswd -nb admin "{{ traefik_admin_password }}" | cut -d':' -f2 > ../credentials/traefik_admin_pass_hash_md5
+  delegate_to: localhost
 
 - name: load generated md5password
   set_fact:
     traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: generate self-signed ssl certificate if not exists
-  local_action: stat path=../credentials/traefik_http_ssl.crt
+  stat: 
+    path: ../credentials/traefik_http_ssl.crt
   register: traefik_http_ssl_crt
+  delegate_to: localhost
 
 - name: generate self-signed ssl certificate if not exists
-  local_action: stat path=../credentials/traefik_http_ssl.key
+  stat:
+    path: ../credentials/traefik_http_ssl.key
+  delegate_to: localhost
   register: traefik_http_ssl_key
 
 - name: create openssl configuration file
@@ -40,28 +46,28 @@
   delegate_to: localhost
 
 - name: generate self-signed ssl certificate if not exists
-  local_action:
-    module: shell
+  shell:
     _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/traefik_http_ssl.key -out ../credentials/traefik_http_ssl.crt -config ../credentials/openssl_req.cfg
-  when: not (traefik_http_ssl_key.stat.exists and traefik_http_ssl_crt.stat.exists) 
+  when: not (traefik_http_ssl_key.stat.exists and traefik_http_ssl_crt.stat.exists)
+  delegate_to: localhost
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/traefik_http_ssl.crt dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{base_domain}}.crt
+  copy: src=../credentials/traefik_http_ssl.crt dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{ base_domain }}.crt
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/traefik_http_ssl.key dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{base_domain}}.key
+  copy: src=../credentials/traefik_http_ssl.key dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{ base_domain }}.key
 
 - name: sync docker-compose.yml
-  template: 
-    src: ../templates/docker-compose.yml.j2
+  template:
+    src: docker-compose.yml.j2
     dest: /tmp/{{ traefik_service_name }}/docker-compose.yml
     mode: 0755
   become: yes
   become_method: sudo
 
 - name: sync traefik.toml (letsencrypt)
-  template: 
-    src: ../templates/traefik.toml.https.j2
+  template:
+    src: traefik.toml.https.j2
     dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
@@ -70,7 +76,7 @@
 
 - name: sync traefik.toml (no ssl certificate, http)
   template:
-    src: ../templates/traefik.toml.http.j2
+    src: traefik.toml.http.j2
     dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
@@ -79,7 +85,7 @@
 
 - name: sync traefik.toml (use self-signed https certificate)
   template:
-    src: ../templates/traefik.toml.selfsigned.j2
+    src: traefik.toml.selfsigned.j2
     dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
@@ -111,6 +117,3 @@
     path: "/tmp/{{ traefik_service_name }}/docker-compose.yml"
   become: yes
   become_method: sudo
-
-
-

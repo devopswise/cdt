@@ -1,7 +1,7 @@
 ---
 # This is a temporary workaround to avoid aws bills for development
 - name: Schedule to turn off system after 2 hours
-  shell: "shutdown -P +120"
+  command: shutdown -P +120
   become: yes
   become_method: sudo
   when: cdt_shutdown_after_2h == "true"
@@ -28,7 +28,7 @@
   become_method: sudo
 
 - name: Disable SELinux imme.
-  shell: "setenforce 0"
+  command: setenforce 0
   become: yes
   become_method: sudo
 
@@ -53,6 +53,7 @@
     - "yum-utils"
   become: yes
   become_method: sudo
+
 # enable extra
 - name: enable extras for epel
   shell: "{{ item }}"
@@ -82,14 +83,17 @@
     - "docker-compose==1.15.0"
   become: yes
   become_method: sudo
-  
+
 - name: Ensures /etc/systemd/system/docker.service.d dir exists
   file: path=/etc/systemd/system/docker.service.d state=directory
   become: yes
   become_method: sudo
 
 - name: enable docker remote api
-  template: src=docker-external.conf.j2 dest=/etc/systemd/system/docker.service.d/docker-external.conf mode=644
+  template:
+    src: docker-external.conf.j2
+    dest: /etc/systemd/system/docker.service.d/docker-external.conf
+    mode: 0644
   become: yes
   become_method: sudo
 
@@ -107,27 +111,39 @@
   service: name=docker state=started
   become: yes
   become_method: sudo
-   
+
 - name: copy s3cmd config
-  template: src=s3cmd.cfg dest=/etc/s3cmd.cfg mode=644
+  template:
+    src: s3cmd.cfg
+    dest: /etc/s3cmd.cfg
+    mode: 0644
   become: yes
   become_method: sudo
 
 - name: copy s3cmd binary wraper
-  copy: src=s3cmd dest=/usr/local/bin/s3cmd mode=775
+  copy:
+    src: s3cmd
+    dest: /usr/local/bin/s3cmd
+    mode: 0775
   become: yes
   become_method: sudo
 
 - name: generate self-signed ssl certificate if not exists
-  local_action: stat path=../credentials/{{ base_domain }}.crt
+  delegate_to: localhost
+  stat:
+    path: ../credentials/{{ base_domain }}.crt
   register: http_ssl_crt
 
 - name: generate self-signed ssl certificate if not exists
-  local_action: stat path=../credentials/{{ base_domain }}.key
+  delegate_to: localhost
+  stat:
+    path: ../credentials/{{ base_domain }}.key
   register: http_ssl_key
 
 - name: create openssl configuration file
-  template: src=../templates/openssl_req.cfg.j2 dest=../credentials/openssl_req.cfg
+  template:
+    src: openssl_req.cfg.j2
+    dest: ../credentials/openssl_req.cfg
   delegate_to: localhost
 
 - name: generate self-signed ssl certificate if not exists
@@ -137,20 +153,24 @@
   when: not (http_ssl_key.stat.exists and http_ssl_crt.stat.exists)
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/{{ base_domain }}.crt dest={{ docker_certs }}/{{base_domain}}.crt
+  copy:
+    src: ../credentials/{{ base_domain }}.crt
+    dest: "{{ docker_certs }}/{{ base_domain }}.crt"
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/{{ base_domain }}.key dest={{ docker_certs }}/{{base_domain}}.key
+  copy:
+    src: ../credentials/{{ base_domain }}.key
+    dest: "{{ docker_certs }}/{{ base_domain }}.key"
 
 - name: generate-cacert.sh file
   template:
-    src: ../templates/generate-cacert.sh.j2
+    src: generate-cacert.sh.j2
     dest: "{{ docker_certs }}/generate-cacert.sh"
     mode: 0755
   become: yes
   become_method: sudo
 
-- name: Run cacert generation script 
+- name: Run cacert generation script
   shell: "cd {{ docker_certs }} && {{ docker_certs }}/generate-cacert.sh"
   become: yes
   become_method: sudo
@@ -196,7 +216,7 @@
   become_method: sudo
 
 - name: Configure default profile
-  lineinfile: dest=/etc/profile line="{{ item }}" state=present 
+  lineinfile: dest=/etc/profile line="{{ item }}" state=present
   become: yes
   become_method: sudo
   with_items:
@@ -235,18 +255,21 @@
     - restart rsyslog
 
 - name: create rsyslog config for docker
-  template: src=10-docker.conf dest=/etc/rsyslog.d/10-docker.conf mode=644
+  template:
+    src: 10-docker.conf
+    dest: /etc/rsyslog.d/10-docker.conf
+    mode: 0644
   become: yes
   become_method: sudo
 
-- name: ensure the directory exists 
+- name: ensure the directory exists
   file: dest=/opt/docker-logs/docker state=directory
   become: yes
   become_method: sudo
   notify:
     - restart rsyslog
 
-- name: schedule logrotate hourly 
+- name: schedule logrotate hourly
   copy: src=logrotate.cron dest=/etc/cron.hourly/logrotate mode=0700
   become: yes
   become_method: sudo
