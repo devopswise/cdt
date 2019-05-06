@@ -22,7 +22,7 @@
 
 - name: sync docker-compose.yml
   template:
-    src: ../templates/docker-compose.yml.j2
+    src: docker-compose.yml.j2
     dest: /tmp/{{ gitea_service_name }}/docker-compose.yml
     mode: 0755
   become: yes
@@ -30,7 +30,7 @@
 
 - name: sync app.ini
   template:
-    src: ../templates/app.ini.j2
+    src: app.ini.j2
     dest: "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
     mode: 0644
     owner: "{{ gitea_user }}"

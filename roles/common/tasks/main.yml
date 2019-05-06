@@ -37,6 +37,8 @@
     name: firewalld
     state: stopped
     enabled: no
+  become: yes
+  become_method: sudo
 
 - name: Create base directories
   file: path="{{ item }}" state=directory mode=0777 owner="0" group="0"

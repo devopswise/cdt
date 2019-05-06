@@ -30,7 +30,7 @@
     dest: '{{ docker_volumes }}/{{ prometheus_service_name }}/config/prometheus.yml'
     owner: '{{ prometheus_user }}'
     group: '{{ prometheus_group }}'
-  when: prometheus_config_file.stat.exists == False
+  when: not prometheus_config_file.stat.exists
   become: yes
   become_method: sudo
 
@@ -44,7 +44,7 @@
     repo: "{{ grafana_provisioning_repo_url }}"
     dest: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
     version: "{{ grafana_provisioning_repo_branch }}"
-  when: grafana_dashboard_config_file.stat.exists == False
+  when: not grafana_dashboard_config_file.stat.exists
   become: yes
   become_method: sudo
 
@@ -76,8 +76,8 @@
     grafana_admin_pass: "{{ lookup('password', '../credentials/grafana_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
-  template: 
-    src: ../templates/docker-compose.yml.j2
+  template:
+    src: docker-compose.yml.j2
     dest: /tmp/{{ grafana_service_name }}/docker-compose.yml
     mode: 0755
   become: yes
@@ -91,13 +91,15 @@
     project_src: "/tmp/{{ grafana_service_name }}"
   register: output
 
-- set_fact: container_name="{{ vars['output']['ansible_facts']['prometheus'].keys()[0] }}"
+- name: get grafana container name
+  set_fact: container_name="{{ vars['output']['ansible_facts']['prometheus'].keys()[0] }}"
 
-- set_fact: run_inside_container="docker exec -i {{ container_name }} /bin/sh -c"
+- name: generate docker exec command
+  set_fact: run_inside_container="docker exec -i {{ container_name }} /bin/sh -c"
 
 - name: copy insert-docker-host.sh to host
-  template: 
-    src: ../templates/insert-docker-host.sh.j2
+  template:
+    src: insert-docker-host.sh.j2
     dest: /tmp/{{ grafana_service_name }}/insert-docker-host.sh
     mode: 0755
   become: yes
