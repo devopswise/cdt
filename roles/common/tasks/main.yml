@@ -33,9 +33,10 @@
   become_method: sudo
 
 - name: Stop and disable firewalld
-  shell: "systemctl disable firewalld && systemctl stop firewalld"
-  become: yes
-  become_method: sudo
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
 
 - name: Create base directories
   file: path="{{ item }}" state=directory mode=0777 owner="0" group="0"
@@ -56,7 +57,7 @@
 
 # enable extra
 - name: enable extras for epel
-  shell: "{{ item }}"
+  command: "{{ item }}"
   with_items:
     - "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
     - "yum -y --enablerepo=extras install epel-release"

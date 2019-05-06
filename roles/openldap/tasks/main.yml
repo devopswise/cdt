@@ -23,15 +23,15 @@
 
 - name: sync structure.ldif
   template:
-    src: ../templates/structure.ldif.j2
+    src: structure.ldif.j2
     dest: "{{ docker_volumes }}/{{ openldap_service_name }}/structure.ldif"
     mode: 0755
   become: yes
   become_method: sudo
 
 - name: sync docker-compose.yml
-  template: 
-    src: ../templates/docker-compose.yml.j2
+  template:
+    src: docker-compose.yml.j2
     dest: /tmp/{{ openldap_service_name }}/docker-compose.yml
     mode: 0755
   become: yes

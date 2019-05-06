@@ -30,7 +30,7 @@
     traefik_admin_pass_hash: "{{ lookup('password', '../credentials/traefik_admin_pass_hash_md5 chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: generate self-signed ssl certificate if not exists
-  stat: 
+  stat:
     path: ../credentials/traefik_http_ssl.crt
   register: traefik_http_ssl_crt
   delegate_to: localhost
@@ -42,7 +42,9 @@
   register: traefik_http_ssl_key
 
 - name: create openssl configuration file
-  template: src=../templates/openssl_req.cfg.j2 dest=../credentials/openssl_req.cfg
+  template: 
+    src: openssl_req.cfg.j2
+    dest: ../credentials/openssl_req.cfg
   delegate_to: localhost
 
 - name: generate self-signed ssl certificate if not exists
