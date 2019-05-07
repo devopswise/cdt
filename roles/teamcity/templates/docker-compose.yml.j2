@@ -12,8 +12,7 @@ services:
     ports:
       - "8111"
     networks:
-      - internal
-      - external
+      - cdt
     restart: always
     labels:
       - traefik.backend=teamcity
@@ -30,11 +29,8 @@ services:
       - SERVER_URL=http://teamcity:8111
       - AGENT_NAME=minimal_agent
     networks:
-      - internal
-      - external
+      - cdt
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

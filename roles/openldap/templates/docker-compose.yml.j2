@@ -18,7 +18,7 @@ services:
       - "{{ cdt_data }}/{{ openldap_service_name }}/etc:/etc/ldap"
       - "{{ cdt_data }}/{{ openldap_service_name }}/structure.ldif:/tmp/structure.ldif"
     networks:
-      - internal
+      - cdt
     logging:
       driver: "syslog"
       options:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - ldap
     networks:
-      - internal
+      - cdt
     expose:
       - "80"
     environment:
@@ -41,12 +41,10 @@ services:
     labels:
       - traefik.backend=password
       - traefik.frontend.rule=Host:passwd.{{ base_domain }}
-      - traefik.docker.network=internal
+      - traefik.docker.network=cdt
       - traefik.port=80
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true
 
 

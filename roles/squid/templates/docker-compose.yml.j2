@@ -8,15 +8,12 @@ services:
     ports:
       - "{{ squid_port }}:{{ squid_port }}"
     networks:
-      - internal
-      - external
+      - cdt
     logging: 
       driver: "syslog"
       options:
         syslog-facility: "local2"
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

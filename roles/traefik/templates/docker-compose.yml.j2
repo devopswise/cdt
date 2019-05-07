@@ -18,8 +18,7 @@ services:
       - "traefik.frontend.rule=Host:monitor.{{ base_domain }}"
       - "traefik.port=8080"
     networks:
-      - internal
-      - external
+      - cdt
     logging: 
       driver: "syslog"
       options:
@@ -27,7 +26,5 @@ services:
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

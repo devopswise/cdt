@@ -41,7 +41,7 @@ pipeline {
                                     -e PEM_FILE=/opt/cdt/dwtools.pem \
                                     -e DEBUG="-vv" \
                                     -v /opt/source/cdt-test/local:/opt/cdt \
-                                    devopswise/cdt-installer:latest "ansible-lint -p /opt/cdt/${CDT_BRANCH}/site.yml && cdt --launch" '''
+                                    devopswise/cdt-installer:latest "cdt --launch" '''
                             }
             }
        }

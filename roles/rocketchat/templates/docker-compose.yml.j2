@@ -5,8 +5,7 @@ services:
     image: "{{ rocketchat_registry_url }}{{ rocketchat_image_name }}:{{ rocketchat_version }}"
     command: "bash -c 'sleep 10 && node --use-openssl-ca main.js'"
     networks:
-      - internal
-      - external
+      - cdt
     ports:
       - 3000
     depends_on:
@@ -19,21 +18,20 @@ services:
     labels:
       - traefik.backend=rocketchat
       - traefik.frontend.rule=Host:rocketchat.{{ base_domain }}
-      - traefik.docker.network=external
+      - traefik.docker.network=cdt
       - traefik.port=3000
-    #logging:
-    #  driver: "syslog"
-    #  options:
-    #    syslog-facility: "local2"
-    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
   mongodb:
     build: .
     volumes:
       - {{ cdt_data }}/{{ rocketchat_service_name }}/mongodb:/db/data
     networks:
-      - internal
-      - external
+      - cdt
     ports:
       - 27017
     environment:
@@ -43,15 +41,13 @@ services:
       MONGO_INITDB_APP_DB: rocketchat
       MONGO_INITDB_APP_USER: rocketchat
       MONGO_INITDB_APP_PASS: {{ rocketchat_mongodb_pass }}
-    #logging:
-    #  driver: "syslog"
-    #  options:
-    #    syslog-facility: "local2"
-    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true
 

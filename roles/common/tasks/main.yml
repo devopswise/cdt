@@ -194,16 +194,9 @@
   become_method: sudo
 
 # TODO: https://stackoverflow.com/a/41493058
-- name: Create an internal network
+- name: Create cdt network
   docker_network:
-    name: internal
-    state: present
-  become: yes
-  become_method: sudo
-
-- name: Create an external network
-  docker_network:
-    name: external
+    name: cdt
     state: present
   become: yes
   become_method: sudo
@@ -281,7 +274,9 @@
   become_method: sudo
 
 - name: ensure the directory exists
-  file: dest=/opt/docker-logs/docker state=directory
+  file:
+    dest: "{{ cdt_log }}/docker"
+    state: directory
   become: yes
   become_method: sudo
   notify:

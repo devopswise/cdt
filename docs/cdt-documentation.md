@@ -15,7 +15,7 @@ Alice Developer (A), Bob Developer (B). Charlie Lead Developer (C) and they work
 
 ## 3. Administration
 ### Logs
-you can find logs from all tools in /opt/cdt/docker-logs
+you can find logs from all tools in /opt/cdt/cdt-logs
 
 ### User & Project Management
 You can use swagger UI to create or delete projects, create groups.

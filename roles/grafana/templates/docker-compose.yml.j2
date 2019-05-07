@@ -14,11 +14,11 @@ services:
       - "{{ cdt_data }}/{{ prometheus_service_name }}/config:/etc/prometheus"
       - /etc/localtime:/etc/localtime:ro
     networks:
-      - internal
+      - cdt
     labels:
       - traefik.backend=prometheus
       - traefik.frontend.rule=Host:prometheus.{{ base_domain }}
-      - traefik.docker.network=internal
+      - traefik.docker.network=cdt
       - traefik.port=9090
       #- traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
@@ -32,12 +32,11 @@ services:
     ports:
       - 9091
     networks:
-      - internal
-      - external
+      - cdt
     labels:
       - traefik.backend=pushgateway
       - traefik.frontend.rule=Host:pushgateway.{{ base_domain }}
-      - traefik.docker.network=internal
+      - traefik.docker.network=cdt
       - traefik.port=9091
       #- traefik.frontend.auth.basic=admin:$$apr1$$yk1vP8L3$$XHz138PzmxfidBroXGTPV1
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
@@ -63,16 +62,14 @@ services:
     ports:
       - 3000
     networks:
-      - internal
+      - cdt
     labels:
       - traefik.backend=grafana
       - traefik.frontend.rule=Host:grafana.{{ base_domain }}
-      - traefik.docker.network=internal
+      - traefik.docker.network=cdt
       - traefik.port=3000
       #- traefik.frontend.auth.basic=admin:$$apr1$$oskZWdaD$$KPrsJBG7I4QA64YagYoIv0
       # Use 2 dollar sign to escape original admin:$apr1$oskZWdaD$KPrsJBG7I4QA64YagYoIv0
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

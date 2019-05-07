@@ -17,8 +17,7 @@ services:
       - "7999:7999"
       - "7990"
     networks:
-      - internal
-      - external
+      - cdt
     restart: always
     labels:
       - traefik.backend=bitbucket
@@ -31,7 +30,5 @@ services:
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

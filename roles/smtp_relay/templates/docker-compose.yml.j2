@@ -8,11 +8,8 @@ services:
     ports:
       - "{{ smtp_tcp_port }}:{{ smtp_tcp_port }}"
     networks:
-      - internal
-      - external
+      - cdt
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

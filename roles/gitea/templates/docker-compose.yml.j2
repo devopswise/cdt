@@ -8,8 +8,7 @@ services:
       - 3000
       - "2222:22"
     networks:
-      - internal
-      - external
+      - cdt
     depends_on:
       - mysql
     restart: always
@@ -17,11 +16,11 @@ services:
       - traefik.backend=gitea
       - traefik.frontend.rule=Host:gitea.{{ base_domain }}
       - traefik.port=3000
-    #logging:
-    #  driver: "syslog"
-    #  options:
-    #    syslog-facility: "local2"
-    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
   mysql:
     image: mariadb:{{ mariadb_version }}
     restart: always
@@ -37,18 +36,15 @@ services:
     labels:
       - traefik.enable=false
     networks:
-      - internal
-      - external
-    #logging:
-    #  driver: "syslog"
-    #  options:
-    #    syslog-facility: "local2"
-    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+      - cdt
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true
 
 

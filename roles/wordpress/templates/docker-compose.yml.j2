@@ -15,13 +15,13 @@ services:
     volumes:
       - "{{ cdt_data }}/{{ wordpress_service_name }}:/var/www/html"
     networks:
-      - internal
+      - cdt
     depends_on:
       - homepage_db
     labels:
       - traefik.backend=homepage
       - traefik.frontend.rule=Host:www.{{ base_domain }}
-      - traefik.docker.network=internal
+      - traefik.docker.network=cdt
       - traefik.port=80
     logging: 
       driver: "syslog"
@@ -37,9 +37,7 @@ services:
       MYSQL_USER: "{{ wordpress_db_user }}"
       MYSQL_PASSWORD: "{{ wordpress_db_pass }}"
     networks:
-      - internal
+      - cdt
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true

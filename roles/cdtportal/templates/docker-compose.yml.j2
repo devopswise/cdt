@@ -12,23 +12,20 @@ services:
     ports:
       - 8080
     networks:
-      - internal
-      - external
+      - cdt
     restart: always
     labels:
       - traefik.backend=cdtportal
       - traefik.frontend.rule=Host:cdtportal.{{ base_domain }}
       - traefik.port=8080
-    #logging:
-    #  driver: "syslog"
-    #  options:
-    #    syslog-facility: "local2"
-    #    tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
-  internal:
-    external: true
-  external:
+  cdt:
     external: true
 
 
