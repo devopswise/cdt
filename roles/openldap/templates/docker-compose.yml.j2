@@ -14,9 +14,9 @@ services:
       SLAPD_DOMAIN: {{ openldap_slapd_domain }}
       SLAPD_FULL_DOMAIN: {{ openldap_full_domain }}
     volumes:
-      - "{{ docker_volumes }}/{{ openldap_service_name }}/data:/var/lib/ldap"
-      - "{{ docker_volumes }}/{{ openldap_service_name }}/etc:/etc/ldap"
-      - "{{ docker_volumes }}/{{ openldap_service_name }}/structure.ldif:/tmp/structure.ldif"
+      - "{{ cdt_data }}/{{ openldap_service_name }}/data:/var/lib/ldap"
+      - "{{ cdt_data }}/{{ openldap_service_name }}/etc:/etc/ldap"
+      - "{{ cdt_data }}/{{ openldap_service_name }}/structure.ldif:/tmp/structure.ldif"
     networks:
       - internal
     logging:

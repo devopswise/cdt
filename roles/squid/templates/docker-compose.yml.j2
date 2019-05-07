@@ -4,7 +4,7 @@ services:
     image: "{{ registry_url }}sameersbn/squid:{{ squid_version }}"
     restart: always
     volumes:
-      - "{{ docker_volumes }}/{{ squid_service_name }}/squid3.conf:/etc/squid3/squid3.conf"
+      - "{{ cdt_data }}/{{ squid_service_name }}/squid3.conf:/etc/squid3/squid3.conf"
     ports:
       - "{{ squid_port }}:{{ squid_port }}"
     networks:

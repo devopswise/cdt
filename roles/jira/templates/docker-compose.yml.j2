@@ -4,7 +4,7 @@ services:
     restart: always
     image: "{{ jira_registry_url }}{{ jira_image_name }}:{{ jira_version }}"
     volumes:
-      - "{{ docker_volumes }}/{{ jira_service_name }}/data:/var/atlassian/jira"
+      - "{{ cdt_data }}/{{ jira_service_name }}/data:/var/atlassian/jira"
     depends_on:
       - jira_db
     environment:
@@ -36,7 +36,7 @@ services:
       - internal
       - external
     volumes:
-      - '{{ docker_volumes }}/{{ jira_service_name }}/mysql:/var/lib/mysql'
+      - '{{ cdt_data }}/{{ jira_service_name }}/mysql:/var/lib/mysql'
     ports:
       - 3306
     labels:

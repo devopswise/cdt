@@ -2,8 +2,8 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ jenkins_user }}" group="{{ jenkins_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ jenkins_service_name }}"
-    - "{{ docker_volumes }}/{{ jenkins_service_name }}"
+    - "{{ cdt_log }}/{{ jenkins_service_name }}"
+    - "{{ cdt_data }}/{{ jenkins_service_name }}"
   become: yes
   become_method: sudo
 
@@ -90,7 +90,7 @@
 - name: Transfer script to run
   copy:
     src: ../credentials/openldap_admin_sshkey.pem
-    dest: "{{ docker_volumes }}/{{ jenkins_service_name }}/ssh-private-key.pem"
+    dest: "{{ cdt_data }}/{{ jenkins_service_name }}/ssh-private-key.pem"
     mode: 0755
   become: yes
   become_method: sudo

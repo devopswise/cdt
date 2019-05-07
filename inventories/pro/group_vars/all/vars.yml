@@ -10,11 +10,11 @@ cdt_protocol: https
 #registry_url: "docker.nexus3.devopswise.com/docker-internal/"
 registry_url: ""
 
-docker_volumes: /opt/docker-volumes
-docker_logs: /opt/docker-logs
-docker_backups: /opt/docker-backups
-docker_certs: /opt/docker-certs
 docker_data: /opt/docker-data
+cdt_data: /opt/cdt-data
+cdt_log: /opt/cdt-log
+cdt_backup: /opt/cdt-backup
+cdt_cert: /opt/cdt-cert
 
 aws_access_key: "AKIAJYUEDKFQKOPEJMHQ"
 aws_region: "eu-west-1"

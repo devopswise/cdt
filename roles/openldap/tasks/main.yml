@@ -2,10 +2,10 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ openldap_user }}" group="{{ openldap_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ openldap_service_name }}"
-    - "{{ docker_volumes }}/{{ openldap_service_name }}"
-    - "{{ docker_volumes }}/{{ openldap_service_name }}/data"
-    - "{{ docker_volumes }}/{{ openldap_service_name }}/etc"
+    - "{{ cdt_log }}/{{ openldap_service_name }}"
+    - "{{ cdt_data }}/{{ openldap_service_name }}"
+    - "{{ cdt_data }}/{{ openldap_service_name }}/data"
+    - "{{ cdt_data }}/{{ openldap_service_name }}/etc"
   become: yes
   become_method: sudo
 
@@ -24,7 +24,7 @@
 - name: sync structure.ldif
   template:
     src: structure.ldif.j2
-    dest: "{{ docker_volumes }}/{{ openldap_service_name }}/structure.ldif"
+    dest: "{{ cdt_data }}/{{ openldap_service_name }}/structure.ldif"
     mode: 0755
   become: yes
   become_method: sudo

@@ -8,8 +8,8 @@
     owner: "{{ smtp_relay_user }}"
     group: "{{ smtp_relay_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ smtp_relay_service_name }}"
-    - "{{ docker_volumes }}/{{ smtp_relay_service_name }}"
+    - "{{ cdt_log }}/{{ smtp_relay_service_name }}"
+    - "{{ cdt_data }}/{{ smtp_relay_service_name }}"
   become: yes
   become_method: sudo
 

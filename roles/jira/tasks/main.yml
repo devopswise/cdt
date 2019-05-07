@@ -2,10 +2,10 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ jira_user }}" group="{{ jira_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ jira_service_name }}"
-    - "{{ docker_volumes }}/{{ jira_service_name }}"
-    - "{{ docker_volumes }}/{{ jira_service_name }}/mysql"
-    - "{{ docker_volumes }}/{{ jira_service_name }}/data"
+    - "{{ cdt_log }}/{{ jira_service_name }}"
+    - "{{ cdt_data }}/{{ jira_service_name }}"
+    - "{{ cdt_data }}/{{ jira_service_name }}/mysql"
+    - "{{ cdt_data }}/{{ jira_service_name }}/data"
   become: yes
   become_method: sudo
 
@@ -20,7 +20,7 @@
 
 - name: sync docker-compose.yml
   template: 
-    src: ../templates/docker-compose.yml.j2
+    src: docker-compose.yml.j2
     dest: /tmp/{{ jira_service_name }}/docker-compose.yml
     mode: 0755
   become: yes

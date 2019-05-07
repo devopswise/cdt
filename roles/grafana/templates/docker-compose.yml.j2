@@ -10,8 +10,8 @@ services:
     ports:
       - 9090
     volumes:
-      - "{{ docker_volumes }}/{{ prometheus_service_name }}/data:/prometheus"
-      - "{{ docker_volumes }}/{{ prometheus_service_name }}/config:/etc/prometheus"
+      - "{{ cdt_data }}/{{ prometheus_service_name }}/data:/prometheus"
+      - "{{ cdt_data }}/{{ prometheus_service_name }}/config:/etc/prometheus"
       - /etc/localtime:/etc/localtime:ro
     networks:
       - internal
@@ -45,8 +45,8 @@ services:
     restart: always
     image: "{{ grafana_registry_url }}{{ grafana_image_name }}:{{ grafana_version }}"
     volumes:
-      - "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning:/etc/grafana/provisioning"
-      - "{{ docker_volumes }}/{{ grafana_service_name }}/data:/var/lib/grafana"
+      - "{{ cdt_data }}/{{ grafana_service_name }}/provisioning:/etc/grafana/provisioning"
+      - "{{ cdt_data }}/{{ grafana_service_name }}/data:/var/lib/grafana"
       - "/etc/localtime:/etc/localtime:ro"    
     environment:
       http_proxy: "{{ http_proxy }}"

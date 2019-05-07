@@ -12,7 +12,7 @@ services:
       SERVER_PROXY_NAME: "bitbucket.{{ base_domain }}"
       ELASTICSEARCH_ENABLED: "false"
     volumes:
-      - "{{ docker_volumes }}/{{ bitbucket_service_name }}/data:/var/atlassian/application-data/bitbucket"
+      - "{{ cdt_data }}/{{ bitbucket_service_name }}/data:/var/atlassian/application-data/bitbucket"
     ports:
       - "7999:7999"
       - "7990"

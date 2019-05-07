@@ -2,9 +2,9 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ rocketchat_user }}" group="{{ rocketchat_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ rocketchat_service_name }}"
-    - "{{ docker_volumes }}/{{ rocketchat_service_name }}"
-    - "{{ docker_volumes }}/{{ rocketchat_service_name }}/mongodb"
+    - "{{ cdt_log }}/{{ rocketchat_service_name }}"
+    - "{{ cdt_data }}/{{ rocketchat_service_name }}"
+    - "{{ cdt_data }}/{{ rocketchat_service_name }}/mongodb"
   become: yes
   become_method: sudo
 

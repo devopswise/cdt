@@ -2,8 +2,8 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=755 owner="{{ squid_user }}" group="{{ squid_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ squid_service_name }}"
-    - "{{ docker_volumes }}/{{ squid_service_name }}"
+    - "{{ cdt_log }}/{{ squid_service_name }}"
+    - "{{ cdt_data }}/{{ squid_service_name }}"
   become: yes
   become_method: sudo
 
@@ -23,7 +23,7 @@
 - name: sync squid3.conf
   template:
     src: squid3.conf.j2
-    dest: "{{ docker_volumes }}/{{ squid_service_name }}/squid3.conf"
+    dest: "{{ cdt_data }}/{{ squid_service_name }}/squid3.conf"
     mode: 0755
   become: yes
   become_method: sudo

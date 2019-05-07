@@ -7,7 +7,7 @@ services:
       - 8080
       - 50000
     volumes:
-      - "{{ docker_volumes }}/{{ jenkins_service_name }}:/var/jenkins_home"
+      - "{{ cdt_data }}/{{ jenkins_service_name }}:/var/jenkins_home"
       - '/var/run/docker.sock:/var/run/docker.sock'
     environment:
       INITIAL_ADMIN_USER: "admin"

@@ -3,7 +3,7 @@ services:
   gitea:
     image: "{{ gitea_registry_url }}{{ gitea_image_name }}:{{ gitea_version }}"
     volumes:
-      - "{{ docker_volumes }}/{{ gitea_service_name }}/data:/data"
+      - "{{ cdt_data }}/{{ gitea_service_name }}/data:/data"
     ports:
       - 3000
       - "2222:22"
@@ -31,7 +31,7 @@ services:
       MYSQL_USER: gitea
       MYSQL_PASSWORD: {{ gitea_mysql_pass }}
     volumes:
-      - '{{ docker_volumes }}/{{ gitea_service_name }}/mysql:/var/lib/mysql'
+      - '{{ cdt_data }}/{{ gitea_service_name }}/mysql:/var/lib/mysql'
     ports:
       - 3306
     labels:

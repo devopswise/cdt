@@ -2,9 +2,9 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ traefik_user }}" group="{{ traefik_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ traefik_service_name }}"
-    - "{{ docker_volumes }}/{{ traefik_service_name }}"
-    - "{{ docker_volumes }}/{{ traefik_service_name }}/certs"
+    - "{{ cdt_log }}/{{ traefik_service_name }}"
+    - "{{ cdt_data }}/{{ traefik_service_name }}"
+    - "{{ cdt_data }}/{{ traefik_service_name }}/certs"
   become: yes
   become_method: sudo
 
@@ -56,10 +56,10 @@
     - skip_ansible_lint
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/traefik_http_ssl.crt dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{ base_domain }}.crt
+  copy: src=../credentials/traefik_http_ssl.crt dest={{ cdt_data }}/{{ traefik_service_name }}/certs/{{ base_domain }}.crt
 
 - name: copy generated certificates to cert folder
-  copy: src=../credentials/traefik_http_ssl.key dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{ base_domain }}.key
+  copy: src=../credentials/traefik_http_ssl.key dest={{ cdt_data }}/{{ traefik_service_name }}/certs/{{ base_domain }}.key
 
 - name: sync docker-compose.yml
   template:
@@ -72,7 +72,7 @@
 - name: sync traefik.toml (letsencrypt)
   template:
     src: traefik.toml.https.j2
-    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    dest: "{{ cdt_data }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
   become_method: sudo
@@ -81,7 +81,7 @@
 - name: sync traefik.toml (no ssl certificate, http)
   template:
     src: traefik.toml.http.j2
-    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    dest: "{{ cdt_data }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
   become_method: sudo
@@ -90,7 +90,7 @@
 - name: sync traefik.toml (use self-signed https certificate)
   template:
     src: traefik.toml.selfsigned.j2
-    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/traefik.toml"
+    dest: "{{ cdt_data }}/{{ traefik_service_name }}/traefik.toml"
     mode: 0755
   become: yes
   become_method: sudo
@@ -99,7 +99,7 @@
 - name: ensure file exists
   copy:
     content: "{}"
-    dest: "{{ docker_volumes }}/{{ traefik_service_name }}/acme.json"
+    dest: "{{ cdt_data }}/{{ traefik_service_name }}/acme.json"
     force: no
     group: "{{ traefik_group }}"
     owner: "{{ traefik_user }}"

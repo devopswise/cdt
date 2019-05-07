@@ -7,9 +7,9 @@ services:
     privileged: true
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
-      - '/opt/docker-volumes/traefik/traefik.toml:/traefik.toml'
-      - '/opt/docker-volumes/traefik/acme.json:/acme.json'
-      - '/opt/docker-certs:/certs'
+      - "{{ cdt_data }}/traefik/traefik.toml:/traefik.toml"
+      - '{{ cdt_data }}/traefik/acme.json:/acme.json'
+      - '{{ cdt_cert }}:/certs'
     ports:
       - "80:80"
       - "443:443"

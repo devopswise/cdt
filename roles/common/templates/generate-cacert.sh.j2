@@ -1,6 +1,6 @@
 #!/bin/bash
 OPENJDK_VERSION="8-jdk"
-WORKING_DIR={{ docker_certs }}
+WORKING_DIR={{ cdt_cert }}
 CERT_TO_IMPORT={{ base_domain }}.crt
 docker pull openjdk:${OPENJDK_VERSION}
 docker run --rm --entrypoint cat openjdk:${OPENJDK_VERSION} /etc/ssl/certs/java/cacerts > ${WORKING_DIR}/cacerts

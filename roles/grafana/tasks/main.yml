@@ -2,32 +2,32 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0755 owner="{{ grafana_user }}" group="{{ grafana_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ grafana_service_name }}"
-    - "{{ docker_volumes }}/{{ grafana_service_name }}"
-    - "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
-    - "{{ docker_volumes }}/{{ grafana_service_name }}/data"
+    - "{{ cdt_log }}/{{ grafana_service_name }}"
+    - "{{ cdt_data }}/{{ grafana_service_name }}"
+    - "{{ cdt_data }}/{{ grafana_service_name }}/provisioning"
+    - "{{ cdt_data }}/{{ grafana_service_name }}/data"
   become: yes
   become_method: sudo
 
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0755 owner="{{ prometheus_user }}" group="{{ prometheus_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ prometheus_service_name }}"
-    - "{{ docker_volumes }}/{{ prometheus_service_name }}"
-    - "{{ docker_volumes }}/{{ prometheus_service_name }}/data"
-    - "{{ docker_volumes }}/{{ prometheus_service_name }}/config"
+    - "{{ cdt_log }}/{{ prometheus_service_name }}"
+    - "{{ cdt_data }}/{{ prometheus_service_name }}"
+    - "{{ cdt_data }}/{{ prometheus_service_name }}/data"
+    - "{{ cdt_data }}/{{ prometheus_service_name }}/config"
   become: yes
   become_method: sudo
 
 - name: Check if the prometheus.yml exists
   stat:
-    path: "{{ docker_volumes }}/{{ prometheus_service_name }}/config/prometheus.yml"
+    path: "{{ cdt_data }}/{{ prometheus_service_name }}/config/prometheus.yml"
   register: prometheus_config_file
 
 - name: "Create default template if not exists"
   template:
     src: "prometheus.yml.j2"
-    dest: '{{ docker_volumes }}/{{ prometheus_service_name }}/config/prometheus.yml'
+    dest: '{{ cdt_data }}/{{ prometheus_service_name }}/config/prometheus.yml'
     owner: '{{ prometheus_user }}'
     group: '{{ prometheus_group }}'
   when: not prometheus_config_file.stat.exists
@@ -36,13 +36,13 @@
 
 - name: Check if the dashboards.yml exists, if so dont clone anything
   stat:
-    path: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning/dashboards/all.yml"
+    path: "{{ cdt_data }}/{{ grafana_service_name }}/provisioning/dashboards/all.yml"
   register: grafana_dashboard_config_file
 
 - name: clone dashboards from git
   git:
     repo: "{{ grafana_provisioning_repo_url }}"
-    dest: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
+    dest: "{{ cdt_data }}/{{ grafana_service_name }}/provisioning"
     version: "{{ grafana_provisioning_repo_branch }}"
   when: not grafana_dashboard_config_file.stat.exists
   become: yes
@@ -51,7 +51,7 @@
 - name: "overwrite datasources"
   template:
     src: "grafana-datasources.yml.j2"
-    dest: '{{ docker_volumes }}/{{ grafana_service_name }}/provisioning/datasources/datasources.yml'
+    dest: '{{ cdt_data }}/{{ grafana_service_name }}/provisioning/datasources/datasources.yml'
     owner: '{{ grafana_user }}'
     group: '{{ grafana_group }}'
   become: yes
@@ -59,7 +59,7 @@
 
 - name: set ownership for cloned dashboards so grafana user can access
   file:
-    dest: "{{ docker_volumes }}/{{ grafana_service_name }}/provisioning"
+    dest: "{{ cdt_data }}/{{ grafana_service_name }}/provisioning"
     owner: "{{ grafana_user }}"
     group: "{{ grafana_group }}"
     recurse: yes

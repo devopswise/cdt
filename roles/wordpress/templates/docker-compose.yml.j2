@@ -13,7 +13,7 @@ services:
       WORDPRESS_DB_NAME: "{{ wordpress_db_name }}"
       WORDPRESS_DB_PORT: "{{ wordpress_db_port }}"
     volumes:
-      - "{{ docker_volumes }}/{{ wordpress_service_name }}:/var/www/html"
+      - "{{ cdt_data }}/{{ wordpress_service_name }}:/var/www/html"
     networks:
       - internal
     depends_on:

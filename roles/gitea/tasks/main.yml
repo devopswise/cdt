@@ -2,12 +2,12 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ gitea_user }}" group="{{ gitea_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ gitea_service_name }}"
-    - "{{ docker_volumes }}/{{ gitea_service_name }}"
-    - "{{ docker_volumes }}/{{ gitea_service_name }}/mysql"
-    - "{{ docker_volumes }}/{{ gitea_service_name }}/data"
-    - "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea"
-    - "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf"
+    - "{{ cdt_log }}/{{ gitea_service_name }}"
+    - "{{ cdt_data }}/{{ gitea_service_name }}"
+    - "{{ cdt_data }}/{{ gitea_service_name }}/mysql"
+    - "{{ cdt_data }}/{{ gitea_service_name }}/data"
+    - "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea"
+    - "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea/conf"
   become: yes
   become_method: sudo
 
@@ -31,7 +31,7 @@
 - name: sync app.ini
   template:
     src: app.ini.j2
-    dest: "{{ docker_volumes }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
+    dest: "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea/conf/app.ini"
     mode: 0644
     owner: "{{ gitea_user }}"
     group: "{{ gitea_group }}"

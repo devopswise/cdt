@@ -2,10 +2,10 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ bitbucket_user }}" group="{{ bitbucket_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ bitbucket_service_name }}"
-    - "{{ docker_volumes }}/{{ bitbucket_service_name }}"
-    - "{{ docker_volumes }}/{{ bitbucket_service_name }}/db"
-    - "{{ docker_volumes }}/{{ bitbucket_service_name }}/data"
+    - "{{ cdt_log }}/{{ bitbucket_service_name }}"
+    - "{{ cdt_data }}/{{ bitbucket_service_name }}"
+    - "{{ cdt_data }}/{{ bitbucket_service_name }}/db"
+    - "{{ cdt_data }}/{{ bitbucket_service_name }}/data"
   become: yes
   become_method: sudo
 
@@ -16,7 +16,7 @@
 
 - name: sync docker-compose.yml
   template: 
-    src: ../templates/docker-compose.yml.j2
+    src: docker-compose.yml.j2
     dest: /tmp/{{ bitbucket_service_name }}/docker-compose.yml
     mode: 0755
   become: yes

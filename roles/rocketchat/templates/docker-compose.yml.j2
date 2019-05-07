@@ -30,7 +30,7 @@ services:
   mongodb:
     build: .
     volumes:
-      - {{ docker_volumes }}/{{ rocketchat_service_name }}/mongodb:/db/data
+      - {{ cdt_data }}/{{ rocketchat_service_name }}/mongodb:/db/data
     networks:
       - internal
       - external

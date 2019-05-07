@@ -2,8 +2,8 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ wordpress_user }}" group="{{ wordpress_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ wordpress_service_name }}"
-    - "{{ docker_volumes }}/{{ wordpress_service_name }}"
+    - "{{ cdt_log }}/{{ wordpress_service_name }}"
+    - "{{ cdt_data }}/{{ wordpress_service_name }}"
   become: yes
   become_method: sudo
 
@@ -18,7 +18,7 @@
 
 - name: sync docker-compose.yml
   template: 
-    src: ../templates/docker-compose.yml.j2
+    src: docker-compose.yml.j2
     dest: /tmp/{{ wordpress_service_name }}/docker-compose.yml
     mode: 0755
   become: yes

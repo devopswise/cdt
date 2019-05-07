@@ -2,10 +2,10 @@
 - name: Create a directory to store volume
   file: path="{{ item }}" state=directory mode=0777 owner="{{ cdtportal_user }}" group="{{ cdtportal_group }}"
   with_items:
-    - "{{ docker_logs }}/{{ cdtportal_service_name }}"
-    - "{{ docker_volumes }}/{{ cdtportal_service_name }}"
-    - "{{ docker_volumes }}/{{ cdtportal_service_name }}/config"
-    - "{{ docker_volumes }}/{{ cdtportal_service_name }}/data"
+    - "{{ cdt_log }}/{{ cdtportal_service_name }}"
+    - "{{ cdt_data }}/{{ cdtportal_service_name }}"
+    - "{{ cdt_data }}/{{ cdtportal_service_name }}/config"
+    - "{{ cdt_data }}/{{ cdtportal_service_name }}/data"
   become: yes
   become_method: sudo
 
@@ -21,7 +21,7 @@
 - name: sync application.yaml file for cdtportal
   template:
     src: application.yml.j2
-    dest: /{{ docker_volumes }}/{{ cdtportal_service_name }}/config/application.yml
+    dest: /{{ cdt_data }}/{{ cdtportal_service_name }}/config/application.yml
     mode: 0755
   become: yes
   become_method: sudo

@@ -54,9 +54,9 @@
 - name: Create base directories
   file: path="{{ item }}" state=directory mode=0777 owner="0" group="0"
   with_items:
-    - "{{ docker_logs }}"
-    - "{{ docker_volumes }}"
-    - "{{ docker_certs }}"
+    - "{{ cdt_log }}"
+    - "{{ cdt_data }}"
+    - "{{ cdt_cert }}"
     - "{{ docker_data }}"
   become: yes
   become_method: sudo
@@ -173,23 +173,23 @@
 - name: copy generated certificates to cert folder
   copy:
     src: ../credentials/{{ base_domain }}.crt
-    dest: "{{ docker_certs }}/{{ base_domain }}.crt"
+    dest: "{{ cdt_cert }}/{{ base_domain }}.crt"
 
 - name: copy generated certificates to cert folder
   copy:
     src: ../credentials/{{ base_domain }}.key
-    dest: "{{ docker_certs }}/{{ base_domain }}.key"
+    dest: "{{ cdt_cert }}/{{ base_domain }}.key"
 
 - name: generate-cacert.sh file
   template:
     src: generate-cacert.sh.j2
-    dest: "{{ docker_certs }}/generate-cacert.sh"
+    dest: "{{ cdt_cert }}/generate-cacert.sh"
     mode: 0755
   become: yes
   become_method: sudo
 
 - name: Run cacert generation script
-  shell: "cd {{ docker_certs }} && {{ docker_certs }}/generate-cacert.sh"
+  shell: "cd {{ cdt_cert }} && {{ cdt_cert }}/generate-cacert.sh"
   become: yes
   become_method: sudo
 
