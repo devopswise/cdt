@@ -16,7 +16,6 @@
 
 - name: Disable swap
   command: swapoff -a
-  when: ansible_swaptotal_mb > 0
   become: yes
   become_method: sudo
 

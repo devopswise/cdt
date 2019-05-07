@@ -17,6 +17,7 @@ pipeline {
   stages {
     stage('run cdt-installer'){
       steps {
+            sh "ansible-lint -p site.yml"
             withCredentials([sshUserPrivateKey(credentialsId: "devopswise", keyFileVariable: 'keyfile')]) {
                 sh "ssh -o StrictHostKeyChecking=no -i ${keyfile} root@192.168.0.46 revert-xen-vm-to-latest-snapshot.sh ${CDT_TARGET_VM}"
             }
