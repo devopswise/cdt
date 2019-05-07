@@ -18,8 +18,8 @@
     rocketchat_mongodb_pass: "{{ lookup('password', '../credentials/rocketchat_mongodb_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
-  template: 
-    src: ../templates/{{ item }}.j2
+  template:
+    src: "{{ item }}.j2"
     dest: /tmp/{{ rocketchat_service_name }}/{{ item }}
     mode: 0755
   become: yes

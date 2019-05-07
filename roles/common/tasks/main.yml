@@ -6,8 +6,17 @@
   become_method: sudo
   when: cdt_shutdown_after_2h == "true"
 
-- name: Turn swap off
-  shell: "nohup swapoff -a &"
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: swap
+    fstype: swap
+    state: absent
+  become: yes
+  become_method: sudo
+
+- name: Disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
   become: yes
   become_method: sudo
 
@@ -18,12 +27,15 @@
 
 # Only for centos
 - name: remove postfix
-  package: name=postfix state=absent
+  package:
+    name: postfix
+    state: absent
   become: yes
   become_method: sudo
 
 - name: Disable SELinux
-  selinux: state=disabled
+  selinux:
+    state: disabled
   become: yes
   become_method: sudo
 
@@ -88,7 +100,9 @@
   become_method: sudo
 
 - name: Ensures /etc/systemd/system/docker.service.d dir exists
-  file: path=/etc/systemd/system/docker.service.d state=directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
   become: yes
   become_method: sudo
 
@@ -154,6 +168,8 @@
     module: shell
     _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/{{ base_domain }}.key -out ../credentials/{{ base_domain }}.crt -config ../credentials/openssl_req.cfg
   when: not (http_ssl_key.stat.exists and http_ssl_crt.stat.exists)
+  tags:
+    - skip_ansible_lint
 
 - name: copy generated certificates to cert folder
   copy:

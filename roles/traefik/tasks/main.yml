@@ -42,7 +42,7 @@
   register: traefik_http_ssl_key
 
 - name: create openssl configuration file
-  template: 
+  template:
     src: openssl_req.cfg.j2
     dest: ../credentials/openssl_req.cfg
   delegate_to: localhost
@@ -52,6 +52,8 @@
     _raw_params: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -sha256 -subj "/C=UK/ST=LO/O=devopswise/CN=*.{{ base_domain }}" -keyout ../credentials/traefik_http_ssl.key -out ../credentials/traefik_http_ssl.crt -config ../credentials/openssl_req.cfg
   when: not (traefik_http_ssl_key.stat.exists and traefik_http_ssl_crt.stat.exists)
   delegate_to: localhost
+  tags:
+    - skip_ansible_lint
 
 - name: copy generated certificates to cert folder
   copy: src=../credentials/traefik_http_ssl.crt dest={{ docker_volumes }}/{{ traefik_service_name }}/certs/{{ base_domain }}.crt

@@ -73,7 +73,6 @@
 
 #TODO: This should be moved to openldap playbook
 - name: generate key-pair for admin
-  when: false
   local_action:
     module: shell
     _raw_params: ssh-keygen -t rsa -b 4096 -q -P '' -C 'your_email@example.com' -f ../credentials/openldap_admin_sshkey.pem
@@ -81,7 +80,7 @@
 
 - name: copy add-new-credential.groovy to target
   template:
-    src: ../templates/add-new-credential.groovy.j2
+    src: add-new-credential.groovy.j2
     dest: /tmp/{{ jenkins_service_name }}/add-new-credential.groovy
     mode: 0755
   become: yes
@@ -100,3 +99,5 @@
 - name: make curl request to jenkins
   shell: "curl -k -f --user admin:{{ openldap_admin_pass }} --data-urlencode \"script@/tmp/{{ jenkins_service_name }}/add-new-credential.groovy\" {{ cdt_protocol }}://{{ jenkins_service_name }}.{{ base_domain }}/scriptText"
   when: false
+  tags:
+    - skip_ansible_lint
