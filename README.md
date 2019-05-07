@@ -119,7 +119,7 @@ End with an example of getting some data out of the system or using it for a dem
 - to access ec2 server a ssh provate key had generated and keept locally only on this server.
 - an smtp relay gets installed and configured to use gmail.
 - cdt configures outgoing mail for all tools. so apps can send notifications to team.
-- all application data created by the tools is persisted and located on /opt/docker-volumes, so it is easy to backup, migrate
+- all application data created by the tools is persisted and located on /opt/cdt-data, so it is easy to backup, migrate
 - cdt install prometheus and grafana and creates grafana dashboards for tools.
 - grafana can also be used to monitor applications created by team.
 - cdt uses official docker images for tools and tools can be updated easily.
