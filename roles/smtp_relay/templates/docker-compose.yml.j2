@@ -9,6 +9,11 @@ services:
       - "{{ smtp_tcp_port }}:{{ smtp_tcp_port }}"
     networks:
       - cdt
+    logging: 
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
   cdt:
