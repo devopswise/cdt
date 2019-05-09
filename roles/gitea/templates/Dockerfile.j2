@@ -1,0 +1,4 @@
+FROM {{ gitea_registry_url }}{{ gitea_image_name }}:{{ gitea_version }}
+
+RUN apk add --update netcat-openbsd && rm -rf /var/cache/apk/*
+COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh

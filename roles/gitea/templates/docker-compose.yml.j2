@@ -1,6 +1,9 @@
 version: '2'
 services:
   gitea:
+    build: .
+    entrypoint: ["/bin/sh"]
+    command: ["-c", "wait-for-it.sh -h gitea_db -p 3306 -t 30 && /bin/s6-svscan /etc/s6"]
     image: "{{ gitea_registry_url }}{{ gitea_image_name }}:{{ gitea_version }}"
     volumes:
       - "{{ cdt_data }}/{{ gitea_service_name }}/data:/data"
@@ -10,7 +13,7 @@ services:
     networks:
       - cdt
     depends_on:
-      - mysql
+      - gitea_db
     restart: always
     labels:
       - traefik.backend=gitea
@@ -21,7 +24,7 @@ services:
       options:
         syslog-facility: "local2"
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
-  mysql:
+  gitea_db:
     image: mariadb:{{ mariadb_version }}
     restart: always
     environment:

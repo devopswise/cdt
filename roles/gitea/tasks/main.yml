@@ -28,6 +28,19 @@
   become: yes
   become_method: sudo
 
+- name: sync Dockerfile for gitea
+  template:
+    src: Dockerfile.j2
+    dest: /tmp/{{ gitea_service_name }}/Dockerfile
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: copy wait-for-it.sh to gitea build folder
+  copy:
+    src: wait-for-it.sh
+    dest: /tmp/{{ gitea_service_name }}/wait-for-it.sh
+
 - name: sync app.ini
   template:
     src: app.ini.j2
