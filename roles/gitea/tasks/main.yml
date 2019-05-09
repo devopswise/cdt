@@ -40,6 +40,8 @@
   copy:
     src: wait-for-it.sh
     dest: /tmp/{{ gitea_service_name }}/wait-for-it.sh
+  become: yes
+  become_method: sudo
 
 - name: sync app.ini
   template:
