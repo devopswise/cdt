@@ -39,7 +39,7 @@ services:
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
   rocketchat_db:
-    image: mongo:4.0
+    image: "mongo:{{ mongodb_version }}"
     restart: unless-stopped
     volumes:
       - {{ cdt_data }}/{{ rocketchat_service_name }}/mongodb:/db/data
@@ -88,6 +88,11 @@ services:
   # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
     ports:
       - 3001:8080
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
 networks:
   cdt:
