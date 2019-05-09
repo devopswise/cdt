@@ -4,6 +4,7 @@
   with_items:
     - "{{ cdt_log }}/{{ rocketchat_service_name }}"
     - "{{ cdt_data }}/{{ rocketchat_service_name }}"
+    - "{{ cdt_data }}/{{ rocketchat_service_name }}/uploads"
     - "{{ cdt_data }}/{{ rocketchat_service_name }}/mongodb"
   become: yes
   become_method: sudo
@@ -25,8 +26,6 @@
   become: yes
   become_method: sudo
   with_items:
-    - "Dockerfile"
-    - "dbinit.sh"
     - "docker-compose.yml"
 
 - name: "Run rocketchat service {{ rocketchat_version }}"

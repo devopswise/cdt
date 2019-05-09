@@ -1,23 +1,32 @@
 version: '2'
+
 services:
   rocketchat:
-    restart: always
     image: "{{ rocketchat_registry_url }}{{ rocketchat_image_name }}:{{ rocketchat_version }}"
-    command: "bash -c 'sleep 10 && node --use-openssl-ca main.js'"
+    command: bash -c 'for i in `seq 1 30`; do node main.js && s=$$? && break || s=$$?; echo "Tried $$i times. Waiting 5 secs..."; sleep 5; done; (exit $$s)'
+    restart: unless-stopped
+    volumes:
+      - {{ cdt_data }}/{{ rocketchat_service_name }}/uploads:/app/uploads
     networks:
       - cdt
+    environment:
+      PORT: 3000
+      ROOT_URL: https://rocketchat.{{ base_domain }}
+      MONGO_URL: mongodb://rocketchat_db:27017/rocketchat
+      MONGO_OPLOG_URL: mongodb://rocketchat_db:27017/local
+      MAIL_URL: smtp://smtp
+      ADMIN_USERNAME: local.admin
+      ADMIN_PASS: {{ openldap_admin_pass }}
+      ADMIN_EMAIL: {{ admin_email }}
+      OVERWRITE_SETTING_Show_Setup_Wizard: completed
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      SSL_CERT_DIR: "/etc/ssl/certs"
+#     HTTP_PROXY: http://proxy.domain.com
+#     HTTPS_PROXY: http://proxy.domain.com
+    depends_on:
+      - mongo
     ports:
       - 3000
-    depends_on:
-      - mongodb
-    environment:
-        MONGO_URL: "mongodb://rocketchat:{{ rocketchat_mongodb_pass }}@mongodb:27017/rocketchat"
-        NODE_TLS_REJECT_UNAUTHORIZED: "0"
-        SSL_CERT_DIR: "/etc/ssl/certs"
-        ADMIN_USERNAME: local.admin
-        ADMIN_PASS: {{ openldap_admin_pass }}
-        ADMIN_EMAIL: {{ admin_email }}
-        OVERWRITE_SETTING_Show_Setup_Wizard: "completed"
     labels:
       - traefik.backend=rocketchat
       - traefik.frontend.rule=Host:rocketchat.{{ base_domain }}
@@ -29,26 +38,56 @@ services:
         syslog-facility: "local2"
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
 
-  mongodb:
-    build: .
+  rocketchat_db:
+    image: mongo:4.0
+    restart: unless-stopped
     volumes:
       - {{ cdt_data }}/{{ rocketchat_service_name }}/mongodb:/db/data
+     #- ./data/dump:/dump
     networks:
       - cdt
-    ports:
-      - 27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: {{ rocketchat_mongodb_pass }}
-      MONGO_INITDB_DATABASE: admin
-      MONGO_INITDB_APP_DB: rocketchat
-      MONGO_INITDB_APP_USER: rocketchat
-      MONGO_INITDB_APP_PASS: {{ rocketchat_mongodb_pass }}
+    command: mongod --smallfiles --oplogSize 128 --replSet rs0 --storageEngine=mmapv1
+    labels:
+      - "traefik.enable=false"
     logging:
       driver: "syslog"
       options:
         syslog-facility: "local2"
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+
+  # this container's job is just run the command to initialize the replica set.
+  # it will run the command and remove himself (it will not stay running)
+  mongo-init-replica:
+    image: mongo:4.0
+    networks:
+      - cdt
+    command: 'bash -c "for i in `seq 1 30`; do mongo mongo/rocketchat --eval \"rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''localhost:27017'' } ]})\" && s=$$? && break || s=$$?; echo \"Tried $$i times. Waiting 5 secs...\"; sleep 5; done; (exit $$s)"'
+    depends_on:
+      - mongo
+
+  # hubot, the popular chatbot (add the bot user first and change the password before starting this image)
+  hubot:
+    image: rocketchat/hubot-rocketchat:latest
+    restart: unless-stopped
+    environment:
+      ROCKETCHAT_URL: rocketchat:3000
+      ROCKETCHAT_ROOM: GENERAL
+      ROCKETCHAT_USER: local.admin
+      ROCKETCHAT_PASSWORD: {{ openldap_admin_pass }}
+      BOT_NAME: hubot
+  # you can add more scripts as you'd like here, they need to be installable by npm
+      - EXTERNAL_SCRIPTS=hubot-help,hubot-seen,hubot-links,hubot-diagnostics
+    depends_on:
+      - rocketchat
+    networks:
+      - cdt
+    labels:
+      - "traefik.enable=false"
+    volumes:
+      - ./scripts:/home/hubot/scripts
+  # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
+    ports:
+      - 3001:8080
 
 networks:
   cdt:
