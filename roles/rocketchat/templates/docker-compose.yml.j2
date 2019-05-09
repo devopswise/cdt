@@ -76,7 +76,7 @@ services:
       ROCKETCHAT_PASSWORD: {{ openldap_admin_pass }}
       BOT_NAME: hubot
   # you can add more scripts as you'd like here, they need to be installable by npm
-      - EXTERNAL_SCRIPTS=hubot-help,hubot-seen,hubot-links,hubot-diagnostics
+      EXTERNAL_SCRIPTS: "hubot-help,hubot-seen,hubot-links,hubot-diagnostics"
     depends_on:
       - rocketchat
     networks:
@@ -84,7 +84,7 @@ services:
     labels:
       - "traefik.enable=false"
     volumes:
-      - ./scripts:/home/hubot/scripts
+      - {{ cdt_data }}/{{ rocketchat_service_name }}/hubot/scripts:/home/hubot/scripts
   # this is used to expose the hubot port for notifications on the host on port 3001, e.g. for hubot-jenkins-notifier
     ports:
       - 3001:8080

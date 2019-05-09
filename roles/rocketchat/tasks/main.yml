@@ -5,6 +5,8 @@
     - "{{ cdt_log }}/{{ rocketchat_service_name }}"
     - "{{ cdt_data }}/{{ rocketchat_service_name }}"
     - "{{ cdt_data }}/{{ rocketchat_service_name }}/uploads"
+    - "{{ cdt_data }}/{{ rocketchat_service_name }}/hubot"
+    - "{{ cdt_data }}/{{ rocketchat_service_name }}/hubot/scripts"
     - "{{ cdt_data }}/{{ rocketchat_service_name }}/mongodb"
   become: yes
   become_method: sudo
