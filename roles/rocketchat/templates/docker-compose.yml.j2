@@ -70,7 +70,7 @@ services:
     image: rocketchat/hubot-rocketchat:latest
     restart: unless-stopped
     environment:
-      ROCKETCHAT_URL: rocketchat:3000
+      ROCKETCHAT_URL: "rocketchat:3000"
       ROCKETCHAT_ROOM: GENERAL
       ROCKETCHAT_USER: local.admin
       ROCKETCHAT_PASSWORD: {{ openldap_admin_pass }}
