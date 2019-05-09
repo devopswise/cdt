@@ -19,6 +19,7 @@
 - name: generate a random mysql password
   set_fact:
     gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass chars=ascii_letters,digits,hexdigits length=12') }}"
+    openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync docker-compose.yml
   template:
@@ -40,6 +41,7 @@
   copy:
     src: wait-for-it.sh
     dest: /tmp/{{ gitea_service_name }}/wait-for-it.sh
+    mode: 0755
   become: yes
   become_method: sudo
 
