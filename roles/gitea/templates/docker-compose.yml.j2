@@ -7,6 +7,17 @@ services:
     image: "{{ gitea_registry_url }}{{ gitea_image_name }}:{{ gitea_version }}"
     volumes:
       - "{{ cdt_data }}/{{ gitea_service_name }}/data:/data"
+    environment:
+      DB_TYPE: "mysql"
+      DB_HOST: "gitea_db:3306"
+      DB_NAME: gitea
+      DB_USER: gitea
+      DB_PASSWD: {{ gitea_mysql_pass }}
+      ROOT_URL: "https://gitea.{{ base_domain }}"
+      SSH_DOMAIN: "gitea.{{ base_domain }}"
+      INSTALL_LOCK: "true"
+      RUN_MODE: "prod"
+      APP_NAME: "gitea"
     ports:
       - 3000
       - "2222:22"
