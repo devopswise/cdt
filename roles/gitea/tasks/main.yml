@@ -67,6 +67,13 @@
 - name: get gitea container name
   set_fact: container_name="{{ vars['output']['ansible_facts']['gitea'].keys()[0] }}"
 
+- name: Wait until Gitea is available
+  shell: "curl -k --head --silent {{ cdt_protocol }}://{{ gitea_service_name }}.{{ base_domain }}"
+  register: result
+  until: result.stdout.find("200 OK") != -1
+  retries: 20
+  delay: 5
+
 - name: create default admin user
   command: "docker exec -i {{ container_name }} gitea admin create-user --name local.admin --password {{ openldap_admin_pass }} --email {{ admin_email }}  --admin"
   become: yes
