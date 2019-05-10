@@ -54,6 +54,7 @@
     group: "{{ gitea_group }}"
   become: yes
   become_method: sudo
+  when: false
 
 - name: "Run gitea service {{ gitea_version }}"
   become: yes
@@ -62,3 +63,12 @@
     project_name: "{{ gitea_service_name }}"
     project_src: "/tmp/{{ gitea_service_name }}"
   register: output
+
+- name: get gitea container name
+  set_fact: container_name="{{ vars['output']['ansible_facts']['gitea'].keys()[0] }}"
+
+- name: create default admin user
+  command: "docker exec -i {{ container_name }} gitea admin create-user --name local.admin --password {{ openldap_admin_pass }} --email {{ admin_email }}  --admin"
+  become: yes
+  become_method: sudo
+
