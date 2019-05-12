@@ -18,6 +18,8 @@ services:
       INSTALL_LOCK: "true"
       RUN_MODE: "prod"
       APP_NAME: "gitea"
+      #USER_UID: "{{ gitea_user }}"
+      #USER_GID: "{{ gitea_group }}"
     ports:
       - 3000
       - "2222:22"

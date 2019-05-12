@@ -6,8 +6,8 @@
     - "{{ cdt_data }}/{{ gitea_service_name }}"
     - "{{ cdt_data }}/{{ gitea_service_name }}/mysql"
     - "{{ cdt_data }}/{{ gitea_service_name }}/data"
-    - "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea"
-    - "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea/conf"
+    #- "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea"
+    #- "{{ cdt_data }}/{{ gitea_service_name }}/data/gitea/conf"
   become: yes
   become_method: sudo
 
