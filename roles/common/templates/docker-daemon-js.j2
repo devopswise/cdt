@@ -2,4 +2,7 @@
   "metrics-addr" : "0.0.0.0:9323",
   "experimental" : true,
   "graph" : "{{ docker_data }}"
+{% if use_dockerhub_mirror is defined %}
+,"registry-mirrors": ["{{ use_dockerhub_mirror }}"]
+{% endif %}
 }
