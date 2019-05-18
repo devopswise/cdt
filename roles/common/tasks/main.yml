@@ -128,6 +128,14 @@
   become: yes
   become_method: sudo
 
+- name: adding existing user "{{ ansible_ssh_user }}" to group docker
+  user:
+    name: "{{ ansible_ssh_user }}"
+    groups: docker
+    append: yes
+  become: yes
+  become_method: sudo
+
 - name: copy s3cmd config
   template:
     src: s3cmd.cfg
