@@ -1,0 +1,9 @@
+---
+- name: restart keycloak
+  docker_service:
+    project_name: "{{ keycloak_service_name }}"
+    project_src: "/tmp/{{ keycloak_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

@@ -68,3 +68,23 @@ gitea:
   debug: "true"
 cdt:
   baseDomain: "{{ base_domain }}"
+keycloak:
+  auth-server-url: "https://keycloak.{{ base_domain }}/auth"
+  credentials:
+    secret: "{{ keycloak_client_secret }}"
+  realm: master
+  resource: cdt
+  ssl-required: external
+  enable-basic-auth: false
+  principal-attribute: username
+  security-constraints[0]:
+    securityCollections[0]:
+      name: static-resources
+      patterns[0]: /css/*
+      patterns[1]: /fonts/*
+      patterns[2]: /js/*
+  security-constraints[1]:
+    authRoles[0]: admin
+    securityCollections[0]:
+      name: application
+      patterns[0]: /*

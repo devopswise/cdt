@@ -5,6 +5,8 @@ services:
     environment:
       GMAIL_USER: "{{ smtp_relay_gmail_user }}"
       GMAIL_PASSWORD: "{{ smtp_relay_gmail_pass }}"
+      RELAY_NETWORKS: ":172.0.0.0/32"
+      RELAY_DOMAINS: "*"
     ports:
       - "{{ smtp_tcp_port }}:{{ smtp_tcp_port }}"
     networks:

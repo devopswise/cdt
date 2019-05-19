@@ -5,6 +5,7 @@
     - "{{ cdt_log }}/{{ cdtportal_service_name }}"
     - "{{ cdt_data }}/{{ cdtportal_service_name }}"
     - "{{ cdt_data }}/{{ cdtportal_service_name }}/config"
+    - "{{ cdt_data }}/{{ cdtportal_service_name }}/script"
     - "{{ cdt_data }}/{{ cdtportal_service_name }}/data"
   become: yes
   become_method: sudo
@@ -18,11 +19,32 @@
   set_fact:
     openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
     openldap_slapd_pass: "{{ lookup('password', '../credentials/openldap_slapd_pass chars=ascii_letters,digits,hexdigits length=12') }}"
+    keycloak_enrcryption_key: "{{ lookup('password', '../credentials/keycloak_enrcryption_key chars=ascii_letters,digits,hexdigits length=32') }}"
+    keycloak_client_secret: "{{ lookup('file', '../credentials/keycloak_client_secret') }}"
 
 - name: sync application.yaml file for cdtportal
   template:
     src: application.yml.j2
     dest: /{{ cdt_data }}/{{ cdtportal_service_name }}/config/application.yml
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: copy template files
+  copy:
+    src: "{{ item }}"
+    dest: "{{ cdt_data }}/{{ cdtportal_service_name }}/script/"
+    mode: 0775
+  become: yes
+  become_method: sudo
+  with_items:
+    - start-ws
+    - keycloak-gatekeeper.conf.template
+
+- name: sync docker-compose.yml
+  template:
+    src: docker-compose.yml.template.j2
+    dest: "{{ cdt_data }}/{{ cdtportal_service_name }}/script/docker-compose.yml.template"
     mode: 0755
   become: yes
   become_method: sudo
@@ -49,3 +71,4 @@
   until: result.stdout.find("200 OK") != -1
   retries: 20
   delay: 5
+  when: false #disable temporarily as needs authentication

@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+KCADM=/opt/jboss/keycloak/bin/kcadm.sh
+$KCADM config credentials --server http://localhost:8080/auth --user admin --realm master --password "{{ openldap_admin_pass }}" > /dev/null 2>&1
+
+CLIENT_ID=$($KCADM create clients -r master -f /opt/jboss/cdt/keycloak-client-cdt.json -i)
+CLIENT_SECRET=$($KCADM get clients/${CLIENT_ID}/client-secret | jq -r '.value')
+echo $CLIENT_SECRET
+
+$KCADM create users -s username=alice.developer -s enabled=true -r master > /dev/null 2>&1
+$KCADM set-password -r master --username alice.developer --new-password "{{ openldap_persona_alice_pass }}"
+
+$KCADM create users -s username=bob.developer -s enabled=true -r master > /dev/null 2>&1
+$KCADM set-password -r master --username bob.developer --new-password "{{ openldap_persona_bob_pass }}"
+
+$KCADM create users -s username=charlie.leaddeveloper -s enabled=true -r master > /dev/null 2>&1
+$KCADM set-password -r master --username charlie.leaddeveloper --new-password "{{ openldap_persona_bob_pass }}"
+
+$KCADM create users -s username=onur.ozkol -s enabled=true -r master > /dev/null 2>&1
+$KCADM set-password -r master --username onur.ozkol --new-password "{{ openldap_persona_bob_pass }}"

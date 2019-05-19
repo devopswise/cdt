@@ -20,6 +20,7 @@
   set_fact:
     gitea_mysql_pass: "{{ lookup('password', '../credentials/gitea_mysql_pass chars=ascii_letters,digits,hexdigits length=12') }}"
     openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
+    keycloak_client_secret: "{{ lookup('file', '../credentials/keycloak_client_secret') }}"
 
 - name: sync docker-compose.yml
   template:
@@ -34,6 +35,13 @@
     src: Dockerfile.j2
     dest: /tmp/{{ gitea_service_name }}/Dockerfile
     mode: 0755
+  become: yes
+  become_method: sudo
+
+- name: copy generated certificates to gitea folder
+  copy:
+    src: ../credentials/{{ base_domain }}.crt
+    dest: "/tmp/{{ gitea_service_name }}/{{ base_domain }}.crt"
   become: yes
   become_method: sudo
 
@@ -79,3 +87,19 @@
   become: yes
   become_method: sudo
 
+#gitea admin auth add-oauth --name keycloak --provider openidConnect --key cdt --secret '8c9c1d91-4aa4-4ccc-a1fd-a2541ea7a0cc' --auto-discover-url 'https://keycloak.precdt.devopswise.co.uk/auth/realms/master/.well-known/openid-configuration'
+
+- name: create oauth authentication for gitea
+  command: "docker exec -i {{ container_name }} gitea admin auth add-oauth --name keycloak --provider openidConnect --key cdt --secret '{{ keycloak_client_secret }}' --auto-discover-url '{{ cdt_protocol }}://keycloak.{{ base_domain }}/auth/realms/master/.well-known/openid-configuration'"
+  ignore_errors: yes
+  become: yes
+  become_method: sudo
+
+- name: restart gitea
+  docker_service:
+    project_name: "{{ gitea_service_name }}"
+    project_src: "/tmp/{{ gitea_service_name }}"
+    restarted: true
+    state: present
+  become: yes
+  become_method: sudo

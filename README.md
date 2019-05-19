@@ -190,6 +190,7 @@ d55b507dd4e4        traefik:1.7.4                           traefik_traefik_1
 
 ## Built With
 
+* [Theia IDE](https://www.theia-ide.org/) - Theia is an open-source cloud desktop IDE framework implemented in TypeScript
 * [Gitea](https://gitea.io) - A painless self-hosted Git service
 * [Jenkins](https://jenkins.io) - The leading open source automation server
 * [RocketChat](https://rocket.chat/) - Rocket.Chat is free, unlimited and open source ultimate team chat software
@@ -201,7 +202,6 @@ analytics and monitoring
 * [docker-compose](https://docs.docker.com/compose/) - A tool for defining and running multi-container Docker applications
 * [Ansible](https://github.com/ansible/ansible) - IT Automation/Configuration Management
 * [DebianExim4](https://github.com/namshi/docker-smtp) - SMTP Relay
-* [Gitea](https://gitea.io) - A painless self-hosted Git service
 * [Squid Web Proxy](http://www.squid-cache.org/) - Web Proxy
 
 

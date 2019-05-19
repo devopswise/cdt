@@ -3,7 +3,8 @@
 - include: playbooks/reverse_proxy.yml
 - include: playbooks/web_proxy.yml
 - include: playbooks/smtp_relay.yml
-- include: playbooks/openldap.yml
+#- include: playbooks/openldap.yml
+- include: playbooks/keycloak.yml
 - include: playbooks/jenkins.yml
 #- include: playbooks/grafana.yml
 - include: playbooks/gitea.yml

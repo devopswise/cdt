@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  theia-${COMPOSE_PROJECT_NAME}:
+    image: "theiaide/theia-full:latest"
+    volumes:
+      - "/opt/cdt-data/theia/${USERNAME}/.ssh:/home/theia/.ssh"
+      - "/opt/cdt-data/theia/${USERNAME}/maven-local-repo:/home/theia/.m2/repository"
+      - "/opt/cdt-cert/cacerts:/etc/ssl/certs/java/cacerts:ro"
+    environment:
+      GIT_URL: ${GIT_URL}
+    ports:
+      - 3000
+      - 8080
+    networks:
+      - theia-${COMPOSE_PROJECT_NAME}
+    restart: always
+    labels:
+      - "traefik.enable=false"
+
+  keycloak-gatekeeper:
+    image: keycloak/keycloak-gatekeeper:6.0.1
+    labels:
+      - traefik.backend=theia-${COMPOSE_PROJECT_NAME}
+      - traefik.frontend.rule=Host:${COMPOSE_PROJECT_NAME}.theia.${BASE_DOMAIN}
+      - traefik.docker.network=theia-${COMPOSE_PROJECT_NAME}
+      - traefik.port=3000
+    networks:
+      - theia-${COMPOSE_PROJECT_NAME}
+    volumes:
+      - "{{ cdt_data }}/{{ cdtportal_service_name }}/script/keycloak-gatekeeper-${COMPOSE_PROJECT_NAME}.conf:/etc/keycloak-gatekeeper.conf"
+    entrypoint:
+      - /opt/keycloak-gatekeeper
+      - --config=/etc/keycloak-gatekeeper.conf
+
+networks:
+  theia-${COMPOSE_PROJECT_NAME}:
+    external: true

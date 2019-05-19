@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [[ ! -z "${DEBUG}" ]]; then
+  set -o xtrace
+  echo arguments: USERNAME: $1 GIT_URL: $2 ACTION: $3
+fi
+
+USERNAME=$1
+GIT_URL=$2
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+workspace_name=$(echo -n ${USERNAME}_${GIT_URL} | md5sum | awk '{print $1}' | cut -c1-8 )
+
+export COMPOSE_PROJECT_NAME=${workspace_name}
+export USERNAME
+export GIT_URL
+
+if [ "$3" = "up" ]; then
+  rm ${SCRIPT_DIR}/docker-compose.yml
+  rm ${SCRIPT_DIR}/keycloak-gatekeeper.conf
+  cat ${SCRIPT_DIR}/docker-compose.yml.template | envsubst > ${SCRIPT_DIR}/docker-compose-${COMPOSE_PROJECT_NAME}.yml
+  cat ${SCRIPT_DIR}/keycloak-gatekeeper.conf.template | envsubst > ${SCRIPT_DIR}/keycloak-gatekeeper-${COMPOSE_PROJECT_NAME}.conf
+  docker network create theia-${COMPOSE_PROJECT_NAME}
+  docker network connect theia-${COMPOSE_PROJECT_NAME} traefik_traefik_1
+  docker-compose -f docker-compose-${COMPOSE_PROJECT_NAME}.yml up -d
+else
+  docker-compose -f docker-compose-${COMPOSE_PROJECT_NAME}.yml down
+  docker network disconnect theia-${COMPOSE_PROJECT_NAME} traefik_traefik_1
+  docker network rm theia-${COMPOSE_PROJECT_NAME}
+fi
+
+retVal=$?
+
+if [ $retVal -ne 0 ]; then
+  echo "Error starting workspace"
+else
+  echo $workspace_name
+fi
+exit $retVal
+

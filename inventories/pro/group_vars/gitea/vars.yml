@@ -4,7 +4,7 @@ gitea_image_name: "gitea/gitea"
 
 mariadb_version: "10.3"
 
-gitea_version: "1.8"
+gitea_version: "1.8.3"
 gitea_user: 0
 gitea_group: 0
 

@@ -1,0 +1,25 @@
+import jenkins.model.*
+import hudson.security.*
+import org.jenkinsci.plugins.*
+def inst = Jenkins.getInstance()
+def keycloak = inst.getExtensionList(org.jenkinsci.plugins.KeycloakSecurityRealm$DescriptorImpl).first()  
+//println(keycloak.getKeycloakJson())
+def json='''{
+  "realm": "master",
+  "auth-server-url": "{{ cdt_protocol }}://keycloak.{{ base_domain }}/auth",
+  "ssl-required": "external",
+  "resource": "cdt",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "{{ keycloak_client_secret }}"
+  },
+  "confidential-port": 0
+}'''
+keycloak.setKeycloakJson(json)
+inst.save()
+
+def keycloakRealm = new KeycloakSecurityRealm()
+inst.setSecurityRealm(keycloakRealm)
+inst.setAuthorizationStrategy(new FullControlOnceLoggedInAuthorizationStrategy())
+
+inst.save()

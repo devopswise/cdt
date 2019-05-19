@@ -16,6 +16,9 @@ only_server
 [openldap:children]
 only_server
 
+[keycloak:children]
+only_server
+
 [jenkins:children]
 only_server
 

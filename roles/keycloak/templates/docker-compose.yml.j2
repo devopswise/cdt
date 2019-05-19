@@ -1,0 +1,61 @@
+version: '2'
+services:
+  keycloak:
+    image: "{{ keycloak_registry_url }}{{ keycloak_image_name }}:{{ keycloak_version }}"
+    volumes:
+      - "{{ cdt_cert }}/cacerts:/etc/pki/java/cacerts:ro"
+      - "{{ cdt_data }}/{{ keycloak_service_name }}/data:/opt/jboss/cdt"
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: keycloak_db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: "{{ keycloak_mysql_pass }}"
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: "{{ openldap_admin_pass }}"
+      PROXY_ADDRESS_FORWARDING: "true"
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter
+      # below is just an example, and it shouldn't be used in production without knowledge.
+      # It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "connectTimeout=30000"
+    networks:
+      - cdt
+    ports:
+      - 8080
+    depends_on:
+      - keycloak_db
+    restart: always
+    labels:
+      - traefik.backend=keycloak
+      - traefik.frontend.rule=Host:keycloak.{{ base_domain }}
+      - traefik.port=8080
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+  keycloak_db:
+    image: mariadb:{{ mariadb_version }}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: {{ keycloak_mysql_pass }}
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: {{ keycloak_mysql_pass }}
+    volumes:
+      - '{{ cdt_data }}/{{ keycloak_service_name }}/mysql:/var/lib/mysql'
+    ports:
+      - 3306
+    labels:
+      - traefik.enable=false
+    networks:
+      - cdt
+    logging:
+      driver: "syslog"
+      options:
+        syslog-facility: "local2"
+        tag: "docker/{% raw %}{{.Name}}{% endraw %}"
+networks:
+  cdt:
+    external: true

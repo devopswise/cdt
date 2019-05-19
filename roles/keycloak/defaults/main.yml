@@ -1,0 +1,9 @@
+keycloak_service_name: "keycloak"
+keycloak_registry_url: ""   #from dockerhub
+keycloak_image_name: "jboss/keycloak"
+
+mariadb_version: "10.3"
+
+keycloak_version: "6.0.1"
+keycloak_user: 1000
+keycloak_group: 1000
