@@ -43,7 +43,7 @@
   register: output
 
 - name: Run a simple smoke test to check if app's are running
-  shell: "curl -k --head --silent {{ cdt_protocol }}://{{ cdtportal_service_name }}.{{ base_domain }}/v2/tool/status"
+  shell: "curl -k --head --silent {{ cdt_protocol }}://{{ cdtportal_service_name }}.{{ base_domain }}/tool/status"
   register: result
   until: result.stdout.find("200 OK") != -1
   retries: 20
