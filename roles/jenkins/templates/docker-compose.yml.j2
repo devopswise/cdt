@@ -33,6 +33,7 @@ services:
       DOCKER_SLAVE_ENVIRONMENT: "GIT_SSL_NO_VERIFY=true"
       DOCKER_SLAVE_IMAGE: "devopswise/jenkins-jnlp-slave-docker-cli:latest"
       DOCKER_SLAVE_DOCKER_HOST_URI: "tcp://172.17.0.1:2375"
+      JENKINS_BASE_URL: "{{ cdt_protocol }}://{{ cdtportal_service_name }}.{{ base_domain }}"
     privileged: true
     networks:
       - cdt
