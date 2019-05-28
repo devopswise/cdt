@@ -2,7 +2,7 @@ version: '2'
 services:
   jenkins:
     restart: always
-    image: "{{ jenkins_registry_url }}{{ jenkins_image_name }}:{{ jenkins_version }}"
+    build: .
     ports:
       - 8080
       - 50000

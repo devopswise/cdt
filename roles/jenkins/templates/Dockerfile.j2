@@ -1,0 +1,5 @@
+FROM "{{ jenkins_registry_url }}{{ jenkins_image_name }}:{{ jenkins_version }}"
+ADD "{{ base_domain }}.crt" "/usr/local/share/ca-certificates/{{ base_domain }}.crt"
+USER root
+RUN update-ca-certificates
+USER jenkins

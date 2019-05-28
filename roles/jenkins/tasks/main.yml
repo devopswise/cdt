@@ -27,6 +27,23 @@
   become: yes
   become_method: sudo
 
+- name: copy jenkins Dockerfile 
+  template:
+    src: Dockerfile.j2
+    dest: /tmp/{{ jenkins_service_name }}/Dockerfile
+    mode: 0755
+  become: yes
+  become_method: sudo
+
+#TODO what if not self-signed ?
+- name: copy self-signed key
+  copy:
+    src: "../credentials/{{ base_domain }}.crt"
+    dest: "/tmp/{{ jenkins_service_name }}/{{ base_domain }}.crt"
+    mode: 0755
+  become: yes
+  become_method: sudo
+
 - name: "Run jenkins service {{ jenkins_version }}"
   become: yes
   become_method: sudo
@@ -97,7 +114,7 @@
   become: yes
   become_method: sudo
   when: false
-
+  
 - name: make curl request to jenkins
   shell: "curl -k -f --user admin:{{ openldap_admin_pass }} --data-urlencode \"script@/tmp/{{ jenkins_service_name }}/add-new-credential.groovy\" {{ cdt_protocol }}://{{ jenkins_service_name }}.{{ base_domain }}/scriptText"
   when: false
