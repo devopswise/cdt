@@ -5,7 +5,7 @@ services:
     build: .
     ports:
       - 8080
-      - 50000
+      - "50000:50000"
     volumes:
       - "{{ cdt_data }}/{{ jenkins_service_name }}:/var/jenkins_home"
       - '/var/run/docker.sock:/var/run/docker.sock'
@@ -27,11 +27,11 @@ services:
       LDAP_DISABLE_MAIL_ADDRESS_RESOLVER: "false"
       LDAP_DISPLAY_NAME_ATTRIBUTE_NAME: "displayName"
       LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME: "mail"
-      DOCKER_SLAVE_LABEL: "jenkins-ssh-slave-docker-cli"
+      DOCKER_SLAVE_LABEL: "jenkins-jnlp-slave-docker-cli"
       DOCKER_SLAVE_NETWORK: "cdt"
       DOCKER_SLAVE_VOLUMES: "/var/run/docker.sock:/var/run/docker.sock {{ cdt_cert }}/cacerts:/etc/ssl/certs/java/cacerts workspace:/home/jenkins"
       DOCKER_SLAVE_ENVIRONMENT: ""
-      DOCKER_SLAVE_IMAGE: "devopswise/jenkins-ssh-slave-docker-cli:1.0.0"
+      DOCKER_SLAVE_IMAGE: "devopswise/jenkins-jnlp-slave-docker-cli:latest"
       DOCKER_SLAVE_DOCKER_HOST_URI: "tcp://172.17.0.1:2375"
     privileged: true
     networks:
