@@ -29,7 +29,7 @@ services:
       LDAP_MAIL_ADDRESS_ATTRIBUTE_NAME: "mail"
       DOCKER_SLAVE_LABEL: "jenkins-jnlp-slave-docker-cli"
       DOCKER_SLAVE_NETWORK: "cdt"
-      DOCKER_SLAVE_VOLUMES: "/var/run/docker.sock:/var/run/docker.sock {{ cdt_cert }}/cacerts:/etc/ssl/certs/java/cacerts workspace:/home/jenkins"
+      DOCKER_SLAVE_VOLUMES: "/var/run/docker.sock:/var/run/docker.sock {{ cdt_cert }}/cacerts:/etc/ssl/certs/java/cacerts workspace:/home/jenkins/agent"
       DOCKER_SLAVE_ENVIRONMENT: "GIT_SSL_NO_VERIFY=true"
       DOCKER_SLAVE_IMAGE: "devopswise/jenkins-jnlp-slave-docker-cli:latest"
       DOCKER_SLAVE_DOCKER_HOST_URI: "tcp://172.17.0.1:2375"
