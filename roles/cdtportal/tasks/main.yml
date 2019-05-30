@@ -17,6 +17,7 @@
 - name: get or generate local.admin pass
   set_fact:
     openldap_admin_pass: "{{ lookup('password', '../credentials/openldap_admin_pass chars=ascii_letters,digits,hexdigits length=12') }}"
+    openldap_slapd_pass: "{{ lookup('password', '../credentials/openldap_slapd_pass chars=ascii_letters,digits,hexdigits length=12') }}"
 
 - name: sync application.yaml file for cdtportal
   template:
@@ -43,7 +44,7 @@
   register: output
 
 - name: Run a simple smoke test to check if app's are running
-  shell: "curl -k --head --silent {{ cdt_protocol }}://{{ cdtportal_service_name }}.{{ base_domain }}/tool/status"
+  shell: "curl -k --head --silent {{ cdt_protocol }}://{{ base_domain }}/tool/status"
   register: result
   until: result.stdout.find("200 OK") != -1
   retries: 20

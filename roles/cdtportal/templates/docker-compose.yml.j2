@@ -17,7 +17,7 @@ services:
     restart: always
     labels:
       - traefik.backend=cdtportal
-      - traefik.frontend.rule=Host:cdtportal.{{ base_domain }}
+      - traefik.frontend.rule=Host:{{ base_domain }}
       - traefik.port=8080
     logging:
       driver: "syslog"
