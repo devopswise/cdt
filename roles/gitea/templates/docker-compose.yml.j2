@@ -15,6 +15,7 @@ services:
       DB_PASSWD: {{ gitea_mysql_pass }}
       ROOT_URL: "https://gitea.{{ base_domain }}"
       SSH_DOMAIN: "gitea.{{ base_domain }}"
+      SSH_PORT: "2222"
       INSTALL_LOCK: "true"
       RUN_MODE: "prod"
       APP_NAME: "gitea"
