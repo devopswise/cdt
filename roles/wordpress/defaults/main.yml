@@ -1,8 +1,0 @@
-wordpress_service_name: "homepage"
-wordpress_registry_url: ""   #official image
-wordpress_image_name: "wordpress"
-
-wordpress_version: "latest"
-wordpress_user: 33
-wordpress_group: 33
-

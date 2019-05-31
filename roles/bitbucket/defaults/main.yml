@@ -1,8 +1,0 @@
-bitbucket_service_name: "bitbucket"
-bitbucket_registry_url: ""   #from dockerhub
-bitbucket_image_name: "atlassian/bitbucket-server"
-
-bitbucket_version: "5.16.0"
-bitbucket_user: 1000
-bitbucket_group: 1000
-

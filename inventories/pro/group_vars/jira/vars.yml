@@ -1,7 +1,0 @@
-jira_service_name: "jira"
-jira_registry_url: ""
-jira_image_name: "cptactionhank/atlassian-jira-software"
-
-jira_version: "7.12.3"
-jira_user: 0 
-jira_group: 0

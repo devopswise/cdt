@@ -1,8 +1,0 @@
-teamcity_service_name: "teamcity"
-teamcity_registry_url: ""   #from dockerhub
-teamcity_image_name: "jetbrains/teamcity-server"
-
-teamcity_version: "latest"
-teamcity_user: 1000
-teamcity_group: 1000
-
