@@ -1,9 +1,0 @@
----
-- name: restart jira
-  docker_service:
-    project_name: "{{ jira_service_name }}"
-    project_src: "/tmp/{{ jira_service_name }}"
-    restarted: true
-    state: present
-  become: yes
-  become_method: sudo

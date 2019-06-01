@@ -5,7 +5,7 @@ services:
     volumes:
       - "{{ cdt_data }}/{{ cdtportal_service_name }}/config/application.yml:/config/application.yml"
       - "{{ cdt_data }}/{{ cdtportal_service_name }}/data:/data"
-      - "{{ cdt_cert }}/cacerts:/etc/ssl/certs/java/cacerts:ro"
+      - "{{ cdt_cert }}/cacerts:/usr/local/openjdk-8/jre/lib/security/cacerts:ro"
       - '/var/run/docker.sock:/var/run/docker.sock'
     environment:
       CDTPORTAL_DATA: "/data"

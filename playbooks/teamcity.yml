@@ -1,5 +1,0 @@
----
-- hosts: teamcity
-  roles:
-    - { role: teamcity,
-        tags: [ 'teamcity' ] }
