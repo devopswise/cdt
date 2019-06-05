@@ -72,11 +72,13 @@ services:
     environment:
       ROCKETCHAT_URL: "rocketchat:3000"
       ROCKETCHAT_ROOM: GENERAL
-      ROCKETCHAT_USER: local.admin
-      ROCKETCHAT_PASSWORD: {{ openldap_admin_pass }}
+      ROCKETCHAT_USER: hubot
+      ROCKETCHAT_PASSWORD: {{ openldap_persona_alice_pass }}
       BOT_NAME: hubot
+      HUBOT_JENKINS_URL: "https://jenkins.{{ base_domain }}"
+      HUBOT_JENKINS_AUTH: "hubot:__api_key__"
   # you can add more scripts as you'd like here, they need to be installable by npm
-      EXTERNAL_SCRIPTS: "hubot-help,hubot-seen,hubot-links,hubot-diagnostics"
+      EXTERNAL_SCRIPTS: "hubot-help,hubot-seen,hubot-links,hubot-diagnostics,hubot-jenkins-enhanced"
     depends_on:
       - rocketchat
     networks:
