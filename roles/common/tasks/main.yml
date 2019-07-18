@@ -124,7 +124,7 @@
   become_method: sudo
 
 - name: start docker
-  service: name=docker state=started
+  service: name=docker state=restarted
   become: yes
   become_method: sudo
 

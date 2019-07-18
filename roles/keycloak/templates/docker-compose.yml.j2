@@ -36,6 +36,7 @@ services:
         tag: "docker/{% raw %}{{.Name}}{% endraw %}"
   keycloak_db:
     image: mariadb:{{ mariadb_version }}
+    restart: always
     volumes:
       - mysql_data:/var/lib/mysql
     environment:

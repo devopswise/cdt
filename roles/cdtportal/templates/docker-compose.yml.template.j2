@@ -20,6 +20,7 @@ services:
 
   keycloak-gatekeeper:
     image: keycloak/keycloak-gatekeeper:6.0.1
+    restart: always
     labels:
       - traefik.backend=theia-${COMPOSE_PROJECT_NAME}
       - traefik.frontend.rule=Host:${COMPOSE_PROJECT_NAME}.theia.${BASE_DOMAIN}
