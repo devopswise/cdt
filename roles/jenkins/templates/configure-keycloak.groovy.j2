@@ -16,7 +16,7 @@ def json='''{
   "confidential-port": 0
 }'''
 keycloak.setKeycloakJson(json)
-inst.save()
+keycloak.save()
 
 def keycloakRealm = new KeycloakSecurityRealm()
 inst.setSecurityRealm(keycloakRealm)
