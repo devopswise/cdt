@@ -2,7 +2,16 @@ version: '2'
 services:
   jenkins:
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+         dummy: "yes"
+{% if parent_http_proxy is defined %}
+         http_proxy: "{{ parent_http_proxy }}"
+         https_proxy: "{{ parent_http_proxy }}"
+         no_proxy: "{{ parent_no_proxy }}"
+{% endif %}
     ports:
       - 8080
       - "50000:50000"
@@ -10,7 +19,13 @@ services:
       - "{{ cdt_data }}/{{ jenkins_service_name }}:/var/jenkins_home"
       - '/var/run/docker.sock:/var/run/docker.sock'
       - "{{ cdt_cert }}/cacerts:/etc/ssl/certs/java/cacerts:ro"
+{% if extra_hosts is defined %}
+    extra_hosts: {{ extra_hosts | to_yaml }}
+{% endif %}
     environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }}"
       INITIAL_ADMIN_USER: "admin"
       INITIAL_ADMIN_PASSWORD: "password" 
       ADOP_LDAP_ENABLED: "true"

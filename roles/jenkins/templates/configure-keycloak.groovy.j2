@@ -20,6 +20,6 @@ keycloak.save()
 
 def keycloakRealm = new KeycloakSecurityRealm()
 inst.setSecurityRealm(keycloakRealm)
-inst.setAuthorizationStrategy(new FullControlOnceLoggedInAuthorizationStrategy())
+inst.setAuthorizationStrategy(new LegacyAuthorizationStrategy())
 
 inst.save()
