@@ -25,6 +25,19 @@ http_proxy: "http://{{ http_proxy_hostname }}:{{ http_proxy_port }}"
 https_proxy: "{{ http_proxy }}"
 no_proxy: "127.0.0.1,localhost"
 
+parent_http_proxy_hostname: "my.companyproxy.corp"
+parent_http_proxy_port: "80"
+parent_http_proxy_username: "corp-username"
+parent_http_proxy_password: "password"
+parent_http_proxy: "http://{{ parent_http_proxy_username }}:{{ parent_http_proxy_password }}@{{ http_proxy_hostname }}:{{ http_proxy_port }}"
+parent_https_proxy: "{{ http_proxy }}"
+parent_no_proxy: ".local,localhost,127.0.0.1,.corp"
+
+#dns_servers : 
+#  - 192.168.10.10
+#  - 192.168.10.10
+#dns_search_domain: "mycompany.corp"
+
 #smtp configuration
 smtp_relay_gmail_user: "devopswise@gmail.com"
 smtp_server: "smtp.{{ base_domain }}"

@@ -4,11 +4,17 @@ services:
     image: "{{ registry_url }}sameersbn/squid:{{ squid_version }}"
     restart: always
     volumes:
-      - "{{ cdt_data }}/{{ squid_service_name }}/squid3.conf:/etc/squid3/squid3.conf"
+      - "{{ cdt_data }}/{{ squid_service_name }}/squid3.conf:/etc/squid3/squid.conf"
     ports:
       - "{{ squid_port }}:{{ squid_port }}"
     networks:
       - cdt
+{% if dns_servers is defined %}
+    dns: {{ dns_servers | to_yaml }}
+{% endif %}
+{% if dns_search_domain is defined %}
+    dns_search: {{ dns_search_domain }}
+{% endif %}
     logging: 
       driver: "syslog"
       options:
