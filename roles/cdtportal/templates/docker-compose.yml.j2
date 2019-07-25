@@ -9,10 +9,16 @@ services:
       - "{{ cdt_cert }}/cacerts:/usr/local/openjdk-8/jre/lib/security/cacerts:ro"
       - '/var/run/docker.sock:/var/run/docker.sock'
     environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }}"    
       CDTPORTAL_DATA: "/data"
       CDTPORTAL_LOG: "/var/log/cdtportal"
       KEYCLOAK_ENCRYPTION_KEY: "{{ keycloak_enrcryption_key }}"
       KEYCLOAK_CLIENT_SECRET: "{{ keycloak_client_secret }}"
+{% if extra_hosts is defined %}
+    extra_hosts: {{ extra_hosts | to_yaml }}
+{% endif %}
     ports:
       - 8080
     networks:

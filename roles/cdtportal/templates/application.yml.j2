@@ -32,7 +32,7 @@ info:
     version: {{ cdtportal_version }}
 spring:
   datasource:
-    url: jdbc:h2:file:${CDTPORTAL_DATA}/h2db;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:${CDTPORTAL_DATA}/h2db;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
   jackson:
     date-format: io.swagger.RFC3339DateFormat
     serialization:
@@ -40,9 +40,11 @@ spring:
   h2:
     console:
       enabled: "true"
-      path: /h2-console
+      path: /h2-console      
   jpa:
     open-in-view: "true"
+    hibernate:
+      ddl-auto: update
   data:
     jpa:
       repositories:
