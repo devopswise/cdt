@@ -5,6 +5,14 @@ services:
     command: '-c /traefik.toml --docker --logLevel=DEBUG'
     restart: always
     privileged: true
+{% if http_ssl_certificate_generation == "letsencrypt" %}
+    environment:
+      AWS_ACCESS_KEY_ID: {{ aws_access_key }}
+      AWS_REGION: {{ aws_region }}
+{% if letsencrypt_method is defined and letsencrypt_method == "route53" %}
+      AWS_SECRET_ACCESS_KEY: {{ aws_secret_access_key }}
+{% endif %}
+{% endif %}
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - "{{ cdt_data }}/traefik/traefik.toml:/traefik.toml"
@@ -28,3 +36,4 @@ services:
 networks:
   cdt:
     external: true
+
