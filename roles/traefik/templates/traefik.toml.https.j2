@@ -20,8 +20,14 @@ storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
 onDemand = false
+{% if letsencrypt_method is defined and letsencrypt_method == "route53" %}
+[acme.dnsChallenge]
+  provider = "route53"
+  delayBeforeCheck = 0
+{% else %}
 [acme.httpChallenge]
   entryPoint = "http"
+{% endif %}
 [[acme.domains]]
   main = "{{ base_domain }}"
 
