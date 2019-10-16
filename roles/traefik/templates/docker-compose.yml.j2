@@ -10,6 +10,10 @@ services:
       - "{{ cdt_data }}/traefik/traefik.toml:/traefik.toml"
       - '{{ cdt_data }}/traefik/acme.json:/acme.json'
       - '{{ cdt_cert }}:/certs'
+    environment:
+      http_proxy: "{{ http_proxy }}"
+      https_proxy: "{{ http_proxy }}"
+      no_proxy: "{{ no_proxy }}"      
     ports:
       - "80:80"
       - "443:443"
