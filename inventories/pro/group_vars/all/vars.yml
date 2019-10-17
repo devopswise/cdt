@@ -29,7 +29,7 @@ parent_http_proxy_hostname: "my.companyproxy.corp"
 parent_http_proxy_port: "80"
 parent_http_proxy_username: "corp-username"
 parent_http_proxy_password: "password"
-parent_http_proxy: "http://{{ parent_http_proxy_username }}:{{ parent_http_proxy_password }}@{{ http_proxy_hostname }}:{{ http_proxy_port }}"
+parent_http_proxy: "http://{{ parent_http_proxy_username }}:{{ parent_http_proxy_password }}@{{ parent_http_proxy_hostname }}:{{ parent_http_proxy_port }}"
 parent_https_proxy: "{{ http_proxy }}"
 parent_no_proxy: ".local,localhost,127.0.0.1,.corp"
 

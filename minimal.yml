@@ -1,3 +1,4 @@
 ---
 - include: playbooks/common.yml
 - include: playbooks/reverse_proxy.yml
+- include: playbooks/web_proxy.yml
