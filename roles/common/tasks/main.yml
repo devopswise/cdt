@@ -82,7 +82,7 @@
   with_items:
     - "sysstat"
     - "python-setuptools"
-    - "docker-ce"
+    - "docker-ce-19.03.3"
     - "python-pip"
     - "git"
   become: yes
